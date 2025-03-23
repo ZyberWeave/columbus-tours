@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, CSSProperties } from "react";
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaBars, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -31,10 +31,10 @@ const subNavLinks = [
 ];
 
 // Styles object for consistent styling
-const styles = {
+const styles: Record<string, CSSProperties> = {
   navContainer: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column" as const,
     alignItems: "center",
   },
   mainRow: {
@@ -102,7 +102,7 @@ const styles = {
     height: "100%",
     background: "rgba(0, 0, 0, 0.9)",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "column" as const,
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1000,
@@ -129,6 +129,20 @@ const styles = {
     padding: "1rem",
     zIndex: 1000,
   },
+  cancelButton: {
+    position: "absolute",
+    top: "1rem",
+    right: "1rem",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    zIndex: 1100,
+  },
+  mobileSocialIcons: {
+    display: "flex",
+    gap: "1rem",
+    marginTop: "2rem",
+  },
 };
 
 export default function Header() {
@@ -141,13 +155,13 @@ export default function Header() {
   };
 
   // Header style: transparent & absolute on home; dark & relative elsewhere
-  const headerStyle = {
+  const headerStyle: CSSProperties = {
     background: isHome ? "transparent" : "#1a1a1a",
     position: isHome ? "absolute" : "relative",
     width: "100%",
     zIndex: 1000,
     padding: "1rem 2rem",
-  } as React.CSSProperties;
+  };
 
   return (
     <header style={headerStyle}>
@@ -232,15 +246,7 @@ export default function Header() {
               className="cancel-button" 
               onClick={toggleMobileMenu} 
               aria-label="Close Menu"
-              style={{ 
-                position: "absolute",
-                top: "1rem",
-                right: "1rem",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                zIndex: 1100
-              }}
+              style={styles.cancelButton}
             >
               <FaTimes size={30} color="#fff" />
             </button>
@@ -254,7 +260,7 @@ export default function Header() {
               ))}
             </ul>
             {/* Mobile Social Media Icons */}
-            <div className="mobile-social-icons" style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+            <div className="mobile-social-icons" style={styles.mobileSocialIcons}>
               {socialLinks.map((link, index) => (
                 <a key={index} href={link.href} target="_blank" rel="noopener noreferrer" style={{ color: "#fff" }}>
                   {link.icon}
