@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 
 interface FeaturedTrip {
   title: string;
@@ -41,7 +42,14 @@ const FeaturedTrips: React.FC<FeaturedTripsProps> = ({ trips }) => {
           Handpicked trips just for you.
         </p>
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          gap: '1rem',
+        }}
+      >
         {trips.map((trip, index) => (
           <div
             key={index}
@@ -55,14 +63,14 @@ const FeaturedTrips: React.FC<FeaturedTripsProps> = ({ trips }) => {
               boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
             }}
           >
-            <img
+            <Image
               src={trip.image}
               alt={trip.title}
+              fill
               style={{
-                width: '100%',
-                height: '100%',
                 objectFit: 'cover',
               }}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
             />
             <div
               style={{
@@ -90,7 +98,13 @@ const FeaturedTrips: React.FC<FeaturedTripsProps> = ({ trips }) => {
               >
                 {trip.title}
               </h3>
-              <p style={{ color: '#fff', fontSize: '0.9rem', fontFamily: 'Arial, sans-serif' }}>
+              <p
+                style={{
+                  color: '#fff',
+                  fontSize: '0.9rem',
+                  fontFamily: 'Arial, sans-serif',
+                }}
+              >
                 {trip.description}
               </p>
             </div>
