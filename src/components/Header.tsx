@@ -5,22 +5,24 @@ import { FaWhatsapp, FaInstagram, FaFacebookF, FaBars, FaTimes } from "react-ico
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-// Social and nav links
+// Social links with provided details
 const socialLinks = [
-  { href: "https://wa.me", icon: <FaWhatsapp size={24} /> },
-  { href: "https://instagram.com", icon: <FaInstagram size={24} /> },
+  { href: "https://wa.me/9422401225", icon: <FaWhatsapp size={24} /> },
+  { href: "https://www.instagram.com/tours.columbus?igsh=eXh4MjU3aWw0cjFr", icon: <FaInstagram size={24} /> },
   { href: "https://facebook.com", icon: <FaFacebookF size={24} /> },
 ];
 
+// Main navigation links
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Services", href: "/services" },
   { name: "Gallery", href: "/gallery" },
-  { name: "Tours", href: "/tours" }, // Added Tours link
+  { name: "Tours", href: "/tours" },
 ];
 
+// Sub-navigation links
 const subNavLinks = [
   { name: "International", href: "/international" },
   { name: "World", href: "/world" },
@@ -28,8 +30,8 @@ const subNavLinks = [
   { name: "Family", href: "/family" },
 ];
 
-// Inline styles object
-const styles: { [key: string]: React.CSSProperties } = {
+// Styles object for consistent styling
+const styles = {
   navContainer: {
     display: "flex",
     flexDirection: "column",
@@ -104,6 +106,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1000,
+    paddingTop: "3rem",
   },
   mobileMenuList: {
     listStyle: "none",
@@ -137,33 +140,34 @@ export default function Header() {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
-  // Dynamically set header style: transparent & absolute on home, white background & relative elsewhere.
-  const headerStyle: React.CSSProperties = {
+  // Header style: transparent & absolute on home; dark & relative elsewhere
+  const headerStyle = {
     background: isHome ? "transparent" : "#1a1a1a",
     position: isHome ? "absolute" : "relative",
     width: "100%",
     zIndex: 1000,
     padding: "1rem 2rem",
-  };
+  } as React.CSSProperties;
 
   return (
     <header style={headerStyle}>
       <nav style={styles.navContainer}>
         {/* Main Row */}
         <div style={styles.mainRow}>
-          {/* Left: Social Media Icons */}
+          {/* Social Media Icons */}
           <div style={styles.socialIcons} className="social-icons">
             {socialLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: "#fff" }}
-              >
+              <a key={index} href={link.href} target="_blank" rel="noopener noreferrer" style={{ color: "#fff" }}>
                 {link.icon}
               </a>
             ))}
+          </div>
+
+          {/* Center: Logo */}
+          <div style={styles.logoContainer}>
+            <Link href="/" style={{ textDecoration: "none" }}>
+              <Image src="/logo.png" alt="Columbus Tours Logo" width={150} height={50} style={{ maxWidth: "150px", height: "auto" }} />
+            </Link>
           </div>
 
           {/* Right Navigation and Search */}
@@ -175,20 +179,12 @@ export default function Header() {
               onClick={toggleMobileMenu}
               aria-label="Toggle Mobile Menu"
             >
-              {isMobileMenuOpen ? (
-                <FaTimes size={24} color="#fff" />
-              ) : (
-                <FaBars size={24} color="#fff" />
-              )}
+              {isMobileMenuOpen ? <FaTimes size={24} color="#fff" /> : <FaBars size={24} color="#fff" />}
             </div>
 
             {/* Desktop Search */}
             <div style={{ marginRight: "1rem" }} className="desktop-search">
-              <input
-                type="text"
-                placeholder="Search..."
-                style={styles.searchInput}
-              />
+              <input type="text" placeholder="Search..." style={styles.searchInput} />
             </div>
 
             {/* Desktop Navigation Links */}
@@ -202,29 +198,27 @@ export default function Header() {
               ))}
             </ul>
           </div>
+        </div>
 
-          {/* Center: Logo */}
-          <div style={styles.logoContainer}>
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <Image
-                src="/logo.png"
-                alt="Columbus Tours Logo"
-                width={150}
-                height={50}
-                style={{ maxWidth: "150px", height: "auto" }}
-              />
-            </Link>
-          </div>
+        {/* Mobile Search Bar */}
+        <div className="mobile-search-bar">
+          <input
+            type="text"
+            placeholder="Search..."
+            style={{
+              padding: "0.5rem",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+              width: "100%",
+              maxWidth: "300px",
+            }}
+          />
         </div>
 
         {/* Desktop Sub Navigation */}
         <div style={styles.subNav} className="desktop-sub-nav">
           {subNavLinks.map((link, index) => (
-            <Link
-              key={index}
-              href={link.href}
-              style={{ ...styles.link, fontSize: "0.9rem" }}
-            >
+            <Link key={index} href={link.href} style={{ ...styles.link, fontSize: "0.9rem" }}>
               {link.name}
             </Link>
           ))}
@@ -233,23 +227,40 @@ export default function Header() {
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div style={styles.mobileMenuOverlay}>
-            {/* Cancel Button */}
-            <button className="cancel-button" onClick={toggleMobileMenu}>
-              Cancel
+            {/* Close Button */}
+            <button 
+              className="cancel-button" 
+              onClick={toggleMobileMenu} 
+              aria-label="Close Menu"
+              style={{ 
+                position: "absolute",
+                top: "1rem",
+                right: "1rem",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                zIndex: 1100
+              }}
+            >
+              <FaTimes size={30} color="#fff" />
             </button>
             <ul style={styles.mobileMenuList}>
               {navLinks.map((link, index) => (
                 <li key={index} style={styles.mobileMenuItem}>
-                  <Link
-                    href={link.href}
-                    style={{ ...styles.link, fontSize: "1.5rem" }}
-                    onClick={toggleMobileMenu}
-                  >
+                  <Link href={link.href} style={{ ...styles.link, fontSize: "1.5rem" }} onClick={toggleMobileMenu}>
                     {link.name}
                   </Link>
                 </li>
               ))}
             </ul>
+            {/* Mobile Social Media Icons */}
+            <div className="mobile-social-icons" style={{ display: "flex", gap: "1rem", marginTop: "2rem" }}>
+              {socialLinks.map((link, index) => (
+                <a key={index} href={link.href} target="_blank" rel="noopener noreferrer" style={{ color: "#fff" }}>
+                  {link.icon}
+                </a>
+              ))}
+            </div>
           </div>
         )}
 
@@ -257,12 +268,7 @@ export default function Header() {
         {isMobileMenuOpen && (
           <div style={styles.mobileSubNav}>
             {subNavLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link.href}
-                style={{ ...styles.link, fontSize: "1rem" }}
-                onClick={toggleMobileMenu}
-              >
+              <Link key={index} href={link.href} style={{ ...styles.link, fontSize: "1rem" }} onClick={toggleMobileMenu}>
                 {link.name}
               </Link>
             ))}
@@ -270,58 +276,43 @@ export default function Header() {
         )}
       </nav>
 
-      {/* Responsive styles via styled-jsx */}
       <style jsx>{`
         /* Hide desktop elements on small screens */
-        .desktop-nav,
-        .desktop-sub-nav,
-        .desktop-search {
-          display: none !important;
+        @media (max-width: 1024px) {
+          .desktop-nav,
+          .desktop-sub-nav,
+          .desktop-search {
+            display: none !important;
+          }
+          /* Show mobile menu icon on small screens */
+          .mobile-menu-icon {
+            display: block !important;
+          }
+          /* Hide social icons from header row on mobile */
+          .social-icons {
+            display: none !important;
+          }
+          .mobile-search-bar {
+            display: block;
+            margin-top: 1rem;
+            text-align: center;
+          }
         }
-        /* Show mobile menu icon on small screens */
-        .mobile-menu-icon {
-          display: block !important;
-        }
-        /* Style for the cancel button in mobile overlay */
-        .cancel-button {
-          background: none;
-          border: 2px solid #fff;
-          color: #fff;
-          font-size: 1.2rem;
-          padding: 0.5rem 1rem;
-          margin-bottom: 1rem;
-          cursor: pointer;
-          border-radius: 4px;
-          transition: background 0.2s ease;
-        }
-        .cancel-button:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-        @media (min-width: 769px) {
+        
+        @media (min-width: 1025px) {
           /* On larger screens, show desktop elements */
           .desktop-nav,
           .desktop-sub-nav,
           .desktop-search {
             display: flex !important;
           }
-          /* Hide mobile menu icon on larger screens */
-          .mobile-menu-icon {
+          /* Hide mobile menu icon, mobile search bar on larger screens */
+          .mobile-menu-icon,
+          .mobile-search-bar {
             display: none !important;
           }
-          /* Hide mobile overlays on larger screens */
-          .mobile-menu-overlay,
-          .mobile-sub-nav {
-            display: none !important;
-          }
-        }
-        @media (max-width: 768px) {
-          /* Adjust social icons on mobile to avoid collisions */
           .social-icons {
-            gap: 0.5rem;
-          }
-          .social-icons a svg {
-            width: 20px;
-            height: 20px;
+            display: flex !important;
           }
         }
       `}</style>
