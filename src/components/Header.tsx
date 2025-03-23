@@ -32,7 +32,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     background: "transparent",
     position: "absolute",
     width: "100%",
-    zIndex: 10,
+    zIndex: 1000,
     padding: "1rem 2rem",
   },
   navContainer: {
