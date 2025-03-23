@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaBars, FaTimes } from "react-icons/fa";
 import Image from "next/image";
 
+// Define link arrays for modularity.
 const socialLinks = [
   { href: "https://wa.me", icon: <FaWhatsapp size={24} /> },
   { href: "https://instagram.com", icon: <FaInstagram size={24} /> },
@@ -25,17 +26,18 @@ const subNavLinks = [
   { name: "Family", href: "/family" },
 ];
 
-const styles = {
+// Annotate the styles object with React.CSSProperties.
+const styles: { [key: string]: React.CSSProperties } = {
   header: {
     background: "transparent",
-    position: "absolute" as "absolute",
+    position: "absolute",
     width: "100%",
     zIndex: 10,
     padding: "1rem 2rem",
   },
   navContainer: {
     display: "flex",
-    flexDirection: "column" as "column",
+    flexDirection: "column",
     alignItems: "center",
   },
   mainRow: {
@@ -43,7 +45,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    position: "relative" as "relative",
+    position: "relative",
   },
   socialIcons: {
     flex: 1,
@@ -76,7 +78,7 @@ const styles = {
     gap: "1.5rem",
     margin: 0,
     padding: 0,
-    display: "flex", // default for desktop
+    display: "flex",
   },
   link: {
     color: "#fff",
@@ -85,7 +87,7 @@ const styles = {
     fontWeight: 500,
   },
   logoContainer: {
-    position: "absolute" as "absolute",
+    position: "absolute",
     left: "50%",
     transform: "translateX(-50%)",
   },
@@ -96,14 +98,14 @@ const styles = {
     gap: "1rem",
   },
   mobileMenuOverlay: {
-    position: "fixed" as "fixed",
+    position: "fixed",
     top: 0,
     left: 0,
     width: "100%",
     height: "100%",
     background: "rgba(0, 0, 0, 0.9)",
     display: "flex",
-    flexDirection: "column" as "column",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     zIndex: 1000,
@@ -112,13 +114,13 @@ const styles = {
     listStyle: "none",
     padding: 0,
     margin: 0,
-    textAlign: "center" as "center",
+    textAlign: "center",
   },
   mobileMenuItem: {
     margin: "1.5rem 0",
   },
   mobileSubNav: {
-    position: "fixed" as "fixed",
+    position: "fixed",
     bottom: 0,
     left: 0,
     width: "100%",
@@ -154,13 +156,8 @@ const Header = () => {
 
           {/* Right Navigation and Search */}
           <div style={styles.rightNav}>
-            {/* Mobile Menu Toggle (visible on mobile via CSS media queries) */}
-            <div
-              style={styles.mobileMenuIcon}
-              className="mobile-menu-icon"
-              onClick={toggleMobileMenu}
-              aria-label="Toggle Mobile Menu"
-            >
+            {/* Mobile Menu Toggle */}
+            <div style={styles.mobileMenuIcon} className="mobile-menu-icon" onClick={toggleMobileMenu} aria-label="Toggle Mobile Menu">
               {isMobileMenuOpen ? <FaTimes size={24} color="#fff" /> : <FaBars size={24} color="#fff" />}
             </div>
 
@@ -227,7 +224,7 @@ const Header = () => {
 
       {/* Responsive styles via styled-jsx */}
       <style jsx>{`
-        /* By default, hide desktop elements on small screens */
+        /* Hide desktop elements on small screens */
         .desktop-nav,
         .desktop-sub-nav,
         .desktop-search {
@@ -244,11 +241,11 @@ const Header = () => {
           .desktop-search {
             display: flex !important;
           }
-          /* Hide mobile elements on larger screens */
+          /* Hide mobile menu icon on larger screens */
           .mobile-menu-icon {
             display: none !important;
           }
-          /* Ensure mobile overlays are hidden on desktop */
+          /* Hide mobile overlays on larger screens */
           .mobile-menu-overlay,
           .mobile-sub-nav {
             display: none !important;

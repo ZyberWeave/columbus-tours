@@ -1,6 +1,8 @@
 'use client';
 import FeaturedTrips from '@/components/FeaturedTrips';
 import React, { useState, useEffect } from 'react';
+import Image from "next/image";
+
 
 interface AutoSliderProps {
   images: string[];
@@ -39,9 +41,9 @@ const AutoSlider: React.FC<AutoSliderProps> = ({ images, interval = 3000, style 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {prevIndex !== null && (
-        <img src={images[prevIndex]} alt="" style={{ ...commonStyle, opacity: 0 }} loading="lazy" />
+        <Image src={images[prevIndex]} alt="" style={{ ...commonStyle, opacity: 0 }} loading="lazy" />
       )}
-      <img src={images[currentIndex]} alt="" style={{ ...commonStyle, opacity: 1 }} loading="lazy" />
+      <Image src={images[currentIndex]} alt="" style={{ ...commonStyle, opacity: 1 }} loading="lazy" />
     </div>
   );
 };
@@ -141,7 +143,7 @@ export default function HomePage() {
             padding: '0 1rem',
           }}
         >
-          <img
+          <Image
             src="/logo.png"
             alt="Columbus Tours Logo"
             style={{
