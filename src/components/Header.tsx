@@ -3,8 +3,9 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { FaWhatsapp, FaInstagram, FaFacebookF, FaBars, FaTimes } from "react-icons/fa";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
-// Define link arrays for modularity.
+// Social and nav links
 const socialLinks = [
   { href: "https://wa.me", icon: <FaWhatsapp size={24} /> },
   { href: "https://instagram.com", icon: <FaInstagram size={24} /> },
@@ -26,15 +27,8 @@ const subNavLinks = [
   { name: "Family", href: "/family" },
 ];
 
-// Annotate the styles object with React.CSSProperties.
+// Inline styles object
 const styles: { [key: string]: React.CSSProperties } = {
-  header: {
-    background: "transparent",
-    position: "absolute",
-    width: "100%",
-    zIndex: 1000,
-    padding: "1rem 2rem",
-  },
   navContainer: {
     display: "flex",
     flexDirection: "column",
@@ -133,22 +127,40 @@ const styles: { [key: string]: React.CSSProperties } = {
   },
 };
 
-const Header = () => {
+export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isHome = pathname === "/";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
+  // Dynamically set header style
+  const headerStyle: React.CSSProperties = {
+    background: isHome ? "transparent" : "#1a1a1a",
+    position: isHome ? "absolute" : "relative",
+    width: "100%",
+    zIndex: 1000,
+    padding: "1rem 2rem",
+  };
+
   return (
-    <header style={styles.header}>
+    <header style={headerStyle}>
       <nav style={styles.navContainer}>
         {/* Main Row */}
         <div style={styles.mainRow}>
           {/* Left: Social Media Icons */}
-          <div style={styles.socialIcons}>
+          <div style={styles.socialIcons} className="social-icons">
             {socialLinks.map((link, index) => (
-              <a key={index} href={link.href} target="_blank" rel="noopener noreferrer" style={{ color: "#fff" }}>
+              <a
+                key={index}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#fff" }}
+              >
                 {link.icon}
               </a>
             ))}
@@ -157,13 +169,26 @@ const Header = () => {
           {/* Right Navigation and Search */}
           <div style={styles.rightNav}>
             {/* Mobile Menu Toggle */}
-            <div style={styles.mobileMenuIcon} className="mobile-menu-icon" onClick={toggleMobileMenu} aria-label="Toggle Mobile Menu">
-              {isMobileMenuOpen ? <FaTimes size={24} color="#fff" /> : <FaBars size={24} color="#fff" />}
+            <div
+              style={styles.mobileMenuIcon}
+              className="mobile-menu-icon"
+              onClick={toggleMobileMenu}
+              aria-label="Toggle Mobile Menu"
+            >
+              {isMobileMenuOpen ? (
+                <FaTimes size={24} color="#fff" />
+              ) : (
+                <FaBars size={24} color="#fff" />
+              )}
             </div>
 
             {/* Desktop Search */}
             <div style={{ marginRight: "1rem" }} className="desktop-search">
-              <input type="text" placeholder="Search..." style={styles.searchInput} />
+              <input
+                type="text"
+                placeholder="Search..."
+                style={styles.searchInput}
+              />
             </div>
 
             {/* Desktop Navigation Links */}
@@ -181,7 +206,13 @@ const Header = () => {
           {/* Center: Logo */}
           <div style={styles.logoContainer}>
             <Link href="/" style={{ textDecoration: "none" }}>
-              <Image src="/logo.png" alt="Columbus Tours Logo" width={150} height={50} style={{ maxWidth: "150px", height: "auto" }} />
+              <Image
+                src="/logo.png"
+                alt="Columbus Tours Logo"
+                width={150}
+                height={50}
+                style={{ maxWidth: "150px", height: "auto" }}
+              />
             </Link>
           </div>
         </div>
@@ -189,7 +220,11 @@ const Header = () => {
         {/* Desktop Sub Navigation */}
         <div style={styles.subNav} className="desktop-sub-nav">
           {subNavLinks.map((link, index) => (
-            <Link key={index} href={link.href} style={{ ...styles.link, fontSize: "0.9rem" }}>
+            <Link
+              key={index}
+              href={link.href}
+              style={{ ...styles.link, fontSize: "0.9rem" }}
+            >
               {link.name}
             </Link>
           ))}
@@ -201,7 +236,11 @@ const Header = () => {
             <ul style={styles.mobileMenuList}>
               {navLinks.map((link, index) => (
                 <li key={index} style={styles.mobileMenuItem}>
-                  <Link href={link.href} style={{ ...styles.link, fontSize: "1.5rem" }} onClick={toggleMobileMenu}>
+                  <Link
+                    href={link.href}
+                    style={{ ...styles.link, fontSize: "1.5rem" }}
+                    onClick={toggleMobileMenu}
+                  >
                     {link.name}
                   </Link>
                 </li>
@@ -214,7 +253,12 @@ const Header = () => {
         {isMobileMenuOpen && (
           <div style={styles.mobileSubNav}>
             {subNavLinks.map((link, index) => (
-              <Link key={index} href={link.href} style={{ ...styles.link, fontSize: "1rem" }} onClick={toggleMobileMenu}>
+              <Link
+                key={index}
+                href={link.href}
+                style={{ ...styles.link, fontSize: "1rem" }}
+                onClick={toggleMobileMenu}
+              >
                 {link.name}
               </Link>
             ))}
@@ -251,9 +295,17 @@ const Header = () => {
             display: none !important;
           }
         }
+        @media (max-width: 768px) {
+          /* Adjust social icons on mobile to avoid collisions */
+          .social-icons {
+            gap: 0.5rem;
+          }
+          .social-icons a svg {
+            width: 20px;
+            height: 20px;
+          }
+        }
       `}</style>
     </header>
   );
-};
-
-export default Header;
+}

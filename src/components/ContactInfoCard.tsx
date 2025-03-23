@@ -76,9 +76,9 @@ const ContactInfoCard = () => {
           <div>
             <p className="text-sm font-medium text-gray-900">Main Office</p>
             <p className="text-sm text-gray-600">
-              123 Business Avenue<br />
-              Suite 200<br />
-              New York, NY 10001
+            91, Laxmi Heights, 63<br />
+            Mangalwar Peth, Opp. Jyotiba Temple<br />
+            Karad - 415 110 (MS) INDIA
             </p>
           </div>
         </div>

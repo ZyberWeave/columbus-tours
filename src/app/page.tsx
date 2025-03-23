@@ -134,18 +134,6 @@ export default function HomePage() {
           </button>
         </div>
       </section>
-
-      {/* Our Trips Heading Section */}
-      <section className="w-full bg-gray-100 py-16">
-        <div className="container mx-auto text-center px-4">
-          <h2 className="text-4xl mb-2 font-bold">Our Trips</h2>
-          <p className="text-xl text-gray-700">
-            Choose from our variety of exciting tour packages.
-          </p>
-        </div>
-      </section>
-
-      {/* Our Trips Section */}
 <section className="w-full bg-white py-16">
   <div className="container mx-auto px-4">
     {/* Heading */}
