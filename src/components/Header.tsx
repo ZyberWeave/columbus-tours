@@ -18,6 +18,7 @@ const navLinks = [
   { name: "Contact", href: "/contact" },
   { name: "Services", href: "/services" },
   { name: "Gallery", href: "/gallery" },
+  { name: "Tours", href: "/tours" }, // Added Tours link
 ];
 
 const subNavLinks = [
@@ -130,14 +131,13 @@ const styles: { [key: string]: React.CSSProperties } = {
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
-
   const isHome = pathname === "/";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
   };
 
-  // Dynamically set header style
+  // Dynamically set header style: transparent & absolute on home, white background & relative elsewhere.
   const headerStyle: React.CSSProperties = {
     background: isHome ? "transparent" : "#1a1a1a",
     position: isHome ? "absolute" : "relative",
@@ -233,6 +233,10 @@ export default function Header() {
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div style={styles.mobileMenuOverlay}>
+            {/* Cancel Button */}
+            <button className="cancel-button" onClick={toggleMobileMenu}>
+              Cancel
+            </button>
             <ul style={styles.mobileMenuList}>
               {navLinks.map((link, index) => (
                 <li key={index} style={styles.mobileMenuItem}>
@@ -277,6 +281,21 @@ export default function Header() {
         /* Show mobile menu icon on small screens */
         .mobile-menu-icon {
           display: block !important;
+        }
+        /* Style for the cancel button in mobile overlay */
+        .cancel-button {
+          background: none;
+          border: 2px solid #fff;
+          color: #fff;
+          font-size: 1.2rem;
+          padding: 0.5rem 1rem;
+          margin-bottom: 1rem;
+          cursor: pointer;
+          border-radius: 4px;
+          transition: background 0.2s ease;
+        }
+        .cancel-button:hover {
+          background: rgba(255, 255, 255, 0.2);
         }
         @media (min-width: 769px) {
           /* On larger screens, show desktop elements */
