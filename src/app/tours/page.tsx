@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import React, { useState, useEffect } from "react";
 import { allTours } from "@/data/toursData";
 import Image from "next/image";
 
@@ -37,7 +37,15 @@ export default function ToursPage() {
       <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>Explore Our Tours</h1>
 
       {/* Category Filter Buttons */}
-      <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem", marginBottom: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: "1rem",
+          marginBottom: "1rem",
+        }}
+      >
         {categories.map((category) => (
           <button
             key={category}
@@ -168,7 +176,7 @@ export default function ToursPage() {
                 <p>Duration: {tour.duration} nights</p>
                 <p>Category: {tour.category}</p>
                 <Link
-                  href={`/tours/${tour.id}`}
+                  href={`/tours/${tour.slug}`} // Using slug for SEO-friendly URL
                   style={{
                     marginTop: "1rem",
                     padding: "0.5rem 1rem",
