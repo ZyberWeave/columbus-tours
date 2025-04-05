@@ -2,23 +2,27 @@ export interface Tour {
   id: number;
   title: string;
   slug: string; // SEO-friendly, descriptive slug (no dates)
-  duration: number;  // number of nights
+  duration: number; // number of nights
   category: "International" | "Domestic" | "Religious" | "Honeymoon" | "Cruise";
-  image: string;
+  images: string[]; // fallback static images (if dynamic loading fails)
+  folder: string; // folder name for dynamic image loading; each folder should contain:
+                 //   - a "slideshow" subfolder with images (e.g., 1.jpg, 2.jpg, ..., 5.jpg)
+                 //   - a "thumbnail.jpg" file for the tour card
   whatsappMessage: string;
 }
 
 export const allTours: Tour[] = [
-  // -------------------------------
+  // ===============================
   // INTERNATIONAL TOURS
-  // -------------------------------
+  // ===============================
   {
     id: 1,
     title: "Dubai Diwali Festival Tour",
     slug: "dubai-diwali-festival-tour",
     duration: 5,
     category: "International",
-    image: "/images/dubai.jpg",
+    images: [],
+    folder: "dubai",
     whatsappMessage:
       "Hello, I'm interested in the Dubai Diwali Festival Tour. Please send me more details.",
   },
@@ -28,7 +32,8 @@ export const allTours: Tour[] = [
     slug: "phuket-krabi-island-adventure-tour",
     duration: 4,
     category: "International",
-    image: "/images/phuket-krabi.jpg",
+    images: [],
+    folder: "phuket-krabi",
     whatsappMessage:
       "Hello, I'm interested in the Phuket Krabi Island Adventure Tour. Please send me more details.",
   },
@@ -38,7 +43,8 @@ export const allTours: Tour[] = [
     slug: "bangkok-pattaya-city-escape-tour",
     duration: 4,
     category: "International",
-    image: "/images/bangkok-pattaya.jpg",
+    images: [],
+    folder: "bangkok-pattaya",
     whatsappMessage:
       "Hello, I'm interested in the Bangkok Pattaya City Escape Tour. Please send me more details.",
   },
@@ -48,7 +54,8 @@ export const allTours: Tour[] = [
     slug: "bali-indonesia-exotic-retreat-tour",
     duration: 5,
     category: "International",
-    image: "/images/bali.jpg",
+    images: [],
+    folder: "bali",
     whatsappMessage:
       "Hello, I'm interested in the Bali Indonesia Exotic Retreat Tour. Please send me more details.",
   },
@@ -58,7 +65,8 @@ export const allTours: Tour[] = [
     slug: "singapore-malaysia-urban-cultural-tour",
     duration: 6,
     category: "International",
-    image: "/images/singapore-malaysia.jpg",
+    images: [],
+    folder: "singapore-malaysia",
     whatsappMessage:
       "Hello, I'm interested in the Singapore Malaysia Urban Cultural Tour. Please send me more details.",
   },
@@ -68,7 +76,8 @@ export const allTours: Tour[] = [
     slug: "almaty-kazakhstan-scenic-discovery-tour",
     duration: 4,
     category: "International",
-    image: "/images/almaty.jpg",
+    images: [],
+    folder: "almaty",
     whatsappMessage:
       "Hello, I'm interested in the Almaty Kazakhstan Scenic Discovery Tour. Please send me more details.",
   },
@@ -78,7 +87,8 @@ export const allTours: Tour[] = [
     slug: "baku-azerbaijan-heritage-modernity-tour",
     duration: 4,
     category: "International",
-    image: "/images/baku.jpg",
+    images: [],
+    folder: "baku",
     whatsappMessage:
       "Hello, I'm interested in the Baku Azerbaijan Heritage & Modernity Tour. Please send me more details.",
   },
@@ -88,7 +98,8 @@ export const allTours: Tour[] = [
     slug: "sri-lanka-scenic-cultural-tour",
     duration: 5,
     category: "International",
-    image: "/images/srilanka.jpg",
+    images: [],
+    folder: "srilanka",
     whatsappMessage:
       "Hello, I'm interested in the Sri Lanka Scenic Cultural Tour. Please send me more details.",
   },
@@ -98,7 +109,8 @@ export const allTours: Tour[] = [
     slug: "vietnam-adventure-heritage-tour",
     duration: 5,
     category: "International",
-    image: "/images/vietnam.jpg",
+    images: [],
+    folder: "vietnam",
     whatsappMessage:
       "Hello, I'm interested in the Vietnam Adventure & Heritage Tour. Please send me more details.",
   },
@@ -108,7 +120,8 @@ export const allTours: Tour[] = [
     slug: "cambodia-ancient-temples-tour",
     duration: 4,
     category: "International",
-    image: "/images/cambodia.jpg",
+    images: [],
+    folder: "cambodia",
     whatsappMessage:
       "Hello, I'm interested in the Cambodia Ancient Temples Tour. Please send me more details.",
   },
@@ -118,7 +131,8 @@ export const allTours: Tour[] = [
     slug: "philippines-island-paradise-tour",
     duration: 5,
     category: "International",
-    image: "/images/philippines.jpg",
+    images: [],
+    folder: "philippines",
     whatsappMessage:
       "Hello, I'm interested in the Philippines Island Paradise Tour. Please send me more details.",
   },
@@ -128,7 +142,8 @@ export const allTours: Tour[] = [
     slug: "nepal-himalayan-culture-tour",
     duration: 5,
     category: "International",
-    image: "/images/nepal.jpg",
+    images: [],
+    folder: "nepal",
     whatsappMessage:
       "Hello, I'm interested in the Nepal Himalayan Culture Tour. Please send me more details.",
   },
@@ -138,7 +153,8 @@ export const allTours: Tour[] = [
     slug: "bhutan-mystical-kingdom-tour",
     duration: 6,
     category: "International",
-    image: "/images/bhutan.jpg",
+    images: [],
+    folder: "bhutan",
     whatsappMessage:
       "Hello, I'm interested in the Bhutan Mystical Kingdom Tour. Please send me more details.",
   },
@@ -148,7 +164,8 @@ export const allTours: Tour[] = [
     slug: "japan-modern-tradition-tour",
     duration: 6,
     category: "International",
-    image: "/images/japan.jpg",
+    images: [],
+    folder: "japan",
     whatsappMessage:
       "Hello, I'm interested in the Japan Modern Tradition Tour. Please send me more details.",
   },
@@ -158,7 +175,8 @@ export const allTours: Tour[] = [
     slug: "turkey-historical-cultural-tour",
     duration: 6,
     category: "International",
-    image: "/images/turkey.jpg",
+    images: [],
+    folder: "turkey",
     whatsappMessage:
       "Hello, I'm interested in the Turkey Historical Cultural Tour. Please send me more details.",
   },
@@ -168,7 +186,8 @@ export const allTours: Tour[] = [
     slug: "greece-mythical-islands-heritage-tour",
     duration: 6,
     category: "International",
-    image: "/images/greece.jpg",
+    images: [],
+    folder: "greece",
     whatsappMessage:
       "Hello, I'm interested in the Greece Mythical Islands Heritage Tour. Please send me more details.",
   },
@@ -178,7 +197,8 @@ export const allTours: Tour[] = [
     slug: "australia-ultimate-outback-city-tour",
     duration: 11,
     category: "International",
-    image: "/images/australia.jpg",
+    images: [],
+    folder: "australia",
     whatsappMessage:
       "Hello, I'm interested in the Australia Ultimate Outback City Tour. Please send me more details.",
   },
@@ -188,7 +208,8 @@ export const allTours: Tour[] = [
     slug: "new-zealand-adventure-scenic-tour",
     duration: 6,
     category: "International",
-    image: "/images/newzealand.jpg",
+    images: [],
+    folder: "newzealand",
     whatsappMessage:
       "Hello, I'm interested in the New Zealand Adventure Scenic Tour. Please send me more details.",
   },
@@ -198,7 +219,8 @@ export const allTours: Tour[] = [
     slug: "europe-grand-cultural-historical-tour",
     duration: 12,
     category: "International",
-    image: "/images/europe.jpg",
+    images: [],
+    folder: "europe",
     whatsappMessage:
       "Hello, I'm interested in the Europe Grand Cultural Historical Tour. Please send me more details.",
   },
@@ -208,7 +230,8 @@ export const allTours: Tour[] = [
     slug: "egypt-ancient-wonders-tour",
     duration: 7,
     category: "International",
-    image: "/images/egypt.jpg",
+    images: [],
+    folder: "egypt",
     whatsappMessage:
       "Hello, I'm interested in the Egypt Ancient Wonders Tour. Please send me more details.",
   },
@@ -218,7 +241,8 @@ export const allTours: Tour[] = [
     slug: "mauritius-tropical-escape-tour",
     duration: 5,
     category: "International",
-    image: "/images/mauritius.jpg",
+    images: [],
+    folder: "mauritius",
     whatsappMessage:
       "Hello, I'm interested in the Mauritius Tropical Escape Tour. Please send me more details.",
   },
@@ -228,7 +252,8 @@ export const allTours: Tour[] = [
     slug: "maldives-luxury-island-retreat",
     duration: 4,
     category: "International",
-    image: "/images/maldives.jpg",
+    images: [],
+    folder: "maldives",
     whatsappMessage:
       "Hello, I'm interested in the Maldives Luxury Island Retreat. Please send me more details.",
   },
@@ -238,21 +263,23 @@ export const allTours: Tour[] = [
     slug: "united-states-grand-road-trip-tour",
     duration: 12,
     category: "International",
-    image: "/images/usa.jpg",
+    images: [],
+    folder: "usa",
     whatsappMessage:
       "Hello, I'm interested in the United States Grand Road Trip Tour. Please send me more details.",
   },
 
-  // -------------------------------
+  // ===============================
   // DOMESTIC TOURS
-  // -------------------------------
+  // ===============================
   {
     id: 101,
     title: "Rajasthan Royal Heritage Tour",
     slug: "rajasthan-royal-heritage-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/rajasthan.jpg",
+    images: [],
+    folder: "rajasthan",
     whatsappMessage:
       "Hello, I'm interested in the Rajasthan Royal Heritage Tour. Please send me more details.",
   },
@@ -262,7 +289,8 @@ export const allTours: Tour[] = [
     slug: "dharamshala-dalhousie-himalayan-retreat-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/dharamshala-dalhousie.jpg",
+    images: [],
+    folder: "dharamshala-dalhousie",
     whatsappMessage:
       "Hello, I'm interested in the Himalayan Retreat: Dharamshala Dalhousie Tour. Please send me more details.",
   },
@@ -272,7 +300,8 @@ export const allTours: Tour[] = [
     slug: "kullu-manali-adventure-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/kullu-manali.jpg",
+    images: [],
+    folder: "kullu-manali",
     whatsappMessage:
       "Hello, I'm interested in the Kullu Manali Adventure Tour. Please send me more details.",
   },
@@ -282,7 +311,8 @@ export const allTours: Tour[] = [
     slug: "jammu-kashmir-scenic-tour",
     duration: 5,
     category: "Domestic",
-    image: "/images/jammu-kashmir.jpg",
+    images: [],
+    folder: "jammu-kashmir",
     whatsappMessage:
       "Hello, I'm interested in the Jammu Kashmir Scenic Tour. Please send me more details.",
   },
@@ -292,7 +322,8 @@ export const allTours: Tour[] = [
     slug: "leh-ladakh-high-altitude-adventure",
     duration: 7,
     category: "Domestic",
-    image: "/images/leh-ladakh.jpg",
+    images: [],
+    folder: "leh-ladakh",
     whatsappMessage:
       "Hello, I'm interested in the Leh Ladakh High Altitude Adventure. Please send me more details.",
   },
@@ -302,7 +333,8 @@ export const allTours: Tour[] = [
     slug: "chardham-pilgrimage-tour",
     duration: 10,
     category: "Domestic",
-    image: "/images/chardham.jpg",
+    images: [],
+    folder: "chardham",
     whatsappMessage:
       "Hello, I'm interested in the Chardham Pilgrimage Tour. Please send me more details.",
   },
@@ -312,7 +344,8 @@ export const allTours: Tour[] = [
     slug: "dodham-pilgrimage-tour",
     duration: 4,
     category: "Domestic",
-    image: "/images/dodham.jpg",
+    images: [],
+    folder: "dodham",
     whatsappMessage:
       "Hello, I'm interested in the Dodham Pilgrimage Tour. Please send me more details.",
   },
@@ -322,7 +355,8 @@ export const allTours: Tour[] = [
     slug: "vaishnodevi-pilgrimage-tour",
     duration: 4,
     category: "Domestic",
-    image: "/images/vaishnodevi.jpg",
+    images: [],
+    folder: "vaishnodevi",
     whatsappMessage:
       "Hello, I'm interested in the Vaishnodevi Pilgrimage Tour. Please send me more details.",
   },
@@ -332,7 +366,8 @@ export const allTours: Tour[] = [
     slug: "kerala-backwaters-culture-tour",
     duration: 5,
     category: "Domestic",
-    image: "/images/kerala.jpg",
+    images: [],
+    folder: "kerala",
     whatsappMessage:
       "Hello, I'm interested in the Kerala Backwaters Culture Tour. Please send me more details.",
   },
@@ -342,7 +377,8 @@ export const allTours: Tour[] = [
     slug: "north-east-india-scenic-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/northeast.jpg",
+    images: [],
+    folder: "northeast",
     whatsappMessage:
       "Hello, I'm interested in the North East India Scenic Tour. Please send me more details.",
   },
@@ -352,7 +388,8 @@ export const allTours: Tour[] = [
     slug: "andaman-nicobar-island-escape",
     duration: 5,
     category: "Domestic",
-    image: "/images/andaman.jpg",
+    images: [],
+    folder: "andaman",
     whatsappMessage:
       "Hello, I'm interested in the Andaman Nicobar Island Escape. Please send me more details.",
   },
@@ -362,7 +399,8 @@ export const allTours: Tour[] = [
     slug: "goa-beach-culture-getaway",
     duration: 3,
     category: "Domestic",
-    image: "/images/goa.jpg",
+    images: [],
+    folder: "goa",
     whatsappMessage:
       "Hello, I'm interested in the Goa Beach Culture Getaway. Please send me more details.",
   },
@@ -372,7 +410,8 @@ export const allTours: Tour[] = [
     slug: "mysore-ooty-nature-heritage-tour",
     duration: 3,
     category: "Domestic",
-    image: "/images/mysore-ooty.jpg",
+    images: [],
+    folder: "mysore-ooty",
     whatsappMessage:
       "Hello, I'm interested in the Mysore Ooty Nature Heritage Tour. Please send me more details.",
   },
@@ -382,7 +421,8 @@ export const allTours: Tour[] = [
     slug: "tamil-nadu-heritage-spiritual-tour",
     duration: 4,
     category: "Domestic",
-    image: "/images/tamilnadu.jpg",
+    images: [],
+    folder: "tamilnadu",
     whatsappMessage:
       "Hello, I'm interested in the Tamil Nadu Heritage Spiritual Tour. Please send me more details.",
   },
@@ -392,7 +432,8 @@ export const allTours: Tour[] = [
     slug: "ramoji-hyderabad-entertainment-tour",
     duration: 2,
     category: "Domestic",
-    image: "/images/ramoji.jpg",
+    images: [],
+    folder: "ramoji",
     whatsappMessage:
       "Hello, I'm interested in the Ramoji Hyderabad Entertainment Tour. Please send me more details.",
   },
@@ -402,7 +443,8 @@ export const allTours: Tour[] = [
     slug: "tirupati-spiritual-pilgrimage-tour",
     duration: 2,
     category: "Domestic",
-    image: "/images/tirupati.jpg",
+    images: [],
+    folder: "tirupati",
     whatsappMessage:
       "Hello, I'm interested in the Tirupati Spiritual Pilgrimage Tour. Please send me more details.",
   },
@@ -412,7 +454,8 @@ export const allTours: Tour[] = [
     slug: "gujarat-vibrant-heritage-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/gujarat.jpg",
+    images: [],
+    folder: "gujarat",
     whatsappMessage:
       "Hello, I'm interested in the Gujarat Vibrant Heritage Tour. Please send me more details.",
   },
@@ -422,7 +465,8 @@ export const allTours: Tour[] = [
     slug: "rann-of-kutch-desert-experience-tour",
     duration: 3,
     category: "Domestic",
-    image: "/images/rann.jpg",
+    images: [],
+    folder: "rann",
     whatsappMessage:
       "Hello, I'm interested in the Rann of Kutch Desert Experience Tour. Please send me more details.",
   },
@@ -432,7 +476,8 @@ export const allTours: Tour[] = [
     slug: "madhya-pradesh-historical-wildlife-tour",
     duration: 6,
     category: "Domestic",
-    image: "/images/madhyapradesh.jpg",
+    images: [],
+    folder: "madhyapradesh",
     whatsappMessage:
       "Hello, I'm interested in the Madhya Pradesh Historical Wildlife Tour. Please send me more details.",
   },
@@ -442,7 +487,8 @@ export const allTours: Tour[] = [
     slug: "ayodhya-varanasi-spiritual-journey",
     duration: 5,
     category: "Domestic",
-    image: "/images/varanasi.jpg",
+    images: [],
+    folder: "varanasi",
     whatsappMessage:
       "Hello, I'm interested in the Ayodhya Varanasi Spiritual Journey. Please send me more details.",
   },
@@ -452,7 +498,8 @@ export const allTours: Tour[] = [
     slug: "odisha-cultural-heritage-tour",
     duration: 5,
     category: "Domestic",
-    image: "/images/odisha.jpg",
+    images: [],
+    folder: "odisha",
     whatsappMessage:
       "Hello, I'm interested in the Odisha Cultural Heritage Tour. Please send me more details.",
   },
@@ -462,21 +509,23 @@ export const allTours: Tour[] = [
     slug: "konkan-coastal-discovery-tour",
     duration: 3,
     category: "Domestic",
-    image: "/images/konkan.jpg",
+    images: [],
+    folder: "konkan",
     whatsappMessage:
       "Hello, I'm interested in the Konkan Coastal Discovery Tour. Please send me more details.",
   },
 
-  // -------------------------------
+  // ===============================
   // RELIGIOUS TOURS
-  // -------------------------------
+  // ===============================
   {
     id: 201,
     title: "Chardham Yatra Pilgrimage Tour",
     slug: "chardham-yatra-pilgrimage-tour",
     duration: 10,
     category: "Religious",
-    image: "/images/chardham.jpg",
+    images: [],
+    folder: "chardham",
     whatsappMessage:
       "Hello, I'm interested in the Chardham Yatra Pilgrimage Tour. Please send me more details.",
   },
@@ -486,7 +535,8 @@ export const allTours: Tour[] = [
     slug: "dodham-yatra-religious-tour",
     duration: 4,
     category: "Religious",
-    image: "/images/dodham.jpg",
+    images: [],
+    folder: "dodham",
     whatsappMessage:
       "Hello, I'm interested in the Dodham Yatra Religious Tour. Please send me more details.",
   },
@@ -496,7 +546,8 @@ export const allTours: Tour[] = [
     slug: "vaishnodevi-katra-religious-tour",
     duration: 4,
     category: "Religious",
-    image: "/images/vaishnodevi.jpg",
+    images: [],
+    folder: "vaishnodevi",
     whatsappMessage:
       "Hello, I'm interested in the Vaishnodevi Katra Religious Tour. Please send me more details.",
   },
@@ -506,7 +557,8 @@ export const allTours: Tour[] = [
     slug: "tirupati-religious-tour",
     duration: 2,
     category: "Religious",
-    image: "/images/tirupati.jpg",
+    images: [],
+    folder: "tirupati",
     whatsappMessage:
       "Hello, I'm interested in the Tirupati Religious Tour. Please send me more details.",
   },
@@ -516,21 +568,23 @@ export const allTours: Tour[] = [
     slug: "ayodhya-varanasi-religious-tour",
     duration: 5,
     category: "Religious",
-    image: "/images/varanasi.jpg",
+    images: [],
+    folder: "varanasi",
     whatsappMessage:
       "Hello, I'm interested in the Ayodhya Varanasi Religious Tour. Please send me more details.",
   },
 
-  // -------------------------------
+  // ===============================
   // HONEYMOON TOURS
-  // -------------------------------
+  // ===============================
   {
     id: 301,
     title: "Mauritius Honeymoon Getaway",
     slug: "mauritius-honeymoon-getaway",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/mauritius-honeymoon.jpg",
+    images: [],
+    folder: "mauritius",
     whatsappMessage:
       "Hello, I'm interested in the Mauritius Honeymoon Getaway. Please send me more details.",
   },
@@ -540,7 +594,8 @@ export const allTours: Tour[] = [
     slug: "maldives-honeymoon-retreat",
     duration: 4,
     category: "Honeymoon",
-    image: "/images/maldives-honeymoon.jpg",
+    images: [],
+    folder: "maldives",
     whatsappMessage:
       "Hello, I'm interested in the Maldives Honeymoon Retreat. Please send me more details.",
   },
@@ -550,7 +605,8 @@ export const allTours: Tour[] = [
     slug: "bali-indonesia-honeymoon-escape",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/bali-honeymoon.jpg",
+    images: [],
+    folder: "bali",
     whatsappMessage:
       "Hello, I'm interested in the Bali Indonesia Honeymoon Escape. Please send me more details.",
   },
@@ -560,7 +616,8 @@ export const allTours: Tour[] = [
     slug: "phuket-krabi-honeymoon",
     duration: 4,
     category: "Honeymoon",
-    image: "/images/phuket-honeymoon.jpg",
+    images: [],
+    folder: "phuket",
     whatsappMessage:
       "Hello, I'm interested in the Phuket Krabi Honeymoon. Please send me more details.",
   },
@@ -570,7 +627,8 @@ export const allTours: Tour[] = [
     slug: "paris-honeymoon-romance",
     duration: 6,
     category: "Honeymoon",
-    image: "/images/paris-honeymoon.jpg",
+    images: [],
+    folder: "paris",
     whatsappMessage:
       "Hello, I'm interested in the Paris Honeymoon Romance. Please send me more details.",
   },
@@ -580,7 +638,8 @@ export const allTours: Tour[] = [
     slug: "switzerland-honeymoon-adventure",
     duration: 6,
     category: "Honeymoon",
-    image: "/images/switzerland-honeymoon.jpg",
+    images: [],
+    folder: "switzerland",
     whatsappMessage:
       "Hello, I'm interested in the Switzerland Honeymoon Adventure. Please send me more details.",
   },
@@ -590,7 +649,8 @@ export const allTours: Tour[] = [
     slug: "venice-italy-honeymoon",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/venice-honeymoon.jpg",
+    images: [],
+    folder: "venice",
     whatsappMessage:
       "Hello, I'm interested in the Venice Italy Honeymoon. Please send me more details.",
   },
@@ -600,7 +660,8 @@ export const allTours: Tour[] = [
     slug: "philippines-honeymoon",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/philippines-honeymoon.jpg",
+    images: [],
+    folder: "philippines",
     whatsappMessage:
       "Hello, I'm interested in the Philippines Honeymoon. Please send me more details.",
   },
@@ -610,7 +671,8 @@ export const allTours: Tour[] = [
     slug: "kashmir-honeymoon",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/kashmir-honeymoon.jpg",
+    images: [],
+    folder: "kashmir",
     whatsappMessage:
       "Hello, I'm interested in the Kashmir Honeymoon. Please send me more details.",
   },
@@ -620,7 +682,8 @@ export const allTours: Tour[] = [
     slug: "kerala-honeymoon",
     duration: 5,
     category: "Honeymoon",
-    image: "/images/kerala-honeymoon.jpg",
+    images: [],
+    folder: "kerala",
     whatsappMessage:
       "Hello, I'm interested in the Kerala Honeymoon. Please send me more details.",
   },
@@ -630,7 +693,8 @@ export const allTours: Tour[] = [
     slug: "goa-honeymoon",
     duration: 3,
     category: "Honeymoon",
-    image: "/images/goa-honeymoon.jpg",
+    images: [],
+    folder: "goa",
     whatsappMessage:
       "Hello, I'm interested in the Goa Honeymoon. Please send me more details.",
   },
@@ -640,21 +704,23 @@ export const allTours: Tour[] = [
     slug: "himachal-honeymoon",
     duration: 6,
     category: "Honeymoon",
-    image: "/images/himachal-honeymoon.jpg",
+    images: [],
+    folder: "himachal",
     whatsappMessage:
       "Hello, I'm interested in the Himachal Honeymoon. Please send me more details.",
   },
 
-  // -------------------------------
+  // ===============================
   // CRUISE TOURS
-  // -------------------------------
+  // ===============================
   {
     id: 401,
     title: "Cordella Cruise Vacation",
     slug: "cordella-cruise-vacation",
     duration: 7,
     category: "Cruise",
-    image: "/images/cordella.jpg",
+    images: [],
+    folder: "cordella",
     whatsappMessage:
       "Hello, I'm interested in the Cordella Cruise Vacation. Please send me more details.",
   },
@@ -664,7 +730,8 @@ export const allTours: Tour[] = [
     slug: "bahamas-cruise-vacation",
     duration: 7,
     category: "Cruise",
-    image: "/images/bahamas.jpg",
+    images: [],
+    folder: "bahamas",
     whatsappMessage:
       "Hello, I'm interested in the Bahamas Cruise Vacation. Please send me more details.",
   },
