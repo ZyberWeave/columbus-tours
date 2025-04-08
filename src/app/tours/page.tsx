@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -19,6 +19,14 @@ const CATEGORIES = [
 ];
 
 export default function ToursPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <ToursPageContent />
+    </Suspense>
+  );
+}
+
+function ToursPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category") || "All";
