@@ -7,15 +7,13 @@ interface PageProps {
   params: { slug: string };
 }
 
-// Generates static parameters for each tour (required for Next.js static generation)
+// Use generateStaticParams for static generation
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   return allTours.map((tour) => ({ slug: tour.slug }));
 }
 
-export default async function TourDetailPage({ params }: PageProps) {
-  // If Next.js requires, await params to be safe
-  const resolvedParams = await Promise.resolve(params);
-  const { slug } = resolvedParams;
+export default function TourDetailPage({ params }: PageProps) {
+  const { slug } = params;
   const tour = allTours.find((t) => t.slug === slug);
 
   if (!tour) {
@@ -24,7 +22,7 @@ export default async function TourDetailPage({ params }: PageProps) {
         <div className="text-center">
           <h1 className="text-3xl font-bold text-red-600 mb-4">Tour Not Found</h1>
           <p className="text-gray-600 mb-6">
-            The tour you&apos;re looking for doesn&apos;t exist. Please check back later or browse our available tours.
+            The tour you’re looking for doesn’t exist. Please check back later or browse our available tours.
           </p>
           <Link
             href="/tours"
