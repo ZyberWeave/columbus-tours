@@ -26,6 +26,15 @@ export default function ToursPage() {
   );
 }
 
+// Add Loading component definition
+function Loading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-pulse text-lg">Loading tours...</div>
+    </div>
+  );
+}
+
 function ToursPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
