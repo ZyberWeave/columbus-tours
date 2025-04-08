@@ -1,5 +1,5 @@
 // src/app/tours/[slug]/page.tsx
-import { allTours, type Tour } from "@/data/toursData";
+import { allTours } from "@/data/toursData";
 import TourDetailClient from "@/components/TourDetailClient";
 import Link from "next/link";
 

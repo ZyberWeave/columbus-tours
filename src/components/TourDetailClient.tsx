@@ -17,7 +17,6 @@ import {
   FaWhatsapp,
   FaTimes,
 } from "react-icons/fa";
-import { IoIosArrowForward } from "react-icons/io";
 import Slideshow from "./Slideshow";
 import { allTours, type Tour } from "@/data/toursData";
 
