@@ -8,6 +8,7 @@ import {
   FaCalendarAlt,
   FaClock,
   FaCheck,
+  FaTimes,
   FaInfoCircle,
   FaStar,
   FaUtensils,
@@ -15,27 +16,30 @@ import {
   FaBus,
   FaPlane,
   FaWhatsapp,
-  FaTimes,
 } from "react-icons/fa";
+// Removed the unused IoIosArrowForward import.
 import Slideshow from "./Slideshow";
-import { allTours, type Tour } from "@/data/toursData";
+import { allTours, Tour } from "@/data/toursData"; // Import allTours here for related tours
+
+// Helper function to get slideshow images; change as needed.
+function getImagesForTour(tour: Tour): string[] {
+  return tour.images && tour.images.length > 0 ? tour.images : ["/images/placeholder.jpg"];
+}
 
 interface TourDetailClientProps {
   tour: Tour;
 }
 
-// Helper function: returns slideshow images or a placeholder.
-function getImagesForTour(tour: Tour): string[] {
-  return tour.images && tour.images.length > 0 ? tour.images : ["/images/placeholder.jpg"];
-}
-
 const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
   const slideshowImages = getImagesForTour(tour);
 
+  // Quick tour details for display
   const tourDetails = [
     {
       label: "Duration",
-      value: tour.duration ? `${tour.duration} night${tour.duration !== 1 ? "s" : ""}` : "Contact for details",
+      value: tour.duration
+        ? `${tour.duration} night${tour.duration !== 1 ? "s" : ""}`
+        : "Contact for details",
       icon: FaClock,
     },
     {
@@ -50,9 +54,12 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
     },
   ];
 
-  const whatsappLink = `https://wa.me/9422401225?text=${encodeURIComponent(tour.whatsappMessage)}`;
+  // Prepare WhatsApp link using the tour's WhatsApp message
+  const whatsappLink = `https://wa.me/9422401225?text=${encodeURIComponent(
+    tour.whatsappMessage
+  )}`;
 
-  // Reusable Section Component
+  // Reusable Section component for use in various parts of the page
   const TourSection: React.FC<{
     title: string;
     children: React.ReactNode;
@@ -68,7 +75,7 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
     </section>
   );
 
-  // ListItem component for details or highlights
+  // ListItem component with an optional icon, used for highlighting features
   const ListItem: React.FC<{
     children: React.ReactNode;
     icon?: React.ElementType;
@@ -94,7 +101,7 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
         </p>
       </header>
 
-      {/* Slideshow Hero Section */}
+      {/* Slideshow Section */}
       <section className="mb-8 rounded-xl overflow-hidden shadow-lg relative">
         <Slideshow images={slideshowImages} />
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
@@ -116,18 +123,16 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
         ))}
       </div>
 
-      {/* Tour Overview Section */}
+      {/* Overview Section */}
       <TourSection title="Overview" icon={FaInfoCircle}>
         <div className="prose max-w-none text-gray-700">
           <p>
-            Columbus Tours proudly presents <strong>{tour.title}</strong>. This exclusive package has been carefully curated
-            to offer you a taste of luxury, culture, and adventure. Enjoy a premium travel experience with handpicked
-            highlights, expert guidance, and seamless logistics.
+            Columbus Tours proudly presents <strong>{tour.title}</strong>. This exclusive package is carefully curated to offer you a taste of luxury, culture, and adventure. Enjoy a premium travel experience with handpicked highlights, expert guidance, and seamless logistics.
           </p>
         </div>
       </TourSection>
 
-      {/* Tour Highlights Section */}
+      {/* Highlights Section */}
       <TourSection title="Highlights" icon={FaStar}>
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {[
@@ -147,7 +152,7 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
         </ul>
       </TourSection>
 
-      {/* Inclusions & Exclusions Section */}
+      {/* Inclusions & Exclusions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <TourSection title="What's Included">
           <ul className="space-y-3">
@@ -181,19 +186,17 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
         </TourSection>
       </div>
 
-      {/* Important Information Section */}
+      {/* Important Information */}
       <TourSection title="Important Information">
         <div className="flex items-start bg-blue-50 p-4 rounded-md">
           <FaInfoCircle className="text-blue-600 mt-1 mr-3 flex-shrink-0" aria-hidden="true" />
           <p className="text-gray-700 leading-relaxed">
-            To protect our proprietary travel planning, detailed itineraries—including day‑by‑day schedules,
-            meeting points, and precise timings—are reserved for confirmed bookings only. For the complete itinerary
-            and personalized travel details, please contact our sales team after booking.
+            To protect our proprietary travel planning, detailed itineraries—including day‑by‑day schedules, meeting points, and precise timings—are reserved for confirmed bookings only. For the complete itinerary and personalized travel details, please contact our sales team after booking.
           </p>
         </div>
       </TourSection>
 
-      {/* Call-To-Action Section */}
+      {/* Call-To-Action */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-8 text-white text-center mb-10">
         <h2 className="text-2xl font-semibold mb-4">Ready to Experience This Tour?</h2>
         <p className="mb-6 max-w-2xl mx-auto">
@@ -227,8 +230,8 @@ const TourDetailClient: React.FC<TourDetailClientProps> = ({ tour }) => {
               .slice(0, 3)
               .map((relatedTour) => (
                 <Link
-                  href={`/tours/${relatedTour.slug}`}
                   key={relatedTour.slug}
+                  href={`/tours/${relatedTour.slug}`}
                   className="group block bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 hover:border-blue-300"
                   aria-label={`View details for ${relatedTour.title}`}
                 >
