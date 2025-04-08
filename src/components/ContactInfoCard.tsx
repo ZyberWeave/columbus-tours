@@ -76,7 +76,7 @@ const ContactInfoCard = () => {
           <div>
             <p className="text-sm font-medium text-gray-900">Main Office</p>
             <p className="text-sm text-gray-600">
-            91, Laxmi Heights, 63<br />
+            1, Laxmi Heights, 63<br />
             Mangalwar Peth, Opp. Jyotiba Temple<br />
             Karad - 415 110 (MS) INDIA
             </p>

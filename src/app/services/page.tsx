@@ -70,8 +70,14 @@ const services = [
   }
 ];
 
+// Define interface for ServiceArticle props
+interface ServiceArticleProps {
+  title: string;
+  description: string;
+}
+
 // Service article component to render each service
-const ServiceArticle = ({ title, description }) => (
+const ServiceArticle = ({ title, description }: ServiceArticleProps) => (
   <article className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow duration-300">
     <h2 className="text-2xl font-semibold mb-4 text-blue-800">{title}</h2>
     <p className="text-lg text-gray-700 leading-relaxed">{description}</p>

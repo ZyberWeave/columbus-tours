@@ -1,9 +1,12 @@
 "use client";
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { allTours, type Tour } from "@/data/toursData";
 import DualSlider from "@/components/DualSlider";
+
+type SortOption = "default" | "duration-asc" | "duration-desc";
 
 // Tour categories with icons for a better UX
 const CATEGORIES = [
@@ -16,31 +19,44 @@ const CATEGORIES = [
 ];
 
 export default function ToursPage() {
-  // States for filtering, sorting, and loading
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category") || "All";
+  const initialSearch = searchParams.get("search") || "";
+
+  // Local state declarations
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [durationRange, setDurationRange] = useState<[number, number]>([1, 15]);
   const [maxDuration, setMaxDuration] = useState(15);
   const [isLoading, setIsLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [sortOption, setSortOption] = useState<"default" | "duration-asc" | "duration-desc">("default");
+  const [sortOption, setSortOption] = useState<SortOption>("default");
 
-  // Debounce helper for search input
+  // Debounce helper to delay search updates
+  // Update the debounce helper function
   const debounce = useCallback(
-    <T extends (...args: any[]) => void>(func: T, wait: number): ((...args: Parameters<T>) => void) => {
-      let timeout: NodeJS.Timeout;
-      return (...args: Parameters<T>) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
+    <T extends unknown[]>(func: (...args: T) => void, wait: number): ((...args: T) => void) => {
+      let timeout: number | undefined;
+      return (...args: T) => {
+        if (timeout) clearTimeout(timeout);
+        timeout = window.setTimeout(() => func(...args), wait);
       };
     },
     []
   );
 
-  // Debounced search handler
-  const handleSearch = useMemo(() => debounce((query: string) => setSearchQuery(query), 300), [debounce]);
+  // Debounced search handler: updates URL query parameters and local search query
+  const handleSearch = useMemo(
+    () =>
+      debounce((query: string) => {
+        router.push(`/tours?search=${encodeURIComponent(query)}&category=${selectedCategory.toLowerCase()}`);
+        setSearchQuery(query);
+      }, 300),
+    [debounce, router, selectedCategory]
+  );
 
-  // On mount, determine the maximum tour duration
+  // On mount: determine maximum tour duration from all tours
   useEffect(() => {
     try {
       const maxTourDuration = Math.max(...allTours.map((tour) => tour.duration));
@@ -53,18 +69,29 @@ export default function ToursPage() {
     }
   }, []);
 
-  // Filter tours based on category, search query, and duration range
+  // Update local state if URL query parameters change
+  useEffect(() => {
+    const cat = searchParams.get("category") || "All";
+    const q = searchParams.get("search") || "";
+    setSelectedCategory(cat);
+    setSearchQuery(q);
+  }, [searchParams]);
+
+  // Filter tours based on category, search query (by title only), and duration range
   const filteredTours = useMemo(() => {
-    let results = allTours.filter((tour) => {
-      if (selectedCategory !== "All" && tour.category !== selectedCategory) return false;
+    const results = allTours.filter((tour) => {
+      if (selectedCategory !== "All" && tour.category.toLowerCase() !== selectedCategory.toLowerCase()) {
+        return false;
+      }
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
+        // Only filter by tour title since `description` and `location` are not part of Tour
         const matchesTitle = tour.title.toLowerCase().includes(query);
-        const matchesDescription = tour.description?.toLowerCase().includes(query) || false;
-        const matchesLocation = tour.location?.toLowerCase().includes(query) || false;
-        if (!matchesTitle && !matchesDescription && !matchesLocation) return false;
+        if (!matchesTitle) return false;
       }
-      if (tour.duration < durationRange[0] || tour.duration > durationRange[1]) return false;
+      if (tour.duration < durationRange[0] || tour.duration > durationRange[1]) {
+        return false;
+      }
       return true;
     });
 
@@ -76,12 +103,19 @@ export default function ToursPage() {
     return results;
   }, [selectedCategory, searchQuery, durationRange, sortOption]);
 
-  // Reset filters to default values
+  // Update URL and local state when a category is selected
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    router.push(`/tours?category=${category.toLowerCase()}&search=${encodeURIComponent(searchQuery)}`);
+  };
+
+  // Reset filters and clear query parameters
   const resetFilters = () => {
     setSelectedCategory("All");
     setSearchQuery("");
     setDurationRange([1, maxDuration]);
     setSortOption("default");
+    router.push("/tours");
   };
 
   if (isLoading) {
@@ -117,7 +151,7 @@ export default function ToursPage() {
           <div className="relative">
             <select
               value={sortOption}
-              onChange={(e) => setSortOption(e.target.value as any)}
+              onChange={(e) => setSortOption(e.target.value as SortOption)}
               className="appearance-none bg-white border border-gray-300 rounded-md px-4 py-2 pr-8"
             >
               <option value="default">Sort by</option>
@@ -142,15 +176,13 @@ export default function ToursPage() {
 
             {/* Search Input */}
             <div className="mb-6">
-              <label htmlFor="search" className="block text-sm font-medium mb-2">
-                Search Tours
-              </label>
+              <label htmlFor="search" className="block text-sm font-medium mb-2">Search Tours</label>
               <input
                 id="search"
                 type="text"
-                defaultValue={searchQuery}
+                value={searchQuery}
                 onChange={(e) => handleSearch(e.target.value)}
-                placeholder="Search by name, description or location..."
+                placeholder="Search by name..."
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Search tours"
               />
@@ -163,9 +195,11 @@ export default function ToursPage() {
                 {CATEGORIES.map((category) => (
                   <button
                     key={category.name}
-                    onClick={() => setSelectedCategory(category.name)}
+                    onClick={() => handleCategoryChange(category.name)}
                     className={`flex items-center w-full text-left px-3 py-2 rounded-md transition-colors ${
-                      selectedCategory === category.name ? "bg-blue-100 text-blue-700" : "hover:bg-gray-50"
+                      selectedCategory.toLowerCase() === category.name.toLowerCase()
+                        ? "bg-blue-100 text-blue-700"
+                        : "hover:bg-gray-50"
                     }`}
                   >
                     <span className="mr-2">{category.icon}</span>
@@ -203,7 +237,7 @@ export default function ToursPage() {
                 <span className="text-sm text-gray-600">Sort by:</span>
                 <select
                   value={sortOption}
-                  onChange={(e) => setSortOption(e.target.value as any)}
+                  onChange={(e) => setSortOption(e.target.value as SortOption)}
                   className="bg-white border border-gray-300 rounded-md px-4 py-2"
                 >
                   <option value="default">Recommended</option>
@@ -241,9 +275,7 @@ export default function ToursPage() {
 
 // Tour Card component
 function TourCard({ tour }: { tour: Tour }) {
-  // Build the thumbnail path from the tour folder
-  // Adjust the path if your images are stored under a category folder:
-  // e.g., `/images/tours/{category in lowercase}/{folder}/thumbnail.jpg`
+  // Build the thumbnail path: /images/tours/{category (lowercase)}/{folder}/thumbnail.jpg
   const thumbnailPath = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
 
   return (
@@ -263,18 +295,11 @@ function TourCard({ tour }: { tour: Tour }) {
       </div>
       <div className="p-4 flex-grow">
         <h3 className="text-xl font-semibold mb-2 line-clamp-2">{tour.title}</h3>
-        {tour.location && (
-          <p className="flex items-center text-sm text-gray-600 mb-2">
-            <span className="mr-1">📍</span>
-            <span>{tour.location}</span>
-          </p>
-        )}
-        {tour.description && (
-          <p className="text-gray-600 text-sm mb-4 line-clamp-3">{tour.description}</p>
-        )}
         <div className="flex items-center text-sm text-gray-600">
           <span className="mr-1">📅</span>
-          <span>{tour.duration} night{tour.duration !== 1 ? "s" : ""}</span>
+          <span>
+            {tour.duration} night{tour.duration !== 1 ? "s" : ""}
+          </span>
         </div>
       </div>
       <div className="p-4 pt-2 border-t border-gray-100">

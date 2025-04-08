@@ -14,14 +14,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Owner & Address */}
+      {/* Partner & Address */}
       <section className="py-20 px-6 max-w-5xl mx-auto">
         <h2 className="text-4xl font-bold mb-8 border-b pb-2 border-gray-300">Contact & Location</h2>
         <div className="space-y-4 text-lg">
-          <p><span className="font-semibold">Owner:</span> Mr. Dhananjay Jadhav</p>
+          <p><span className="font-semibold">Partner:</span> Mr. Dhananjay Jadhav</p>
           <address className="not-italic">
             <span className="font-semibold">Address:</span><br />
-            91, Laxmi Heights, 63, Mangalwar Peth,<br />
+            1, Laxmi Heights, 63, Mangalwar Peth,<br />
             Opp. Jyotiba Temple,<br />
             Karad - 415 110 (MS) INDIA
           </address>
