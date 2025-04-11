@@ -39,6 +39,7 @@ const Footer: React.FC = () => {
       setMessage("Thank you for subscribing!");
       setEmail("");
     } catch (error) {
+      console.error('Newsletter subscription error:', error);
       setStatus("error");
       setMessage("Failed to subscribe. Please try again.");
     }
