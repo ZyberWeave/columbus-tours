@@ -147,9 +147,9 @@ function ToursPageContent() {
   }
 
   return (
-    <main className="bg-gray-50 min-h-screen pb-16">
+    <main className="bg-[#FFFFFF] min-h-screen pb-16">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-blue-400 text-white py-16 mb-8">
+      <section className="bg-gradient-to-r from-[#1976D2] to-[#D32F2F] text-white py-16 mb-8">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Your Perfect Journey</h1>
           <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-90">
@@ -188,7 +188,7 @@ function ToursPageContent() {
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* Filter Sidebar */}
-          <aside className={`${isFilterOpen ? "block" : "hidden"} md:block md:w-1/4 bg-white rounded-lg shadow-md p-6`}>
+          <aside className={`${isFilterOpen ? "block" : "hidden"} md:block md:w-1/4 bg-[#F7F7F7] rounded-lg shadow-md p-6`}>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-semibold">Filters</h2>
               <button onClick={() => setIsFilterOpen(false)} className="md:hidden text-gray-500 hover:text-gray-700">
@@ -240,7 +240,7 @@ function ToursPageContent() {
             {/* Reset Filters Button */}
             <button
               onClick={resetFilters}
-              className="w-full py-2 text-sm text-blue-600 hover:text-blue-800 border border-blue-200 rounded-md hover:bg-blue-50 transition-colors"
+              className="w-full py-2 text-sm text-[#1976D2] hover:text-[#1565C0] border border-[#1976D2]/20 rounded-md hover:bg-[#1976D2]/10 transition-colors"
             >
               Reset All Filters
             </button>
@@ -250,7 +250,7 @@ function ToursPageContent() {
           <div className="flex-1">
             {/* Desktop Sort Controls */}
             <div className="hidden md:flex justify-between items-center mb-6">
-              <p className="text-black">
+              <p className="text-[#333333]">
                 Showing {filteredTours.length} {filteredTours.length === 1 ? "tour" : "tours"}
                 {selectedCategory !== "All" && ` in ${selectedCategory}`}
                 {searchQuery && ` matching "${searchQuery}"`}
@@ -275,10 +275,10 @@ function ToursPageContent() {
             {filteredTours.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-lg shadow-sm">
                 <h3 className="text-2xl font-semibold mb-4">No tours found</h3>
-                <p className="text-black mb-6">Try adjusting your filters to find more options.</p>
+                <p className="text-[#333333] mb-6">Try adjusting your filters to find more options.</p>
                 <button
                   onClick={resetFilters}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  className="px-4 py-2 bg-[#D32F2F] text-white rounded-md hover:bg-[#B71C1C] focus:outline-none focus:ring-2 focus:ring-[#D32F2F] focus:ring-offset-2"
                 >
                   Reset Filters
                 </button>
@@ -312,13 +312,13 @@ function TourCard({ tour }: { tour: Tour }) {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           priority={false}
         />
-        <span className="absolute top-3 right-3 bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
+        <span className="absolute top-3 right-3 bg-[#1976D2] text-white text-xs px-2 py-1 rounded-full">
           {tour.category}
         </span>
       </div>
       <div className="p-4 flex-grow">
         <h3 className="text-xl font-semibold mb-2 line-clamp-2">{tour.title}</h3>
-        <div className="flex items-center text-sm text-black">
+        <div className="flex items-center text-sm text-[#333333]">
           <span className="mr-1">📅</span>
           <span>
             {tour.duration} night{tour.duration !== 1 ? "s" : ""}
@@ -327,7 +327,7 @@ function TourCard({ tour }: { tour: Tour }) {
       </div>
       <div className="p-4 pt-2 border-t border-gray-100">
         <Link href={`/tours/${tour.slug}`} className="block w-full" aria-label={`View details for ${tour.title}`}>
-          <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors flex items-center justify-center">
+          <button className="w-full bg-[#1976D2] hover:bg-[#1565C0] text-white py-2 px-4 rounded transition-colors flex items-center justify-center">
             View Details <span className="ml-1">→</span>
           </button>
         </Link>
@@ -336,13 +336,13 @@ function TourCard({ tour }: { tour: Tour }) {
             href={`https://wa.me/919422401225?text=Hi, I'm interested in the ${tour.title} tour`}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+            className="w-full bg-[#43A047] hover:bg-[#388E3C] text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
           >
             WhatsApp <span className="ml-1">💬</span>
           </a>
           <a
             href="tel:+919422401225"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+            className="w-full bg-[#1976D2] hover:bg-[#1565C0] text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
           >
             Call <span className="ml-1">📞</span>
           </a>
