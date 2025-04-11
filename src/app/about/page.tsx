@@ -91,7 +91,7 @@ export default function AboutPage() {
 
       {/* Footer CTA */}
       <section className="py-20 px-6 max-w-6xl mx-auto text-center bg-gradient-to-r from-blue-600 to-blue-400 text-white">
-        <h2 className="text-4xl font-bold mb-4">Let's Build Memories Together</h2>
+        <h2 className="text-4xl font-bold mb-4">Let&apos;s Build Memories Together</h2>
         <p className="text-lg mb-6">Our team is ready to plan your next getaway. Start now.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a

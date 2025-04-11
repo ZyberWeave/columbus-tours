@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const { email } = await request.json();
+    // const { email } = await request.json();
 
     // Here you would typically:
     // 1. Validate the email
