@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import { Range, getTrackBackground } from "react-range";
 
 interface DualSliderProps {
   min: number;
@@ -9,90 +10,110 @@ interface DualSliderProps {
 }
 
 const DualSlider: React.FC<DualSliderProps> = ({ min, max, value, onChange }) => {
-  const [minVal, maxVal] = value;
-  const trackRef = useRef<HTMLDivElement>(null);
-  const minDistance = 1;
-
-  useEffect(() => {
-    if (trackRef.current) {
-      const range = max - min;
-      const minPercent = ((minVal - min) / range) * 100;
-      const maxPercent = ((maxVal - min) / range) * 100;
-
-      trackRef.current.style.background = `linear-gradient(to right, #C6C6C6 0%, #C6C6C6 ${minPercent}%, #25daa5 ${minPercent}%, #25daa5 ${maxPercent}%, #C6C6C6 ${maxPercent}%, #C6C6C6 100%)`;
-    }
-  }, [minVal, maxVal, min, max]);
-
-  const handleMinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newMin = Math.min(Number(e.target.value), maxVal - minDistance);
-    onChange([newMin, maxVal]);
-  };
-
-  const handleMaxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newMax = Math.max(Number(e.target.value), minVal + minDistance);
-    onChange([minVal, newMax]);
-  };
-
   return (
     <div className="w-full">
-      {/* Track */}
-      <div
-        ref={trackRef}
-        className="relative h-2 my-6 rounded bg-gray-300"
-      ></div>
+      <Range
+        values={value}
+        step={1}
+        min={min}
+        max={max}
+        onChange={(values) => onChange(values as [number, number])}
+        renderTrack={({ props, children }) => (
+          // Outer container for mouse and touch events
+          <div
+            onMouseDown={props.onMouseDown}
+            onTouchStart={props.onTouchStart}
+            style={{
+              ...props.style,
+              height: "36px",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {/* Inner container that receives the ref */}
+            <div
+              ref={props.ref}
+              style={{
+                height: "6px",
+                width: "100%",
+                borderRadius: "4px",
+                background: getTrackBackground({
+                  values: value,
+                  colors: ["#C6C6C6", "#25daa5", "#C6C6C6"],
+                  min: min,
+                  max: max,
+                }),
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        )}
+        renderThumb={({ props, isDragged, index }) => {
+          // Destructure to remove the key from the spread
+          const { key, ...thumbProps } = props;
+          return (
+            <div
+              key={key}
+              {...thumbProps}
+              style={{
+                ...thumbProps.style,
+                height: "24px",
+                width: "24px",
+                borderRadius: "50%",
+                backgroundColor: "#25daa5",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                boxShadow: "0px 2px 6px #AAA",
+              }}
+            >
+              {/* Optional: Display current value when dragged */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-28px",
+                  color: "#fff",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                }}
+              >
+                {isDragged ? value[index] : ""}
+              </div>
+            </div>
+          );
+        }}
+      />
 
-      {/* Sliders with offset layering technique */}
-      <div className="relative -mt-10 h-6">
-        {/* Min Slider */}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          value={minVal}
-          onChange={handleMinChange}
-          className="absolute w-full appearance-none bg-transparent z-20 pointer-events-auto 
-          [&::-webkit-slider-thumb]:appearance-none 
-          [&::-webkit-slider-thumb]:w-4 
-          [&::-webkit-slider-thumb]:h-4 
-          [&::-webkit-slider-thumb]:rounded-full 
-          [&::-webkit-slider-thumb]:bg-[#25daa5] 
-          [&::-webkit-slider-thumb]:cursor-pointer"
-        />
-
-        {/* Max Slider (rtl to avoid overlap issues) */}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          value={maxVal}
-          onChange={handleMaxChange}
-          dir="rtl"
-          className="absolute w-full appearance-none bg-transparent z-30 pointer-events-auto 
-          [&::-webkit-slider-thumb]:appearance-none 
-          [&::-webkit-slider-thumb]:w-4 
-          [&::-webkit-slider-thumb]:h-4 
-          [&::-webkit-slider-thumb]:rounded-full 
-          [&::-webkit-slider-thumb]:bg-[#25daa5] 
-          [&::-webkit-slider-thumb]:cursor-pointer"
-        />
-      </div>
-
-      {/* Number inputs */}
+      {/* Number inputs for precise control */}
       <div className="flex justify-between mt-4">
         <input
           type="number"
-          value={minVal}
+          value={value[0]}
           min={min}
-          max={max - minDistance}
-          onChange={handleMinChange}
+          max={value[1]}
+          onChange={(e) => {
+            const newMin = parseInt(e.target.value, 10);
+            if (newMin <= value[1]) {
+              onChange([newMin, value[1]]);
+            }
+          }}
+          aria-label="Minimum value input"
           className="w-20 p-1 text-center border border-gray-300 rounded"
         />
         <input
           type="number"
-          value={maxVal}
-          min={min + minDistance}
+          value={value[1]}
+          min={value[0]}
           max={max}
-          onChange={handleMaxChange}
+          onChange={(e) => {
+            const newMax = parseInt(e.target.value, 10);
+            if (newMax >= value[0]) {
+              onChange([value[0], newMax]);
+            }
+          }}
+          aria-label="Maximum value input"
           className="w-20 p-1 text-center border border-gray-300 rounded"
         />
       </div>

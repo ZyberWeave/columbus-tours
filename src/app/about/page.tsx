@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function AboutPage() {
   return (
@@ -19,6 +20,14 @@ export default function AboutPage() {
         <h2 className="text-4xl font-bold mb-8 border-b pb-2 border-gray-300">Contact & Location</h2>
         <div className="space-y-4 text-lg">
           <p><span className="font-semibold">Partner:</span> Mr. Dhananjay Jadhav</p>
+          <div className="flex flex-col space-y-2">
+            <a href="tel:+919422401225" className="flex items-center text-blue-600 hover:text-blue-800">
+              <span className="font-semibold mr-2">Phone:</span> +91 94224 01225
+            </a>
+            <a href="https://wa.me/919422401225" target="_blank" rel="noopener noreferrer" className="flex items-center text-green-600 hover:text-green-800">
+              <span className="font-semibold mr-2">WhatsApp:</span> +91 94224 01225
+            </a>
+          </div>
           <address className="not-italic">
             <span className="font-semibold">Address:</span><br />
             1, Laxmi Heights, 63, Mangalwar Peth,<br />
@@ -29,7 +38,7 @@ export default function AboutPage() {
         <div className="mt-8">
           <iframe
             title="Location Map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.547355582799!2d74.19117201489844!3d17.289072788121957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc1846b4d68d0ed%3A0x4b50d73aa5e2a7ff!2sColumbus%20Tours!5e0!3m2!1sen!2sin!4v1711189034061"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3809.504425097256!2d74.18194227580952!3d17.291194605567846!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc183aa3557bd5f%3A0xc2de5ed4ee22c2e3!2sColumbus%20Tours!5e0!3m2!1sen!2sin!4v1744154063335!5m2!1sen!2sin"
             width="100%"
             height="300"
             className="rounded shadow"
@@ -82,15 +91,30 @@ export default function AboutPage() {
 
       {/* Footer CTA */}
       <section className="py-20 px-6 max-w-6xl mx-auto text-center bg-gradient-to-r from-blue-600 to-blue-400 text-white">
-        <h2 className="text-4xl font-bold mb-4">Let’s Build Memories Together</h2>
+        <h2 className="text-4xl font-bold mb-4">Let's Build Memories Together</h2>
         <p className="text-lg mb-6">Our team is ready to plan your next getaway. Start now.</p>
-        <a
-          href="https://wa.me/918805833675"
-          target="_blank"
-          className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded hover:bg-gray-100 transition"
-        >
-          Message Us on WhatsApp
-        </a>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <a
+            href="https://wa.me/919422401225"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-green-600 text-white font-semibold px-8 py-3 rounded hover:bg-green-700 transition"
+          >
+            Message on WhatsApp
+          </a>
+          <a
+            href="tel:+919422401225"
+            className="inline-block bg-white text-blue-600 font-semibold px-8 py-3 rounded hover:bg-gray-100 transition"
+          >
+            Call Us Now
+          </a>
+          <Link
+            href="/contact"
+            className="inline-block bg-blue-700 text-white font-semibold px-8 py-3 rounded hover:bg-blue-800 transition"
+          >
+            Contact Us
+          </Link>
+        </div>
       </section>
     </main>
   );

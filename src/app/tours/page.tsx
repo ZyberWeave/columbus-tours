@@ -6,7 +6,7 @@ import Image from "next/image";
 import { allTours, type Tour } from "@/data/toursData";
 import DualSlider from "@/components/DualSlider";
 
-type SortOption = "default" | "duration-asc" | "duration-desc";
+type SortOption = "default" | "duration-asc" | "duration-desc" | "alphabetical-asc" | "alphabetical-desc";
 
 // Tour categories with icons for a better UX
 const CATEGORIES = [
@@ -102,7 +102,6 @@ function ToursPageContent() {
       }
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
-        // Only filter by tour title since `description` and `location` are not part of Tour
         const matchesTitle = tour.title.toLowerCase().includes(query);
         if (!matchesTitle) return false;
       }
@@ -116,6 +115,10 @@ function ToursPageContent() {
       results.sort((a, b) => a.duration - b.duration);
     } else if (sortOption === "duration-desc") {
       results.sort((a, b) => b.duration - a.duration);
+    } else if (sortOption === "alphabetical-asc") {
+      results.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (sortOption === "alphabetical-desc") {
+      results.sort((a, b) => b.title.localeCompare(a.title));
     }
     return results;
   }, [selectedCategory, searchQuery, durationRange, sortOption]);
@@ -174,6 +177,8 @@ function ToursPageContent() {
               <option value="default">Sort by</option>
               <option value="duration-asc">Duration: Short to Long</option>
               <option value="duration-desc">Duration: Long to Short</option>
+              <option value="alphabetical-asc">Alphabetical: A to Z</option>
+              <option value="alphabetical-desc">Alphabetical: Z to A</option>
             </select>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
               <span className="text-gray-500">▼</span>
@@ -245,13 +250,13 @@ function ToursPageContent() {
           <div className="flex-1">
             {/* Desktop Sort Controls */}
             <div className="hidden md:flex justify-between items-center mb-6">
-              <p className="text-gray-600">
+              <p className="text-black">
                 Showing {filteredTours.length} {filteredTours.length === 1 ? "tour" : "tours"}
                 {selectedCategory !== "All" && ` in ${selectedCategory}`}
                 {searchQuery && ` matching "${searchQuery}"`}
               </p>
               <div className="flex items-center gap-4">
-                <span className="text-sm text-gray-600">Sort by:</span>
+                <span className="text-sm text-black">Sort by:</span>
                 <select
                   value={sortOption}
                   onChange={(e) => setSortOption(e.target.value as SortOption)}
@@ -260,6 +265,8 @@ function ToursPageContent() {
                   <option value="default">Recommended</option>
                   <option value="duration-asc">Duration: Short to Long</option>
                   <option value="duration-desc">Duration: Long to Short</option>
+                  <option value="alphabetical-asc">Alphabetical: A to Z</option>
+                  <option value="alphabetical-desc">Alphabetical: Z to A</option>
                 </select>
               </div>
             </div>
@@ -268,7 +275,7 @@ function ToursPageContent() {
             {filteredTours.length === 0 ? (
               <div className="text-center py-16 bg-white rounded-lg shadow-sm">
                 <h3 className="text-2xl font-semibold mb-4">No tours found</h3>
-                <p className="text-gray-600 mb-6">Try adjusting your filters to find more options.</p>
+                <p className="text-black mb-6">Try adjusting your filters to find more options.</p>
                 <button
                   onClick={resetFilters}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
@@ -292,7 +299,6 @@ function ToursPageContent() {
 
 // Tour Card component
 function TourCard({ tour }: { tour: Tour }) {
-  // Build the thumbnail path: /images/tours/{category (lowercase)}/{folder}/thumbnail.jpg
   const thumbnailPath = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
 
   return (
@@ -312,7 +318,7 @@ function TourCard({ tour }: { tour: Tour }) {
       </div>
       <div className="p-4 flex-grow">
         <h3 className="text-xl font-semibold mb-2 line-clamp-2">{tour.title}</h3>
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center text-sm text-black">
           <span className="mr-1">📅</span>
           <span>
             {tour.duration} night{tour.duration !== 1 ? "s" : ""}
@@ -325,6 +331,22 @@ function TourCard({ tour }: { tour: Tour }) {
             View Details <span className="ml-1">→</span>
           </button>
         </Link>
+        <div className="mt-2 flex gap-2">
+          <a
+            href={`https://wa.me/919422401225?text=Hi, I'm interested in the ${tour.title} tour`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+          >
+            WhatsApp <span className="ml-1">💬</span>
+          </a>
+          <a
+            href="tel:+919422401225"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
+          >
+            Call <span className="ml-1">📞</span>
+          </a>
+        </div>
       </div>
     </div>
   );

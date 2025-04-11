@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import Link from "next/link";
+import Image from "next/image";
 import {
   FaFacebook,
   FaInstagram,
@@ -9,9 +11,38 @@ import {
   FaPhone,
   FaEnvelope,
 } from "react-icons/fa";
-import Link from 'next/link';
+import { useState } from "react";
 
 const Footer: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Subscription failed");
+      }
+
+      setStatus("success");
+      setMessage("Thank you for subscribing!");
+      setEmail("");
+    } catch (error) {
+      setStatus("error");
+      setMessage("Failed to subscribe. Please try again.");
+    }
+  };
   return (
     <footer className="bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
@@ -21,8 +52,8 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">About Columbus Tours</h3>
             <p className="text-gray-400 text-sm">
-              We specialize in creating unforgettable travel experiences. Our
-              mission is to make every journey a story worth telling.
+              We specialize in creating unforgettable travel experiences. Every journey is a story
+              worth telling. Explore our curated tours and ignite your wanderlust.
             </p>
             <div className="flex space-x-3 mt-4">
               <a
@@ -81,28 +112,28 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/blog"
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   Travel Blog
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/contact"
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   Contact Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/privacy"
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -110,27 +141,34 @@ const Footer: React.FC = () => {
           {/* Contact Info Section */}
           <div>
             <h3 className="text-xl font-bold mb-4">Contact Info</h3>
-            <ul className="space-y-3 text-sm text-gray-400">
+            <ul className="space-y-3 text-sm">
               <li className="flex items-center">
-                <FaMapMarkerAlt className="mr-2" />
-                123 Travel Street, Columbus, USA
-              </li>
-              <li className="flex items-center">
-                <FaPhone className="mr-2" />
+                <FaMapMarkerAlt className="mr-2" size={20} />
                 <a
-                  href="tel:8956273122"
-                  className="hover:text-white transition-colors duration-300"
+                  href="https://maps.app.goo.gl/QwzV5paRzzCtWkU59"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
-                  +1 (895) 627-3122
+                  1, Laxmi Heights, 63, Mangalwar Peth, Karad, Maharashtra 415110
                 </a>
               </li>
               <li className="flex items-center">
-                <FaEnvelope className="mr-2" />
+                <FaPhone className="mr-2" size={18} />
                 <a
-                  href="mailto:info@columbustours.com"
-                  className="hover:text-white transition-colors duration-300"
+                  href="tel:8956273122"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
-                  info@columbustours.com
+                  +91 89562 73122
+                </a>
+              </li>
+              <li className="flex items-center">
+                <FaEnvelope className="mr-2" size={18} />
+                <a
+                  href="mailto:columbustours@gmail.com"
+                  className="text-gray-400 hover:text-white transition-colors duration-300"
+                >
+                  columbustours@gmail.com
                 </a>
               </li>
             </ul>
@@ -140,27 +178,37 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold mb-4">Newsletter</h3>
             <p className="text-gray-400 text-sm mb-4">
-              Subscribe to our newsletter for the latest deals and travel
-              inspiration.
+              Subscribe for the latest travel deals, tips, and inspirations.
             </p>
-            <form className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="p-3 rounded-md sm:rounded-l-lg bg-gray-800 text-white focus:outline-none w-full"
-              />
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md sm:rounded-r-lg transition-colors duration-300"
-              >
-                Subscribe
-              </button>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+              {message && (
+                <p className={`text-sm ${status === "success" ? "text-green-400" : "text-red-400"}`}>
+                  {message}
+                </p>
+              )}
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="p-3 rounded-md sm:rounded-l-lg bg-gray-800 text-white w-full focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={status === "loading"}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md sm:rounded-r-lg transition-colors duration-300 disabled:opacity-50"
+                >
+                  {status === "loading" ? "Subscribing..." : "Subscribe"}
+                </button>
+              </div>
             </form>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row justify-between items-center">
+        <div className="border-t border-gray-800 pt-8 mt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-center sm:text-left">
             © {new Date().getFullYear()} Columbus Tours. All rights reserved.
           </p>
@@ -174,6 +222,7 @@ const Footer: React.FC = () => {
             >
               Zyberweave
             </a>
+            {" | "} Contact: +91 89562 73122
           </p>
         </div>
       </div>

@@ -326,11 +326,27 @@ export default function HomePage() {
           <p className="text-2xl text-white mb-10 max-w-2xl mx-auto">
             Have questions or need more information? Our team is ready to help.
           </p>
-          <Link href="/contact">
-            <button className="px-10 py-4 bg-white text-blue-600 text-2xl rounded-full hover:bg-gray-200 transition-colors duration-300 transform hover:scale-105">
-              Contact Us
-            </button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact">
+              <button className="px-10 py-4 bg-white text-blue-600 text-2xl rounded-full hover:bg-gray-200 transition-colors duration-300 transform hover:scale-105">
+                Contact Us
+              </button>
+            </Link>
+            <a
+              href="https://wa.me/919422401225"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-10 py-4 bg-green-600 text-white text-2xl rounded-full hover:bg-green-700 transition-colors duration-300 transform hover:scale-105"
+            >
+              WhatsApp
+            </a>
+            <a
+              href="tel:+919422401225"
+              className="px-10 py-4 bg-white text-blue-600 text-2xl rounded-full hover:bg-gray-200 transition-colors duration-300 transform hover:scale-105"
+            >
+              Call Us
+            </a>
+          </div>
         </div>
       </section>
     </main>

@@ -23,8 +23,8 @@ const ContactInfoCard = () => {
           </svg>
           <div>
             <p className="text-sm font-medium text-gray-900">Email Us</p>
-            <a href="mailto:info@example.com" className="text-sm text-blue-600 hover:underline">
-              info@example.com
+            <a href="mailto:columbustours@gmail.com" className="text-sm text-blue-600 hover:underline">
+              columbustours@gmail.com
             </a>
           </div>
         </div>
@@ -46,8 +46,8 @@ const ContactInfoCard = () => {
           </svg>
           <div>
             <p className="text-sm font-medium text-gray-900">Call Us</p>
-            <a href="tel:+1234567890" className="text-sm text-blue-600 hover:underline">
-              +1 (234) 567-890
+            <a href="tel:+919604541294" className="text-sm text-blue-600 hover:underline">
+              +91 96045 41294
             </a>
           </div>
         </div>

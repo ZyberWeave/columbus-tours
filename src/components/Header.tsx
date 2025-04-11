@@ -18,8 +18,6 @@ import { allTours, type Tour } from "@/data/toursData";
 const navLinks = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-  { name: "Tours", href: "/tours" },
-  { name: "Gallery", href: "/gallery" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -48,20 +46,25 @@ export default function Header() {
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Simple search handler – using only the tour title for matching
+  // Update the handleSearch function
+  // Add useEffect for initial search results
+  useEffect(() => {
+    if (isSearchOpen) {
+      setSearchResults(allTours.slice(0, 5));
+    }
+  }, [isSearchOpen]);
+
   const handleSearch = (value: string) => {
     setSearchText(value);
-    if (value.trim() === "") {
-      // Show the first 5 tours as featured suggestions when no text is typed
-      setSearchResults(allTours.slice(0, 5));
-    } else {
-      const query = value.toLowerCase();
-      const results = allTours
-        .filter((tour) =>
-          tour.title.toLowerCase().includes(query)
-        )
-        .slice(0, 5);
-      setSearchResults(results);
-    }
+    const query = value.toLowerCase().trim();
+    
+    const results = query === "" 
+      ? allTours.slice(0, 5)
+      : allTours
+          .filter((tour) => tour.title.toLowerCase().includes(query))
+          .slice(0, 5);
+    
+    setSearchResults(results);
   };
 
   // Debounce helper to prevent too many updates while typing
@@ -170,8 +173,11 @@ export default function Header() {
                 ? "bg-white/10 border-white/20 text-white placeholder-white/70"
                 : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
             } focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm`}
-            onChange={(e) => updateSearch(e.target.value)}
-            onFocus={() => setIsSearchOpen(true)}
+            onChange={(e) => handleSearch(e.target.value)}
+            onFocus={() => {
+              setIsSearchOpen(true);
+              handleSearch("");
+            }}
             onKeyDown={handleKeyDown}
             value={searchText}
           />
@@ -207,12 +213,12 @@ export default function Header() {
                         }}
                       >
                         <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
-                        <span>{tour.title}</span>
+                        <span className="text-gray-900">{tour.title}</span>
                       </li>
                     );
                   })}
                   <li
-                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer"
+                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer text-center border-t"
                     onClick={() => {
                       setIsSearchOpen(false);
                       router.push(`/tours?search=${encodeURIComponent(searchText)}`);
@@ -222,7 +228,7 @@ export default function Header() {
                   </li>
                 </ul>
               ) : (
-                <div className="px-4 py-2 text-gray-600">No tours found</div>
+                <div className="px-4 py-2 text-gray-900">No tours found</div>
               )}
             </div>
           )}
@@ -231,16 +237,17 @@ export default function Header() {
         {/* Contact Icons */}
         <div className="flex items-center justify-end space-x-4 w-[250px]">
           <a
-            href="tel:+1234567890"
+            href="tel:+919604541294"
             className={`flex items-center space-x-2 p-2 rounded-full ${
               isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"
             }`}
           >
             <FaPhone size={18} />
-            <span className="text-sm">+1 234 567 890</span>
+            <span className="text-sm">+919604541294</span>
           </a>
           <a
-            href="#"
+            href="https://maps.app.goo.gl/QwzV5paRzzCtWkU59"
+            target="_blank"
             className={`flex items-center space-x-2 p-2 rounded-full ${
               isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"
             }`}
@@ -332,7 +339,7 @@ export default function Header() {
       {/* Mobile Search Dropdown */}
       {isSearchOpen && (
         <div className="lg:hidden fixed inset-x-0 top-[70px] px-4 py-3 bg-white shadow-md z-50">
-          <div className="relative">
+          <div className="relative" ref={searchRef}>
             <input
               type="text"
               placeholder="Search destinations..."
@@ -342,6 +349,38 @@ export default function Header() {
               value={searchText}
             />
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
+            {/* Add search results dropdown for mobile */}
+            {searchResults.length > 0 && (
+              <div className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50">
+                <ul>
+                  {searchResults.map((tour) => {
+                    const thumb = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
+                    return (
+                      <li
+                        key={tour.id}
+                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => {
+                          router.push(`/tours/${tour.slug}`);
+                          setIsSearchOpen(false);
+                        }}
+                      >
+                        <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
+                        <span className="text-gray-900">{tour.title}</span>
+                      </li>
+                    );
+                  })}
+                  <li
+                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer text-center border-t"
+                    onClick={() => {
+                      setIsSearchOpen(false);
+                      router.push(`/tours?search=${encodeURIComponent(searchText)}`);
+                    }}
+                  >
+                    Show All
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -357,26 +396,25 @@ export default function Header() {
                 <FaTimes size={20} className="text-gray-800" />
               </button>
             </div>
-            <div className="p-4 border-b">
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="Search destinations..."
-                  className="w-full py-2 pl-10 pr-4 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
-                  onChange={(e) => updateSearch(e.target.value)}
-                />
-                <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
-              </div>
-            </div>
+           
             <nav className="flex flex-col p-4 border-b">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="px-3 py-2 font-medium text-black hover:text-black">
+                <Link 
+                  key={link.name} 
+                  href={link.href} 
+                  className="px-3 py-2 font-medium text-black hover:text-black"
+                  onClick={toggleMobileMenu}
+                >
                   {link.name}
                 </Link>
               ))}
             </nav>
             <div className="flex flex-wrap p-4 border-b">
-              {categoryLinks}
+              {React.Children.map(categoryLinks, (link) => 
+                React.cloneElement(link as React.ReactElement, {
+                  onClick: toggleMobileMenu
+                })
+              )}
             </div>
             <div className="p-4">
               <div className="flex space-x-4 mb-4">
@@ -391,14 +429,18 @@ export default function Header() {
                 </a>
               </div>
               <div className="space-y-2">
-                <a href="tel:+1234567890" className="flex items-center space-x-2 text-gray-600 hover:text-black">
+                <a href="tel:+919604541294" className="flex items-center space-x-2 text-gray-600 hover:text-black">
                   <FaPhone size={16} />
-                  <span>+1 234 567 890</span>
+                  <span>+91 96045 41294</span>
                 </a>
-                <div className="flex items-center space-x-2 text-gray-600">
+                <a 
+                  href="https://maps.app.goo.gl/QwzV5paRzzCtWkU59" 
+                  target="_blank"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-black"
+                >
                   <FaMapMarkerAlt size={16} />
                   <span>Location</span>
-                </div>
+                </a>
               </div>
             </div>
           </div>
