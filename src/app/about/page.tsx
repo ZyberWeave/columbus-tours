@@ -30,7 +30,7 @@ export default function AboutPage() {
         </video>
         <div className="relative z-10 text-center text-white px-4 max-w-5xl">
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight animate-fadeIn">
-            Crafting <span className="text-[#1976D2]">Unforgettable</span> Journeys Since 2015
+            Crafting <span className="text-[#1976D2]">Unforgettable</span> Journeys Since 2004
           </h1>
           <p className="text-xl md:text-2xl font-light mb-8 max-w-3xl mx-auto">
             At Columbus Tours, we don't just plan trips - we create experiences that become lifelong memories.
@@ -71,7 +71,7 @@ export default function AboutPage() {
               Our <span className="text-[#D32F2F]">Story</span>
             </h2>
             <p className="text-lg mb-6">
-              Founded in 2015 by Mr. Dhananjay Jadhav, Columbus Tours began as a passion project to make international travel accessible to everyone in Karad and beyond. What started as a small office has grown into a trusted name in travel planning.
+              Founded in <strong>2004</strong> by <strong>Mr. Dhananjay Jadhav</strong>, Columbus Tours began as a passion project to make international travel accessible to everyone in Karad and beyond. What started as a small office has grown into a trusted name in travel planning.
             </p>
             <p className="text-lg mb-6">
               With over 8 years of experience, we've helped thousands of travelers discover new destinations, whether they're seeking spiritual journeys, family vacations, or adventurous getaways.

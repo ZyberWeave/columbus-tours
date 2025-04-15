@@ -1,5 +1,5 @@
 "use client";
-import Spinner from "../../components/Spinner";
+import Spinner from "./Spinner";
 
 const faqItems = [
   {
