@@ -385,7 +385,7 @@ interface TourCardProps {
   tour: Tour;
   priority?: boolean;
 }
-export function TourCard({ tour, priority = false }: TourCardProps) {
+ function TourCard({ tour, priority = false }: TourCardProps) {
   
   
   return (
