@@ -5,13 +5,13 @@ import { getTourImages } from '@/utils/getImages';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function TourDetailPage({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const tour = allTours.find((t) => t.slug === slug);
 
   if (!tour) {
