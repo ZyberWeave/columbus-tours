@@ -1,14 +1,14 @@
 export interface Tour {
   id: number;
   title: string;
-  slug: string; // SEO-friendly, descriptive slug (no dates)
-  duration: number; // number of nights
+  slug: string;
+  duration: number;
   category: "International" | "Domestic" | "Religious" | "Honeymoon" | "Cruise";
-  images: string[]; // fallback static images (if dynamic loading fails)
-  folder: string; // folder name for dynamic image loading; each folder should contain:
-                 //   - a "slideshow" subfolder with images (e.g., 1.jpg, 2.jpg, ..., 5.jpg)
-                 //   - a "thumbnail.jpg" file for the tour card
+  images: string[];
+  folder: string;
   whatsappMessage: string;
+  featured?: boolean;
+  shortDescription?: string;
 }
 
 export const allTours: Tour[] = [
@@ -25,6 +25,8 @@ export const allTours: Tour[] = [
     folder: "dubai",
     whatsappMessage:
       "Hello, I'm interested in the Dubai Diwali Festival Tour. Please send me more details.",
+    featured: true,
+    shortDescription: "Celebrate Diwali in style with Dubai's dazzling lights, vibrant markets, and iconic landmarks."
   },
   {
     id: 2,
@@ -36,6 +38,7 @@ export const allTours: Tour[] = [
     folder: "phuket-krabi",
     whatsappMessage:
       "Hello, I'm interested in the Phuket Krabi Island Adventure Tour. Please send me more details.",
+    shortDescription: "Explore Thailand's stunning beaches, crystal waters, and thrilling island adventures in Phuket and Krabi."
   },
   {
     id: 3,
@@ -47,6 +50,7 @@ export const allTours: Tour[] = [
     folder: "bangkok-pattaya",
     whatsappMessage:
       "Hello, I'm interested in the Bangkok Pattaya City Escape Tour. Please send me more details.",
+    shortDescription: "Experience the vibrant nightlife, cultural temples, and beach vibes of Bangkok and Pattaya."
   },
   {
     id: 4,
@@ -58,6 +62,7 @@ export const allTours: Tour[] = [
     folder: "bali",
     whatsappMessage:
       "Hello, I'm interested in the Bali Indonesia Exotic Retreat Tour. Please send me more details.",
+    shortDescription: "Unwind in Bali’s lush jungles, pristine beaches, and spiritual temples for an exotic escape."
   },
   {
     id: 5,
@@ -69,6 +74,7 @@ export const allTours: Tour[] = [
     folder: "singapore-malaysia",
     whatsappMessage:
       "Hello, I'm interested in the Singapore Malaysia Urban Cultural Tour. Please send me more details.",
+    shortDescription: "Discover the modern marvels and rich cultural heritage of Singapore and Malaysia’s bustling cities."
   },
   {
     id: 6,
@@ -80,6 +86,7 @@ export const allTours: Tour[] = [
     folder: "almaty",
     whatsappMessage:
       "Hello, I'm interested in the Almaty Kazakhstan Scenic Discovery Tour. Please send me more details.",
+    shortDescription: "Marvel at Almaty’s breathtaking mountains, vibrant markets, and unique blend of cultures."
   },
   {
     id: 7,
@@ -91,6 +98,7 @@ export const allTours: Tour[] = [
     folder: "baku",
     whatsappMessage:
       "Hello, I'm interested in the Baku Azerbaijan Heritage & Modernity Tour. Please send me more details.",
+    shortDescription: "Experience Baku’s fusion of ancient heritage and futuristic architecture in a vibrant cultural journey."
   },
   {
     id: 8,
@@ -102,6 +110,7 @@ export const allTours: Tour[] = [
     folder: "srilanka",
     whatsappMessage:
       "Hello, I'm interested in the Sri Lanka Scenic Cultural Tour. Please send me more details.",
+    shortDescription: "Journey through Sri Lanka’s lush landscapes, ancient temples, and vibrant cultural traditions."
   },
   {
     id: 9,
@@ -113,6 +122,7 @@ export const allTours: Tour[] = [
     folder: "vietnam",
     whatsappMessage:
       "Hello, I'm interested in the Vietnam Adventure & Heritage Tour. Please send me more details.",
+    shortDescription: "Explore Vietnam’s historic sites, bustling cities, and scenic countryside on an unforgettable adventure."
   },
   {
     id: 10,
@@ -124,6 +134,7 @@ export const allTours: Tour[] = [
     folder: "cambodia",
     whatsappMessage:
       "Hello, I'm interested in the Cambodia Ancient Temples Tour. Please send me more details.",
+    shortDescription: "Step back in time with Cambodia’s majestic Angkor Wat and other ancient temple wonders."
   },
   {
     id: 11,
@@ -135,6 +146,7 @@ export const allTours: Tour[] = [
     folder: "philippines",
     whatsappMessage:
       "Hello, I'm interested in the Philippines Island Paradise Tour. Please send me more details.",
+    shortDescription: "Relax on the Philippines’ pristine beaches and explore its vibrant coral reefs and islands."
   },
   {
     id: 12,
@@ -146,6 +158,7 @@ export const allTours: Tour[] = [
     folder: "nepal",
     whatsappMessage:
       "Hello, I'm interested in the Nepal Himalayan Culture Tour. Please send me more details.",
+    shortDescription: "Immerse yourself in Nepal’s Himalayan beauty and rich cultural heritage, from temples to treks."
   },
   {
     id: 13,
@@ -157,6 +170,7 @@ export const allTours: Tour[] = [
     folder: "bhutan",
     whatsappMessage:
       "Hello, I'm interested in the Bhutan Mystical Kingdom Tour. Please send me more details.",
+    shortDescription: "Discover Bhutan’s serene monasteries, stunning landscapes, and unique Himalayan culture."
   },
   {
     id: 14,
@@ -168,6 +182,7 @@ export const allTours: Tour[] = [
     folder: "japan",
     whatsappMessage:
       "Hello, I'm interested in the Japan Modern Tradition Tour. Please send me more details.",
+    shortDescription: "Experience Japan’s blend of cutting-edge cities and timeless traditions, from Tokyo to Kyoto."
   },
   {
     id: 15,
@@ -179,6 +194,7 @@ export const allTours: Tour[] = [
     folder: "turkey",
     whatsappMessage:
       "Hello, I'm interested in the Turkey Historical Cultural Tour. Please send me more details.",
+    shortDescription: "Uncover Turkey’s rich history, from Istanbul’s bazaars to Cappadocia’s fairy-tale landscapes."
   },
   {
     id: 16,
@@ -190,6 +206,7 @@ export const allTours: Tour[] = [
     folder: "greece",
     whatsappMessage:
       "Hello, I'm interested in the Greece Mythical Islands Heritage Tour. Please send me more details.",
+    shortDescription: "Sail through Greece’s idyllic islands, exploring ancient ruins and sun-soaked beaches."
   },
   {
     id: 17,
@@ -201,6 +218,7 @@ export const allTours: Tour[] = [
     folder: "australia",
     whatsappMessage:
       "Hello, I'm interested in the Australia Ultimate Outback City Tour. Please send me more details.",
+    shortDescription: "Adventure through Australia’s rugged Outback and vibrant cities like Sydney and Melbourne."
   },
   {
     id: 18,
@@ -212,6 +230,7 @@ export const allTours: Tour[] = [
     folder: "newzealand",
     whatsappMessage:
       "Hello, I'm interested in the New Zealand Adventure Scenic Tour. Please send me more details.",
+    shortDescription: "Explore New Zealand’s dramatic landscapes, from fjords to mountains, on an epic adventure."
   },
   {
     id: 19,
@@ -223,6 +242,7 @@ export const allTours: Tour[] = [
     folder: "europe",
     whatsappMessage:
       "Hello, I'm interested in the Europe Grand Cultural Historical Tour. Please send me more details.",
+    shortDescription: "Journey across Europe’s iconic cities, marveling at historic landmarks and cultural treasures."
   },
   {
     id: 20,
@@ -234,6 +254,7 @@ export const allTours: Tour[] = [
     folder: "egypt",
     whatsappMessage:
       "Hello, I'm interested in the Egypt Ancient Wonders Tour. Please send me more details.",
+    shortDescription: "Discover Egypt’s pyramids, Nile River, and ancient temples on a journey through history."
   },
   {
     id: 21,
@@ -245,6 +266,7 @@ export const allTours: Tour[] = [
     folder: "mauritius",
     whatsappMessage:
       "Hello, I'm interested in the Mauritius Tropical Escape Tour. Please send me more details.",
+    shortDescription: "Relax on Mauritius’ turquoise beaches and explore its lush rainforests and coral reefs."
   },
   {
     id: 22,
@@ -256,6 +278,7 @@ export const allTours: Tour[] = [
     folder: "maldives",
     whatsappMessage:
       "Hello, I'm interested in the Maldives Luxury Island Retreat. Please send me more details.",
+    shortDescription: "Indulge in the Maldives’ overwater villas and pristine beaches for a luxurious escape."
   },
   {
     id: 23,
@@ -267,6 +290,7 @@ export const allTours: Tour[] = [
     folder: "usa",
     whatsappMessage:
       "Hello, I'm interested in the United States Grand Road Trip Tour. Please send me more details.",
+    shortDescription: "Embark on an epic U.S. road trip, from vibrant cities to stunning national parks."
   },
 
   // ===============================
@@ -282,6 +306,8 @@ export const allTours: Tour[] = [
     folder: "rajasthan",
     whatsappMessage:
       "Hello, I'm interested in the Rajasthan Royal Heritage Tour. Please send me more details.",
+    featured: true,
+    shortDescription: "Step into Rajasthan’s royal past with its majestic forts, palaces, and vibrant culture."
   },
   {
     id: 102,
@@ -293,6 +319,7 @@ export const allTours: Tour[] = [
     folder: "dharamshala-dalhousie",
     whatsappMessage:
       "Hello, I'm interested in the Himalayan Retreat: Dharamshala Dalhousie Tour. Please send me more details.",
+    shortDescription: "Find peace in the Himalayan serenity of Dharamshala and Dalhousie’s colonial charm."
   },
   {
     id: 103,
@@ -304,6 +331,7 @@ export const allTours: Tour[] = [
     folder: "kullu-manali",
     whatsappMessage:
       "Hello, I'm interested in the Kullu Manali Adventure Tour. Please send me more details.",
+    shortDescription: "Thrill in Kullu Manali’s snow-capped peaks, adventure sports, and scenic beauty."
   },
   {
     id: 104,
@@ -315,6 +343,7 @@ export const allTours: Tour[] = [
     folder: "jammu-kashmir",
     whatsappMessage:
       "Hello, I'm interested in the Jammu Kashmir Scenic Tour. Please send me more details.",
+    shortDescription: "Discover the paradise of Jammu & Kashmir with its serene lakes and majestic mountains."
   },
   {
     id: 105,
@@ -326,6 +355,7 @@ export const allTours: Tour[] = [
     folder: "leh-ladakh",
     whatsappMessage:
       "Hello, I'm interested in the Leh Ladakh High Altitude Adventure. Please send me more details.",
+    shortDescription: "Conquer Leh Ladakh’s rugged terrains and monasteries on a high-altitude adventure."
   },
   {
     id: 106,
@@ -337,6 +367,7 @@ export const allTours: Tour[] = [
     folder: "chardham",
     whatsappMessage:
       "Hello, I'm interested in the Chardham Pilgrimage Tour. Please send me more details.",
+    shortDescription: "Embark on a sacred Chardham Yatra to India’s holiest Himalayan pilgrimage sites."
   },
   {
     id: 107,
@@ -348,6 +379,7 @@ export const allTours: Tour[] = [
     folder: "dodham",
     whatsappMessage:
       "Hello, I'm interested in the Dodham Pilgrimage Tour. Please send me more details.",
+    shortDescription: "Seek spiritual solace with the Dodham Yatra, visiting two sacred Himalayan shrines."
   },
   {
     id: 108,
@@ -359,6 +391,7 @@ export const allTours: Tour[] = [
     folder: "vaishnodevi",
     whatsappMessage:
       "Hello, I'm interested in the Vaishnodevi Pilgrimage Tour. Please send me more details.",
+    shortDescription: "Experience divine blessings on a pilgrimage to the holy Vaishnodevi shrine."
   },
   {
     id: 109,
@@ -370,6 +403,7 @@ export const allTours: Tour[] = [
     folder: "kerala",
     whatsappMessage:
       "Hello, I'm interested in the Kerala Backwaters Culture Tour. Please send me more details.",
+    shortDescription: "Cruise Kerala’s tranquil backwaters and immerse in its rich cultural traditions."
   },
   {
     id: 110,
@@ -381,6 +415,7 @@ export const allTours: Tour[] = [
     folder: "northeast",
     whatsappMessage:
       "Hello, I'm interested in the North East India Scenic Tour. Please send me more details.",
+    shortDescription: "Explore the untouched beauty and tribal cultures of North East India’s hills."
   },
   {
     id: 111,
@@ -392,6 +427,7 @@ export const allTours: Tour[] = [
     folder: "andaman",
     whatsappMessage:
       "Hello, I'm interested in the Andaman Nicobar Island Escape. Please send me more details.",
+    shortDescription: "Dive into the Andaman’s turquoise waters and relax on its pristine beaches."
   },
   {
     id: 112,
@@ -403,6 +439,7 @@ export const allTours: Tour[] = [
     folder: "goa",
     whatsappMessage:
       "Hello, I'm interested in the Goa Beach Culture Getaway. Please send me more details.",
+    shortDescription: "Soak up Goa’s vibrant beaches, nightlife, and Portuguese-inspired culture."
   },
   {
     id: 113,
@@ -414,6 +451,7 @@ export const allTours: Tour[] = [
     folder: "mysore-ooty",
     whatsappMessage:
       "Hello, I'm interested in the Mysore Ooty Nature Heritage Tour. Please send me more details.",
+    shortDescription: "Discover Mysore’s palaces and Ooty’s misty hills on a nature and heritage journey."
   },
   {
     id: 114,
@@ -425,6 +463,7 @@ export const allTours: Tour[] = [
     folder: "tamilnadu",
     whatsappMessage:
       "Hello, I'm interested in the Tamil Nadu Heritage Spiritual Tour. Please send me more details.",
+    shortDescription: "Explore Tamil Nadu’s ancient temples and rich cultural heritage on a spiritual journey."
   },
   {
     id: 115,
@@ -436,6 +475,7 @@ export const allTours: Tour[] = [
     folder: "ramoji",
     whatsappMessage:
       "Hello, I'm interested in the Ramoji Hyderabad Entertainment Tour. Please send me more details.",
+    shortDescription: "Experience the magic of cinema at Ramoji Film City in vibrant Hyderabad."
   },
   {
     id: 116,
@@ -447,6 +487,7 @@ export const allTours: Tour[] = [
     folder: "tirupati",
     whatsappMessage:
       "Hello, I'm interested in the Tirupati Spiritual Pilgrimage Tour. Please send me more details.",
+    shortDescription: "Seek blessings at Tirupati’s sacred Venkateswara Temple on a spiritual pilgrimage."
   },
   {
     id: 117,
@@ -458,6 +499,7 @@ export const allTours: Tour[] = [
     folder: "gujarat",
     whatsappMessage:
       "Hello, I'm interested in the Gujarat Vibrant Heritage Tour. Please send me more details.",
+    shortDescription: "Immerse in Gujarat’s colorful festivals, historic sites, and vibrant cultural heritage."
   },
   {
     id: 118,
@@ -469,6 +511,7 @@ export const allTours: Tour[] = [
     folder: "rann",
     whatsappMessage:
       "Hello, I'm interested in the Rann of Kutch Desert Experience Tour. Please send me more details.",
+    shortDescription: "Witness the surreal white salt desert and vibrant culture of Rann of Kutch."
   },
   {
     id: 119,
@@ -480,6 +523,7 @@ export const allTours: Tour[] = [
     folder: "madhyapradesh",
     whatsappMessage:
       "Hello, I'm interested in the Madhya Pradesh Historical Wildlife Tour. Please send me more details.",
+    shortDescription: "Explore Madhya Pradesh’s ancient forts and thrilling wildlife sanctuaries."
   },
   {
     id: 120,
@@ -491,6 +535,7 @@ export const allTours: Tour[] = [
     folder: "varanasi",
     whatsappMessage:
       "Hello, I'm interested in the Ayodhya Varanasi Spiritual Journey. Please send me more details.",
+    shortDescription: "Embark on a sacred journey to Ayodhya and Varanasi, India’s spiritual heartlands."
   },
   {
     id: 121,
@@ -502,6 +547,7 @@ export const allTours: Tour[] = [
     folder: "odisha",
     whatsappMessage:
       "Hello, I'm interested in the Odisha Cultural Heritage Tour. Please send me more details.",
+    shortDescription: "Discover Odisha’s ancient temples, tribal culture, and artistic heritage."
   },
   {
     id: 122,
@@ -513,6 +559,7 @@ export const allTours: Tour[] = [
     folder: "konkan",
     whatsappMessage:
       "Hello, I'm interested in the Konkan Coastal Discovery Tour. Please send me more details.",
+    shortDescription: "Explore the Konkan coast’s serene beaches, forts, and lush greenery."
   },
 
   // ===============================
@@ -528,6 +575,8 @@ export const allTours: Tour[] = [
     folder: "chardham",
     whatsappMessage:
       "Hello, I'm interested in the Chardham Yatra Pilgrimage Tour. Please send me more details.",
+    featured: true,
+    shortDescription: "Undertake the sacred Chardham Yatra to four holy Himalayan shrines for spiritual fulfillment."
   },
   {
     id: 202,
@@ -539,6 +588,7 @@ export const allTours: Tour[] = [
     folder: "dodham",
     whatsappMessage:
       "Hello, I'm interested in the Dodham Yatra Religious Tour. Please send me more details.",
+    shortDescription: "Visit two sacred Himalayan shrines on the spiritually enriching Dodham Yatra."
   },
   {
     id: 203,
@@ -550,6 +600,7 @@ export const allTours: Tour[] = [
     folder: "vaishnodevi",
     whatsappMessage:
       "Hello, I'm interested in the Vaishnodevi Katra Religious Tour. Please send me more details.",
+    shortDescription: "Seek divine blessings at the revered Vaishnodevi temple in Katra."
   },
   {
     id: 204,
@@ -561,6 +612,7 @@ export const allTours: Tour[] = [
     folder: "tirupati",
     whatsappMessage:
       "Hello, I'm interested in the Tirupati Religious Tour. Please send me more details.",
+    shortDescription: "Experience spiritual serenity at Tirupati’s sacred Venkateswara Temple."
   },
   {
     id: 205,
@@ -572,6 +624,7 @@ export const allTours: Tour[] = [
     folder: "varanasi",
     whatsappMessage:
       "Hello, I'm interested in the Ayodhya Varanasi Religious Tour. Please send me more details.",
+    shortDescription: "Connect with divinity in the sacred cities of Ayodhya and Varanasi."
   },
 
   // ===============================
@@ -587,6 +640,7 @@ export const allTours: Tour[] = [
     folder: "mauritius",
     whatsappMessage:
       "Hello, I'm interested in the Mauritius Honeymoon Getaway. Please send me more details.",
+    shortDescription: "Celebrate love on Mauritius’ romantic beaches and turquoise lagoons."
   },
   {
     id: 302,
@@ -598,6 +652,8 @@ export const allTours: Tour[] = [
     folder: "maldives",
     whatsappMessage:
       "Hello, I'm interested in the Maldives Honeymoon Retreat. Please send me more details.",
+    featured: true,
+    shortDescription: "Escape to the Maldives for a romantic retreat in luxurious overwater villas."
   },
   {
     id: 303,
@@ -609,6 +665,7 @@ export const allTours: Tour[] = [
     folder: "bali",
     whatsappMessage:
       "Hello, I'm interested in the Bali Indonesia Honeymoon Escape. Please send me more details.",
+    shortDescription: "Fall in love amidst Bali’s lush jungles, beaches, and romantic sunsets."
   },
   {
     id: 304,
@@ -620,6 +677,7 @@ export const allTours: Tour[] = [
     folder: "phuket",
     whatsappMessage:
       "Hello, I'm interested in the Phuket Krabi Honeymoon. Please send me more details.",
+    shortDescription: "Enjoy a romantic getaway on Phuket and Krabi’s stunning beaches and islands."
   },
   {
     id: 305,
@@ -631,6 +689,7 @@ export const allTours: Tour[] = [
     folder: "paris",
     whatsappMessage:
       "Hello, I'm interested in the Paris Honeymoon Romance. Please send me more details.",
+    shortDescription: "Experience timeless romance in Paris, the city of love, with iconic landmarks."
   },
   {
     id: 306,
@@ -642,6 +701,7 @@ export const allTours: Tour[] = [
     folder: "switzerland",
     whatsappMessage:
       "Hello, I'm interested in the Switzerland Honeymoon Adventure. Please send me more details.",
+    shortDescription: "Celebrate love amidst Switzerland’s Alps, lakes, and charming villages."
   },
   {
     id: 307,
@@ -653,6 +713,7 @@ export const allTours: Tour[] = [
     folder: "venice",
     whatsappMessage:
       "Hello, I'm interested in the Venice Italy Honeymoon. Please send me more details.",
+    shortDescription: "Drift through Venice’s romantic canals and historic charm for an unforgettable honeymoon."
   },
   {
     id: 308,
@@ -664,6 +725,7 @@ export const allTours: Tour[] = [
     folder: "philippines",
     whatsappMessage:
       "Hello, I'm interested in the Philippines Honeymoon. Please send me more details.",
+    shortDescription: "Create lasting memories on the Philippines’ idyllic beaches and tropical islands."
   },
   {
     id: 309,
@@ -675,6 +737,7 @@ export const allTours: Tour[] = [
     folder: "kashmir",
     whatsappMessage:
       "Hello, I'm interested in the Kashmir Honeymoon. Please send me more details.",
+    shortDescription: "Romance in Kashmir’s serene valleys, lakes, and snow-capped mountains."
   },
   {
     id: 310,
@@ -686,6 +749,7 @@ export const allTours: Tour[] = [
     folder: "kerala",
     whatsappMessage:
       "Hello, I'm interested in the Kerala Honeymoon. Please send me more details.",
+    shortDescription: "Cruise Kerala’s romantic backwaters and lush hills for a dreamy honeymoon."
   },
   {
     id: 311,
@@ -697,6 +761,7 @@ export const allTours: Tour[] = [
     folder: "goa",
     whatsappMessage:
       "Hello, I'm interested in the Goa Honeymoon. Please send me more details.",
+    shortDescription: "Celebrate love on Goa’s vibrant beaches with a perfect blend of romance and fun."
   },
   {
     id: 312,
@@ -708,6 +773,7 @@ export const allTours: Tour[] = [
     folder: "himachal",
     whatsappMessage:
       "Hello, I'm interested in the Himachal Honeymoon. Please send me more details.",
+    shortDescription: "Escape to Himachal’s romantic hills and cozy retreats for a magical honeymoon."
   },
 
   // ===============================
@@ -723,6 +789,7 @@ export const allTours: Tour[] = [
     folder: "cordella",
     whatsappMessage:
       "Hello, I'm interested in the Cordella Cruise Vacation. Please send me more details.",
+    shortDescription: "Sail in luxury on the Cordella Cruise, exploring exotic destinations in style."
   },
   {
     id: 402,
@@ -734,5 +801,7 @@ export const allTours: Tour[] = [
     folder: "bahamas",
     whatsappMessage:
       "Hello, I'm interested in the Bahamas Cruise Vacation. Please send me more details.",
+    featured: true,
+    shortDescription: "Cruise to the Bahamas’ crystal waters and vibrant islands for a dreamy vacation."
   },
 ];

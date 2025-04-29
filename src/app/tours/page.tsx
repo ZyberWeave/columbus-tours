@@ -1,21 +1,49 @@
 "use client";
-import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
+import { motion } from "framer-motion";
+import { useState, useEffect, useMemo,  Suspense, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { allTours, type Tour } from "@/data/toursData";
 import DualSlider from "@/components/DualSlider";
+import { FaStar, FaCalendarAlt, FaHeart } from 'react-icons/fa';
+import {
+  FaGlobe,
+  FaPlane,
+  FaHome,
+  FaPrayingHands,
+  FaShip
+} from 'react-icons/fa';
 
 type SortOption = "default" | "duration-asc" | "duration-desc" | "alphabetical-asc" | "alphabetical-desc";
 
-// Tour categories with icons for a better UX
 const CATEGORIES = [
-  { name: "All", icon: "🌍" },
-  { name: "International", icon: "✈️" },
-  { name: "Domestic", icon: "🏠" },
-  { name: "Religious", icon: "🛐" },
-  { name: "Honeymoon", icon: "💑" },
-  { name: "Cruise", icon: "🛳️" },
+  { name: 'All', icon: <FaGlobe className="text-xl text-blue-600" /> },
+  { name: 'International', icon: <FaPlane className="text-xl text-blue-600" /> },
+  { name: 'Domestic', icon: <FaHome className="text-xl text-blue-600" /> },
+  { name: 'Religious', icon: <FaPrayingHands className="text-xl text-blue-600" /> },
+  { name: 'Honeymoon', icon: <FaHeart className="text-xl text-pink-600" /> },
+  { name: 'Cruise', icon: <FaShip className="text-xl text-blue-600" /> },
+];
+
+// Slideshow images
+// Replace SLIDES with your actual tour group images and captions
+const SLIDES = [
+  {
+    src: "/images/tourgroups/group1.jpg",
+    title: "Our Tour Groups",
+    subtitle: "Memorable journeys with happy travelers",
+  },
+  {
+    src: "/images/tourgroups/group2.jpg",
+    title: "Our Tour Groups",
+    subtitle: "Adventure, fun, and lifelong friendships",
+  },
+  {
+    src: "/images/tourgroups/group3.jpg",
+    title: "Our Tour Groups",
+    subtitle: "Discovering the world together",
+  },
 ];
 
 export default function ToursPage() {
@@ -26,7 +54,6 @@ export default function ToursPage() {
   );
 }
 
-// Add Loading component definition
 function Loading() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -38,10 +65,9 @@ function Loading() {
 function ToursPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const initialCategory = searchParams.get("category") || "All";
+  const initialCategory = searchParams.get("category")?.toLowerCase() || "all";
   const initialSearch = searchParams.get("search") || "";
 
-  // Local state declarations
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [durationRange, setDurationRange] = useState<[number, number]>([1, 15]);
@@ -49,31 +75,28 @@ function ToursPageContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [sortOption, setSortOption] = useState<SortOption>("default");
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Debounce helper to delay search updates
-  // Update the debounce helper function
-  const debounce = useCallback(
-    <T extends unknown[]>(func: (...args: T) => void, wait: number): ((...args: T) => void) => {
-      let timeout: number | undefined;
-      return (...args: T) => {
-        if (timeout) clearTimeout(timeout);
-        timeout = window.setTimeout(() => func(...args), wait);
-      };
-    },
-    []
-  );
+  // Slideshow effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
-  // Debounced search handler: updates URL query parameters and local search query
-  const handleSearch = useMemo(
-    () =>
-      debounce((query: string) => {
-        router.push(`/tours?search=${encodeURIComponent(query)}&category=${selectedCategory.toLowerCase()}`);
-        setSearchQuery(query);
-      }, 300),
-    [debounce, router, selectedCategory]
-  );
+  // --- Move debounce outside the component ---
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // On mount: determine maximum tour duration from all tours
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      router.replace(`/tours?search=${encodeURIComponent(value)}&category=${selectedCategory.toLowerCase()}`, { scroll: false });
+    }, 300);
+  };
+
   useEffect(() => {
     try {
       const maxTourDuration = Math.max(...allTours.map((tour) => tour.duration));
@@ -86,18 +109,16 @@ function ToursPageContent() {
     }
   }, []);
 
-  // Update local state if URL query parameters change
   useEffect(() => {
-    const cat = searchParams.get("category") || "All";
+    const cat = searchParams.get("category")?.toLowerCase() || "all";
     const q = searchParams.get("search") || "";
     setSelectedCategory(cat);
     setSearchQuery(q);
   }, [searchParams]);
 
-  // Filter tours based on category, search query (by title only), and duration range
   const filteredTours = useMemo(() => {
     const results = allTours.filter((tour) => {
-      if (selectedCategory !== "All" && tour.category.toLowerCase() !== selectedCategory.toLowerCase()) {
+      if (selectedCategory !== "all" && tour.category.toLowerCase() !== selectedCategory.toLowerCase()) {
         return false;
       }
       if (searchQuery) {
@@ -118,24 +139,23 @@ function ToursPageContent() {
     } else if (sortOption === "alphabetical-asc") {
       results.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortOption === "alphabetical-desc") {
-      results.sort((a, b) => b.title.localeCompare(a.title));
+      results.sort((a, b) => b.title.localeCompare(b.title));
     }
     return results;
   }, [selectedCategory, searchQuery, durationRange, sortOption]);
 
-  // Update URL and local state when a category is selected
   const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    router.push(`/tours?category=${category.toLowerCase()}&search=${encodeURIComponent(searchQuery)}`);
+    const normalizedCategory = category.toLowerCase();
+    setSelectedCategory(normalizedCategory);
+    router.replace(`/tours?category=${normalizedCategory}&search=${encodeURIComponent(searchQuery)}`, { scroll: false });
   };
 
-  // Reset filters and clear query parameters
   const resetFilters = () => {
-    setSelectedCategory("All");
+    setSelectedCategory("all");
     setSearchQuery("");
     setDurationRange([1, maxDuration]);
     setSortOption("default");
-    router.push("/tours");
+    router.replace("/tours", { scroll: false });
   };
 
   if (isLoading) {
@@ -148,13 +168,77 @@ function ToursPageContent() {
 
   return (
     <main className="bg-[#FFFFFF] min-h-screen pb-16">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#1976D2] to-[#D32F2F] text-white py-16 mb-8">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Discover Your Perfect Journey</h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto opacity-90">
-            Explore our handpicked collection of unforgettable tour experiences.
-          </p>
+      <style jsx global>{`
+        /* Styles for rc-slider (assuming DualSlider uses rc-slider) */
+        .rc-slider-rail {
+          background-color: #e0e0e0 !important;
+        }
+        .rc-slider-track {
+          background-color: #D32F2F !important;
+        }
+        .rc-slider-handle {
+          border-color: #D32F2F !important;
+          background-color: #FFFFFF !important;
+        }
+        .rc-slider-handle:hover,
+        .rc-slider-handle:active,
+        .rc-slider-handle:focus {
+          border-color: #B71C1C !important;
+        }
+        .rc-slider-dot-active {
+          border-color: #D32F2F !important;
+        }
+      `}</style>
+
+      {/* Hero Section with Slideshow */}
+      <section className="relative h-[60vh] overflow-hidden">
+        {SLIDES.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute inset-0 transition-opacity duration-1000 ${
+              currentSlide === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.title}
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+              <div className="text-center text-white">
+                <motion.h1
+                  className="text-4xl md:text-5xl font-bold mb-4"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  {slide.title}
+                </motion.h1>
+                <motion.p
+                  className="text-lg md:text-xl max-w-2xl mx-auto"
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  {slide.subtitle}
+                </motion.p>
+              </div>
+            </div>
+          </div>
+        ))}
+        {/* Slide Indicators */}
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+          {SLIDES.map((_, index) => (
+            <button
+              key={index}
+              className={`w-3 h-3 rounded-full ${
+                currentSlide === index ? "bg-white" : "bg-white/50"
+              }`}
+              onClick={() => setCurrentSlide(index)}
+            />
+          ))}
         </div>
       </section>
 
@@ -203,7 +287,7 @@ function ToursPageContent() {
                 id="search"
                 type="text"
                 value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
+                onChange={handleSearchInput}
                 placeholder="Search by name..."
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 aria-label="Search tours"
@@ -252,7 +336,7 @@ function ToursPageContent() {
             <div className="hidden md:flex justify-between items-center mb-6">
               <p className="text-[#333333]">
                 Showing {filteredTours.length} {filteredTours.length === 1 ? "tour" : "tours"}
-                {selectedCategory !== "All" && ` in ${selectedCategory}`}
+                {selectedCategory !== "all" && ` in ${selectedCategory}`}
                 {searchQuery && ` matching "${searchQuery}"`}
               </p>
               <div className="flex items-center gap-4">
@@ -297,57 +381,120 @@ function ToursPageContent() {
   );
 }
 
-// Tour Card component
-function TourCard({ tour }: { tour: Tour }) {
-  const thumbnailPath = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
-
+interface TourCardProps {
+  tour: Tour;
+  priority?: boolean;
+}
+export function TourCard({ tour, priority = false }: TourCardProps) {
+  
+  
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow h-full flex flex-col group">
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <Image
-          src={thumbnailPath}
-          alt={tour.title}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          priority={false}
-        />
-        <span className="absolute top-3 right-3 bg-[#1976D2] text-white text-xs px-2 py-1 rounded-full">
-          {tour.category}
-        </span>
-      </div>
-      <div className="p-4 flex-grow">
-        <h3 className="text-xl font-semibold mb-2 line-clamp-2">{tour.title}</h3>
-        <div className="flex items-center text-sm text-[#333333]">
-          <span className="mr-1">📅</span>
-          <span>
-            {tour.duration} night{tour.duration !== 1 ? "s" : ""}
-          </span>
+    <motion.div
+      className="relative group h-full"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -8 }}
+    >
+      {/* Featured Badge */}
+      {tour.featured && (
+        <div className="absolute top-4 right-4 z-20 bg-[#D32F2F] text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg flex items-center">
+          <FaStar className="mr-1" />
+          Featured
         </div>
-      </div>
-      <div className="p-4 pt-2 border-t border-gray-100">
-        <Link href={`/tours/${tour.slug}`} className="block w-full" aria-label={`View details for ${tour.title}`}>
-          <button className="w-full bg-[#1976D2] hover:bg-[#1565C0] text-white py-2 px-4 rounded transition-colors flex items-center justify-center">
-            View Details <span className="ml-1">→</span>
-          </button>
-        </Link>
-        <div className="mt-2 flex gap-2">
-          <a
-            href={`https://wa.me/919422401225?text=Hi, I'm interested in the ${tour.title} tour`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full bg-[#43A047] hover:bg-[#388E3C] text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
-          >
-            WhatsApp <span className="ml-1">💬</span>
-          </a>
-          <a
-            href="tel:+919422401225"
-            className="w-full bg-[#1976D2] hover:bg-[#1565C0] text-white py-2 px-4 rounded transition-colors flex items-center justify-center"
-          >
-            Call <span className="ml-1">📞</span>
-          </a>
+      )}
+
+      <Link
+        href={`/tours/${tour.slug}`}
+        className="block bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-[#D32F2F] transition-all duration-300 shadow-sm hover:shadow-xl h-full flex flex-col"
+      >
+        {/* Square Image Container */}
+        <div className="relative w-full aspect-square overflow-hidden">
+          <Image
+            src={`/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`}
+            alt={`Scenic view of ${tour.title}`}
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={priority}
+          />
+          
+          
         </div>
-      </div>
-    </div>
-  );
+
+        {/* Card Content */}
+        <div className="p-5 flex-grow flex flex-col">
+          {/* Title */}
+          <h3 className="text-xl font-bold text-gray-800 mb-2">
+            {tour.title}
+          </h3>
+          
+          {/* Duration and Location */}
+          <div className="flex flex-wrap gap-y-2 mb-3">
+            <div className="flex items-center text-gray-700 w-full">
+              <FaCalendarAlt className="mr-2 text-[#D32F2F]" />
+              <span className="text-sm font-medium">
+                {tour.duration} {tour.duration === 1 ? 'night' : 'nights'} / {tour.duration + 1} days
+              </span>
+            </div>
+          
+          </div>
+          
+          {/* Description */}
+          <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+            {tour.shortDescription || 'Experience an unforgettable journey through breathtaking landscapes and immerse yourself in local culture with expert guides and carefully crafted itineraries.'}
+          </p>
+        </div>
+
+        {/* Hover Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#D32F2F] to-[#B71C1C] flex flex-col p-6 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 rounded-xl overflow-hidden">
+          <div className="flex flex-col h-full">
+            {/* Header Section */}
+            <div className="mb-4">
+              <h3 className="text-2xl font-bold text-white mb-2">
+                {tour.title} Experience
+              </h3>
+              <div className="h-1 w-16 bg-white rounded-full mb-3"></div>
+              <div className="flex flex-wrap gap-y-2">
+                <div className="flex items-center text-white/90 w-full">
+                  <FaCalendarAlt className="mr-2" />
+                  <span>{tour.duration} {tour.duration === 1 ? 'night' : 'nights'}</span>
+                </div>
+                
+              </div>
+            </div>
+            
+            {/* Content Section */}
+            <div className="flex-grow overflow-y-auto mb-4">
+              <h4 className="text-white font-semibold mb-2 text-lg">Description:</h4>
+              <p className="text-white/80 text-sm mb-4">
+                {tour.shortDescription || 'Experience an unforgettable journey through breathtaking landscapes and immerse yourself in local culture with expert guides and carefully crafted itineraries.'}
+              </p>
+            </div>
+            
+            {/* Footer CTA */}
+            <button className="w-full px-6 py-3 bg-white hover:bg-gray-100 text-[#D32F2F] font-semibold rounded-lg transition-colors shadow-lg flex items-center justify-center mt-auto">
+              Discover Journey
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  ); 
+  
 }

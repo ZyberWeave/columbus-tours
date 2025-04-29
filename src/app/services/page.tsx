@@ -1,274 +1,602 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 import Head from "next/head";
+import {
+  FiSearch,
+  FiStar,
+  FiShield,
+  FiHeadphones,
+  FiArrowRight,
+  FiMapPin,
+  FiHeart,
+  FiCheckCircle,
 
-// Data array to store all service information
+} from "react-icons/fi";
+import { FaHotel, FaPlane, FaUmbrellaBeach, FaMountain, FaCity } from "react-icons/fa";
+
+// Simplified service data with clearer benefits
 const services = [
   {
     id: 1,
-    title: "Comprehensive Travel Planning",
-    description: "At Columbus Tours, we believe that every great journey begins with thoughtful planning. Our comprehensive travel planning services are designed to transform your travel dreams into a reality tailored just for you. We start by getting to know your interests, budget, and the destinations you're passionate about. Whether you envision a relaxing beach vacation, an action-packed adventure, or a cultural immersion, our expert travel consultants work closely with you to craft an itinerary that captures your vision. Every detail—from sightseeing routes and restaurant reservations to local experiences and leisure activities—is meticulously arranged to ensure a seamless, enjoyable, and unforgettable trip.",
-    icon: "🗺️"
+    title: "Tailored Itineraries",
+    description: "We design trips that match your unique travel style and interests perfectly.",
+    benefits: [
+      "Personalized daily schedules",
+      "Activities based on your preferences",
+      "Flexible pacing options",
+    ],
+    icon: <FiMapPin className="text-red-600" size={24} />,
+    category: "planning",
   },
   {
     id: 2,
-    title: "Customized Itineraries",
-    description: "We understand that no two travelers are alike. That's why our customized itineraries are created with your personal interests in mind. After an in-depth consultation, our team designs a travel plan that highlights both must-see landmarks and hidden gems unique to each destination. Our itineraries provide the flexibility to explore at your own pace while ensuring that all logistics are taken care of—from transportation and accommodations to exclusive local experiences. Enjoy a travel experience that reflects your personality and meets your expectations, whether you are a solo explorer, a couple, or a family.",
-    icon: "✏️"
+    title: "Luxury Stays",
+    description: "Access our curated collection of the world's finest accommodations.",
+    benefits: [
+      "5-star hotels & private villas",
+      "Exclusive member rates",
+      "VIP amenities included",
+    ],
+    icon: <FaHotel className="text-red-600" size={24} />,
+    category: "accommodation",
   },
   {
     id: 3,
-    title: "Group Tours and Tailor-Made Packages",
-    description: "For those who love to share travel experiences with others, Columbus Tours offers an extensive range of group tours and tailor-made packages. Our group tours bring together like-minded travelers for exciting journeys led by knowledgeable local guides. Enjoy the camaraderie of shared adventures while experiencing the best that each destination has to offer. We also design tailor-made packages for families, friends, or corporate groups that combine structured activities with ample free time, allowing you to create lasting memories together while enjoying a stress-free travel experience.",
-    icon: "👥"
+    title: "Unique Experiences",
+    description: "Go beyond tourism with authentic local encounters you'll remember forever.",
+    benefits: [
+      "Private cultural immersions",
+      "Meet local artisans & experts",
+      "Off-the-beaten-path adventures",
+    ],
+    icon: <FiHeart className="text-red-600" size={24} />,
+    category: "experiences",
   },
   {
     id: 4,
-    title: "Visa Assistance and Travel Documentation",
-    description: "International travel can sometimes be overwhelming when it comes to visas and documentation. Our visa assistance services are here to simplify that process. Our experienced team stays updated with the latest travel regulations and visa requirements for destinations around the world. We help you prepare and submit all necessary paperwork accurately and on time, ensuring that you have the proper documentation to enjoy a hassle-free journey. With Columbus Tours handling your travel paperwork, you can focus on the excitement of your upcoming adventure.",
-    icon: "🛂"
+    title: "Seamless Transport",
+    description: "From private jets to luxury trains, we handle all your mobility needs.",
+    benefits: [
+      "Airport transfers included",
+      "Private drivers available",
+      "Flight booking service",
+    ],
+    icon: <FaPlane className="text-red-600" size={24} />,
+    category: "transport",
   },
   {
     id: 5,
-    title: "Hotel Reservations and Accommodation",
-    description: "The perfect stay can make or break a trip, and Columbus Tours takes pride in securing accommodations that enhance your overall experience. We work with a diverse portfolio of hotels, resorts, and vacation rentals that cater to every taste and budget. From luxury resorts with world-class amenities to charming boutique hotels in historic districts, our accommodation services ensure that you have a comfortable, convenient, and memorable place to call home while traveling. Our personalized recommendations and streamlined booking process guarantee that your stay is as enjoyable as your journey.",
-    icon: "🏨"
+    title: "24/7 Support",
+    description: "Our team is always available to assist you during your travels.",
+    benefits: [
+      "Dedicated concierge",
+      "Emergency assistance",
+      "Real-time itinerary updates",
+    ],
+    icon: <FiHeadphones className="text-red-600" size={24} />,
+    category: "support",
   },
   {
     id: 6,
-    title: "Flight Bookings and Transportation Logistics",
-    description: "Efficient and reliable transportation is essential for a successful trip. Columbus Tours offers comprehensive flight booking and transportation logistics services to ensure that you travel smoothly between destinations. We partner with reputable airlines to secure competitive fares and flexible travel options that fit your schedule. In addition, our team arranges ground transportation—including airport transfers, car rentals, and local transit—to ensure that every leg of your journey is taken care of. With meticulous attention to detail, we manage all aspects of your travel logistics so you can focus on enjoying your adventure.",
-    icon: "✈️"
+    title: "Travel Protection",
+    description: "Comprehensive coverage for unexpected situations during your trip.",
+    benefits: [
+      "Cancellation protection",
+      "Medical coverage",
+      "Lost luggage assistance",
+    ],
+    icon: <FiShield className="text-red-600" size={24} />,
+    category: "protection",
   },
-  {
-    id: 7,
-    title: "Local Guides and Cultural Experiences",
-    description: "One of the most rewarding aspects of travel is the opportunity to immerse yourself in a new culture. Our local guides are experts in their regions and provide insights that go beyond the usual tourist attractions. They help you discover the hidden stories, traditions, and flavors of each destination. From exploring ancient ruins and historic landmarks to participating in local festivals and culinary tours, our cultural experiences are designed to offer a deep, authentic connection to the places you visit. With our local guides, you can gain a richer understanding of the history and heritage of each destination.",
-    icon: "🏛️"
-  },
-  {
-    id: 8,
-    title: "Travel Insurance and Risk Management",
-    description: "Traveling always comes with a degree of unpredictability, which is why we offer robust travel insurance and risk management services. Our travel insurance policies are designed to cover unexpected events such as trip cancellations, medical emergencies, and lost luggage. We work with trusted insurance providers to offer coverage that protects your investment and ensures peace of mind throughout your journey. In addition, our risk management services include pre-trip advisories, up-to-date local safety information, and 24/7 emergency assistance. With Columbus Tours, you can travel confidently knowing that you are protected from unforeseen circumstances.",
-    icon: "🛡️"
-  },
-  {
-    id: 9,
-    title: "Culinary Tours and Gastronomic Experiences",
-    description: "Food is a gateway to understanding the soul of a destination, and our culinary tours are crafted to take you on a journey of flavors. Columbus Tours offers immersive gastronomic experiences that allow you to savor the local cuisine—from street food adventures and market tours to fine dining experiences at renowned restaurants. Our culinary experts introduce you to traditional recipes, unique ingredients, and the stories behind beloved dishes. These tours not only delight your taste buds but also provide a deeper appreciation for the cultural heritage and culinary traditions of each region.",
-    icon: "🍽️"
-  },
-  {
-    id: 10,
-    title: "24/7 Customer Support and Assistance",
-    description: "Exceptional customer service is at the heart of everything we do. Columbus Tours provides round-the-clock customer support to assist you before, during, and after your trip. Whether you need help with last-minute changes, emergency assistance, or simply have a question about your itinerary, our dedicated support team is available 24/7. We pride ourselves on our responsiveness and our commitment to ensuring that every aspect of your travel experience is smooth and stress-free. Our proactive approach means that help is always just a phone call or message away.",
-    icon: "📞"
-  },
-  {
-    id: 11,
-    title: "Eco-Friendly and Sustainable Travel Options",
-    description: "We recognize the importance of responsible tourism, which is why Columbus Tours is committed to promoting eco-friendly and sustainable travel practices. Our sustainable travel options focus on minimizing the environmental impact of your journey while providing enriching and authentic experiences. We work with local partners who prioritize conservation and ethical practices, ensuring that your travel choices contribute to the well-being of local communities and the preservation of natural resources. By choosing our sustainable travel packages, you help foster a greener future while enjoying an unforgettable adventure.",
-    icon: "🌱"
-  },
-  {
-    id: 12,
-    title: "Tailored Corporate and Group Travel Solutions",
-    description: "In addition to leisure travel, Columbus Tours offers specialized solutions for corporate and group travel. We understand that business trips, incentive travel, and large group excursions require a unique approach. Our dedicated corporate travel team collaborates closely with your organization to plan itineraries that maximize efficiency and ensure a smooth experience for all participants. Whether you're organizing an international conference, a team-building retreat, or a family reunion, our comprehensive services cover every detail—from logistics and accommodations to group activities and dining arrangements. Our goal is to provide a seamless travel experience that meets the high standards of corporate and group clients.",
-    icon: "💼"
-  },
-  {
-    id: 13,
-    title: "Personalized Concierge and Lifestyle Services",
-    description: "Beyond standard travel arrangements, Columbus Tours offers personalized concierge and lifestyle services that elevate your overall experience. Our concierge team is available to assist with special requests, such as securing reservations at exclusive restaurants, arranging private tours, and organizing luxury experiences tailored to your unique interests. Whether you're celebrating a milestone event or simply wish to indulge in a premium travel experience, our personalized services ensure every detail is curated to perfection. With a focus on quality, responsiveness, and a high level of personal attention, we are dedicated to making your trip as memorable and enjoyable as possible.",
-    icon: "✨"
-  }
 ];
 
-// Define interface for ServiceArticle props
-interface ServiceArticleProps {
-  title: string;
-  description: string;
-  icon: string;
-  isExpanded: boolean;
-  onToggle: () => void;
-}
 
-// Service article component to render each service
-const ServiceArticle = ({ title, description, icon, isExpanded, onToggle }: ServiceArticleProps) => (
-  <motion.article 
-    className={`bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-blue-500' : ''}`}
-    whileHover={{ y: -5 }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-  >
-    <div 
-      className="p-6 cursor-pointer"
-      onClick={onToggle}
+
+// Testimonials with real client photos
+const testimonials = [
+  {
+    id: 1,
+    name: "Sarah & James",
+    location: "Sydney, Australia",
+    text: "Our honeymoon was absolutely perfect thanks to Columbus Tours. Every detail was taken care of, from private beach dinners to surprise upgrades at our resort.",
+    rating: 5,
+    image: "/couple-honeymoon.jpg",
+  },
+  {
+    id: 2,
+    name: "The Chen Family",
+    location: "Toronto, Canada",
+    text: "Traveling with three kids can be stressful, but Columbus made it effortless. Their kid-friendly guides and activities kept everyone happy throughout our European tour.",
+    rating: 5,
+    image: "/family-travel.jpg",
+  },
+  {
+    id: 3,
+    name: "Michael R.",
+    location: "London, UK",
+    text: "As a frequent business traveler, I appreciate the efficiency and attention to detail. My corporate trips are now completely hassle-free.",
+    rating: 4,
+    image: "/business-traveler.jpg",
+  },
+];
+
+// Aligned booking steps with JSX
+const bookingSteps = [
+  {
+    step: 1,
+    title: "Pick Your Dream Destination",
+    description:
+      "Browse our website, find the place that excites you most, and reach out to us directly—your adventure starts with a click!",
+    icon: <FiMapPin className="text-red-600" size={24} />,
+  },
+  {
+    step: 2,
+    title: "Get Personalized Options",
+    description:
+      "Receive custom trip ideas and expert consultations tailored just for you. We make planning easy and exciting!",
+    icon: <FiCheckCircle className="text-red-600" size={24} />,
+  },
+  {
+    step: 3,
+    title: "Refine & Book",
+    description:
+      "Fine-tune your itinerary with our team, then lock in your booking. Your perfect trip is just a few tweaks away!",
+    icon: <FiStar className="text-red-600" size={24} />,
+  },
+  {
+    step: 4,
+    title: "Travel & Enjoy!",
+    description:
+      "Set off on your adventure and let the fun begin—our team is here for you every step of the way!",
+    icon: <FiHeadphones className="text-red-600" size={24} />,
+  },
+];
+
+const ServiceCard = ({ service }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <motion.div
+      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100 hover:border-red-200 transition-all"
+      whileHover={{ y: -5 }}
     >
-      <div className="flex items-start gap-4">
-        <span className="text-3xl">{icon}</span>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">{title}</h2>
-          <AnimatePresence>
-            {isExpanded && (
-              <motion.p
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="text-gray-600 leading-relaxed"
-              >
-                {description}
-              </motion.p>
-            )}
-          </AnimatePresence>
+      <div className="p-6 cursor-pointer" onClick={() => setExpanded(!expanded)}>
+        <div className="flex items-start gap-4">
+          <div className="p-3 rounded-full bg-red-50">{service.icon}</div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">{service.title}</h3>
+            <p className="text-gray-600 text-sm mb-3">{service.description}</p>
+
+            <AnimatePresence>
+              {expanded && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="bg-red-50 p-4 rounded-lg"
+                >
+                  <ul className="text-gray-700 space-y-2">
+                    {service.benefits.map((benefit, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <FiCheckCircle className="text-red-500 mt-0.5 flex-shrink-0" size={14} />
+                        <span className="text-sm">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <button
+              className={`mt-3 text-sm font-medium flex items-center gap-1 ${
+                expanded ? "text-red-600" : "text-red-500 hover:text-red-700"
+              }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(!expanded);
+              }}
+            >
+              {expanded ? "Show Less" : "Learn More"}
+              <FiArrowRight size={14} className={expanded ? "transform rotate-90" : ""} />
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-    {isExpanded && (
-      <div className="px-6 pb-6 pt-2 bg-gray-50">
-        <button 
-          className="text-blue-600 font-medium hover:text-blue-800 transition-colors"
-          onClick={onToggle}
-        >
-          Show less
-        </button>
+    </motion.div>
+  );
+};
+
+
+
+const TestimonialCard = ({ testimonial }) => {
+  return (
+    <motion.div
+      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
+      whileHover={{ y: -5 }}
+    >
+      <div className="flex items-center gap-4 mb-4">
+        <div className="relative h-12 w-12 rounded-full overflow-hidden">
+          <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
+        </div>
+        <div>
+          <h4 className="font-medium">{testimonial.name}</h4>
+          <p className="text-gray-500 text-sm">{testimonial.location}</p>
+        </div>
       </div>
-    )}
-  </motion.article>
-);
+      <div className="flex text-amber-400 mb-3">
+        {[...Array(testimonial.rating)].map((_, i) => (
+          <FiStar key={i} className="fill-current" size={16} />
+        ))}
+      </div>
+      <p className="text-gray-700 text-sm">"{testimonial.text}"</p>
+    </motion.div>
+  );
+};
 
-// Main component
-export default function ServicesPage() {
-  const [expandedService, setExpandedService] = useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredServices, setFilteredServices] = useState(services);
+const BookingStep = ({ step }) => {
+  return (
+    <motion.div
+      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: step.step * 0.1 }}
+    >
+      <div className="bg-red-100 p-3 rounded-full">{step.icon}</div>
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-medium bg-red-600 text-white px-2 py-0.5 rounded-full">
+            STEP {step.step}
+          </span>
+          <h4 className="font-medium text-gray-900">{step.title}</h4>
+        </div>
+        <p className="text-gray-600 text-sm">{step.description}</p>
+      </div>
+    </motion.div>
+  );
+};
 
-  const toggleService = (id: number) => {
-    setExpandedService(expandedService === id ? null : id);
-  };
+export default function TravelServices() {
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    const results = services.filter(service =>
-      service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredServices(results);
-  }, [searchTerm]);
+  const filteredServices = services.filter((service) => {
+    const matchesSearch =
+      service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter = activeFilter === "all" || service.category === activeFilter;
+    return matchesSearch && matchesFilter;
+  });
+
+  const mainRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: mainRef,
+    offset: ["start start", "end start"],
+  });
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
 
   return (
     <>
       <Head>
-        <title>Our Services | Columbus Tours</title>
-        <meta name="description" content="Discover the comprehensive travel services offered by Columbus Tours to make your journey extraordinary and stress-free." />
+        <title>Travel Services | Columbus Tours</title>
+        <meta
+          name="description"
+          content="Explore our luxury travel services with Columbus Tours, including tailored itineraries, luxury stays, unique experiences, seamless transport, 24/7 support, and travel protection."
+        />
       </Head>
 
-      <main className="min-h-screen bg-[#FFFFFF]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          {/* Hero Section */}
-          <motion.header 
-            className="mb-16 text-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-5xl font-bold text-[#D32F2F] mb-6">
-              Our Services
-            </h1>
-            <p className="text-xl text-[#333333] max-w-3xl mx-auto">
-              Discover how Columbus Tours can make your next journey extraordinary with our comprehensive range of travel services.
-            </p>
-          </motion.header>
-
-          {/* Search Bar */}
-          <motion.div
-            className="mb-12 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search services..."
-                className="w-full px-6 py-4 text-lg border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-[#1976D2] focus:border-[#1976D2] outline-none transition"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-            </div>
+      <div className="min-h-screen bg-gray-50" ref={mainRef}>
+        {/* Hero Section */}
+        <section className="relative h-[80vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+          <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+            <div className="absolute inset-0 bg-black/40" />
+            <Image
+              src="/travel-hero.jpg"
+              alt="Luxury travel experience"
+              fill
+              className="object-cover w-full h-full"
+              priority
+            />
           </motion.div>
 
-          {/* Services Grid */}
-          {filteredServices.length > 0 ? (
-            <motion.section 
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              {filteredServices.map((service) => (
-                <ServiceArticle 
-                  key={service.id}
-                  title={service.title}
-                  description={service.description}
-                  icon={service.icon}
-                  isExpanded={expandedService === service.id}
-                  onToggle={() => toggleService(service.id)}
-                />
-              ))}
-            </motion.section>
-          ) : (
+          <div className="container mx-auto px-4 relative z-10 text-center">
             <motion.div
-              className="text-center py-12"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <h3 className="mt-2 text-xl font-medium text-[#333333]">No services found</h3>
-              <p className="mt-1 text-[#333333]">Try adjusting your search or filter to find what you're looking for.</p>
-            </motion.div>
-          )}
-
-          {/* Call to Action */}
-          <motion.footer 
-            className="mt-16 bg-gradient-to-r from-[#D32F2F] to-[#1976D2] text-white rounded-2xl shadow-xl overflow-hidden"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-          >
-            <div className="p-8 sm:p-10">
-              <div className="md:flex md:items-center md:justify-between">
-                <div className="md:w-2/3 mb-6 md:mb-0">
-                  <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
-                  <p className="text-lg">
-                    At Columbus Tours, our diverse range of services is designed to cover every
-                    aspect of your travel journey, ensuring that your experience is both
-                    extraordinary and stress-free.
-                  </p>
-                </div>
-                <div className="md:w-1/3 flex md:justify-end">
-                  <a
-                    href="/contact"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#1976D2] font-bold rounded-lg shadow-lg hover:bg-gray-100 transition transform hover:-translate-y-1"
-                  >
-                    Contact Us
-                    <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </a>
-                </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Your Journey, <span className="text-red-300">Perfected</span>
+              </h1>
+              <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+                We handle every detail so you can focus on making memories. Where will your next adventure take you?
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
+                  Explore Our Services
+                </button>
+                <button className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-md shadow-md transition-colors">
+                  View Popular Trips
+                </button>
               </div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Services Section */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                How We <span className="text-red-600">Elevate</span> Your Travel
+              </motion.h2>
+              <motion.p
+                className="text-gray-600 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                Our comprehensive services ensure every aspect of your journey is exceptional
+              </motion.p>
             </div>
-          </motion.footer>
-        </div>
-      </main>
+
+            {/* Services Grid */}
+            {filteredServices.length > 0 ? (
+              <motion.div
+                className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+              >
+                {filteredServices.map((service) => (
+                  <ServiceCard key={service.id} service={service} />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                className="text-center py-12 bg-gray-50 rounded-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+              >
+                <FiSearch className="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <h3 className="text-xl font-medium text-gray-900 mb-2">No services found</h3>
+                <p className="text-gray-600 mb-4">Try adjusting your search or filters</p>
+                <button
+                  className="px-5 py-2 bg-red-600 text-white rounded-md font-medium"
+                  onClick={() => {
+                    setSearchQuery("");
+                    setActiveFilter("all");
+                  }}
+                >
+                  Reset Search
+                </button>
+              </motion.div>
+            )}
+          </div>
+        </section>
+
+        {/* How It Works */}
+        <section className="py-16 bg-white">
+  <div className="container mx-auto px-4">
+    <div className="text-center mb-12">
+      <motion.h2
+        className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        Simple <span className="text-red-600">Booking</span> Process
+      </motion.h2>
+      <motion.p
+        className="text-gray-600 max-w-2xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.1 }}
+      >
+        From dream to departure in just a few easy steps
+      </motion.p>
+    </div>
+
+    <motion.div
+      className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.2 }}
+    >
+      {bookingSteps.map((step) => (
+        <motion.div
+          key={step.step}
+          className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ delay: step.step * 0.1 }}
+        >
+          <div className="mb-4">
+            <div className="relative inline-block">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                {step.icon}
+              </div>
+              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                STEP {step.step}
+              </span>
+            </div>
+          </div>
+          <h4 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h4>
+          <p className="text-gray-600 text-sm">{step.description}</p>
+        </motion.div>
+      ))}
+    </motion.div>
+
+    <motion.div
+      className="mt-12 bg-red-50 rounded-xl p-8 text-center"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.3 }}
+    >
+      <h3 className="text-xl font-bold text-gray-900 mb-3">Ready to start planning?</h3>
+      <p className="text-gray-600 max-w-2xl mx-auto mb-6">
+        Our travel specialists are standing by to help you create your perfect itinerary
+      </p>
+      <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
+        Get a Free Consultation
+      </button>
+    </motion.div>
+  </div>
+</section>
+
+        {/* Testimonials */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                Traveler <span className="text-red-600">Stories</span>
+              </motion.h2>
+              <motion.p
+                className="text-gray-600 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                Don't just take our word for it - hear from our satisfied clients
+              </motion.p>
+            </div>
+
+            <motion.div
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              {testimonials.map((testimonial) => (
+                <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Contact Us Section */}
+        <section className="w-full bg-gradient-to-br from-[#0A122A] to-[#1B2738] py-24 px-4 relative overflow-hidden mt-20 mb-20">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-20 left-10 w-44 h-44 rounded-full bg-white/10" />
+            <div className="absolute bottom-10 right-24 w-64 h-64 rounded-full bg-white/10" />
+          </div>
+
+          <div className="max-w-4xl mx-auto text-center relative z-10">
+            <motion.div
+              className="mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <div className="inline-flex items-center justify-center mb-6 w-full">
+                <div className="h-1 w-12 bg-[#F7E7CE]/40 mr-3" />
+                <span className="text-[#F7E7CE]/90 font-semibold tracking-wider text-sm uppercase">
+                  Contact Us
+                </span>
+                <div className="h-1 w-12 bg-[#F7E7CE]/40 ml-3" />
+              </div>
+
+              <h2 className="text-4xl md:text-5xl font-extrabold text-[#F7E7CE] mb-4">
+                Ready for Your Next Adventure?
+              </h2>
+              <p className="text-lg md:text-xl text-[#F7E7CE]/80 max-w-2xl mx-auto">
+                Our travel concierges will craft an unforgettable journey for you.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.5, staggerChildren: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
+                <a href="https://wa.me/919422401225" target="_blank" rel="noopener noreferrer">
+                  <div className="bg-white/5 hover:bg-white/[.08] border border-white/10 rounded-xl p-8 h-full flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group">
+                    <div className="w-14 h-14 bg-[#25D366]/20 rounded-full flex items-center justify-center mb-5 group-hover:bg-[#25D366]/30 transition-colors duration-300">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-[#25D366]"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-[#F7E7CE] mb-3">Chat Now</h3>
+                    <p className="text-[#F7E7CE]/80 mb-5 text-sm">Instant connection with our team</p>
+                    <div className="px-6 py-2 bg-[#25D366] text-white font-medium rounded-full group-hover:bg-[#1DA851] transition-all duration-300 flex items-center justify-center">
+                      WhatsApp
+                    </div>
+                  </div>
+                </a>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -5 }} transition={{ type: "spring", stiffness: 300 }}>
+                <a href="tel:+919422401225">
+                  <div className="bg-white/5 hover:bg-white/[.08] border border-white/10 rounded-xl p-8 h-full flex flex-col items-center justify-center transition-all duration-300 cursor-pointer group">
+                    <div className="w-14 h-14 bg-white/10 rounded-full flex items-center justify-center mb-5 group-hover:bg-white/20 transition-colors duration-300">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6 text-[#F7E7CE]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-bold text-[#F7E7CE] mb-3">Call Us</h3>
+                    <p className="text-[#F7E7CE]/80 mb-5 text-sm">Speak directly with our experts</p>
+                    <div className="px-6 py-2 bg-[#D4AF37] text-[#0A122A] font-semibold rounded-full group-hover:bg-[#c39a2f] transition-all duration-300">
+                      +91 94224 01225
+                    </div>
+                  </div>
+                </a>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              className="mt-16 pt-8 border-t border-[#F7E7CE]/20"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[#F7E7CE]/90">
+                {/* Add address / email etc. here if needed */}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

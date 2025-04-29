@@ -43,11 +43,10 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const shouldTransparent = isHome;
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Simple search handler – using only the tour title for matching
-  // Update the handleSearch function
-  // Add useEffect for initial search results
   useEffect(() => {
     if (isSearchOpen) {
       setSearchResults(allTours.slice(0, 5));
@@ -93,7 +92,11 @@ export default function Header() {
   // Close search dropdown when clicking outside the search box
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node) &&
+        !(event.target as HTMLElement).closest(".search-result-item")
+      ) {
         setIsSearchOpen(false);
       }
     };
@@ -105,16 +108,16 @@ export default function Header() {
     };
   }, [isSearchOpen]);
 
-  // Change header background on scroll (only if on home page)
+  // Change header background on scroll (for home and about pages)
   useEffect(() => {
-    if (isHome) {
+    if (shouldTransparent) {
       const handleScroll = () => {
         setIsScrolled(window.scrollY > 50);
       };
       window.addEventListener("scroll", handleScroll);
       return () => window.removeEventListener("scroll", handleScroll);
     }
-  }, [isHome]);
+  }, [shouldTransparent]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -129,7 +132,7 @@ export default function Header() {
   return (
     <header
       className={`top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isHome
+        shouldTransparent
           ? isScrolled
             ? "fixed bg-black shadow-md"
             : "fixed bg-transparent shadow-none"
@@ -143,6 +146,7 @@ export default function Header() {
           <a
             href="https://www.instagram.com/tours.columbus"
             target="_blank"
+            rel="noopener noreferrer"
             className={`p-2 rounded-full ${isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"}`}
           >
             <FaInstagram size={18} />
@@ -150,6 +154,7 @@ export default function Header() {
           <a
             href="https://wa.me/9422401225"
             target="_blank"
+            rel="noopener noreferrer"
             className={`p-2 rounded-full ${isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"}`}
           >
             <FaWhatsapp size={18} />
@@ -157,6 +162,7 @@ export default function Header() {
           <a
             href="https://facebook.com"
             target="_blank"
+            rel="noopener noreferrer"
             className={`p-2 rounded-full ${isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"}`}
           >
             <FaFacebook size={18} />
@@ -185,7 +191,6 @@ export default function Header() {
             className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isHome ? "text-white/70" : "text-gray-400"}`}
             size={14}
           />
-          {/* Right Search Icon acting as a button */}
           <button
             onClick={() => {
               router.push(`/tours?search=${encodeURIComponent(searchText)}`);
@@ -196,7 +201,6 @@ export default function Header() {
           >
             <FaSearch size={14} />
           </button>
-          {/* Dropdown Suggestions */}
           {isSearchOpen && (
             <div className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50">
               {searchResults.length > 0 ? (
@@ -204,17 +208,19 @@ export default function Header() {
                   {searchResults.map((tour) => {
                     const thumb = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
                     return (
-                      <li
+                      <Link
                         key={tour.id}
-                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        href={`/tours/${tour.slug}`}
                         onClick={() => {
-                          router.push(`/tours/${tour.slug}`);
+                          console.log(`[desktop] Navigating to tour: /tours/${tour.slug}`);
                           setIsSearchOpen(false);
                         }}
                       >
-                        <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
-                        <span className="text-gray-900">{tour.title}</span>
-                      </li>
+                        <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer search-result-item">
+                          <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
+                          <span className="text-gray-900">{tour.title}</span>
+                        </li>
+                      </Link>
                     );
                   })}
                   <li
@@ -248,6 +254,7 @@ export default function Header() {
           <a
             href="https://maps.app.goo.gl/QwzV5paRzzCtWkU59"
             target="_blank"
+            rel="noopener noreferrer"
             className={`flex items-center space-x-2 p-2 rounded-full ${
               isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"
             }`}
@@ -322,15 +329,15 @@ export default function Header() {
       </div>
 
       {/* Mobile Header */}
-      <div className={`lg:hidden flex items-center justify-between px-4 py-3 ${isMobileMenuOpen ? "bg-white" : "bg-transparent"} shadow-md`}>
+      <div className={`lg:hidden flex items-center justify-between px-4 py-3 ${isMobileMenuOpen ? "bg-white" : isHome ? "bg-transparent" : "bg-white"} shadow-md`}>
         <Link href="/" className="flex-shrink-0">
           <Image src="/logo.png" alt="Columbus Tours Logo" width={140} height={50} />
         </Link>
         <div className="flex items-center space-x-4">
-          <button onClick={toggleSearch} className={`p-2 ${isHome ? "text-white" : "text-black"} hover:bg-gray-100 rounded-full`}>
+          <button onClick={toggleSearch} className={`p-2 ${isHome && !isMobileMenuOpen ? "text-white hover:bg-white/10" : "text-black hover:bg-gray-100"} rounded-full`}>
             <FaSearch size={20} />
           </button>
-          <button onClick={toggleMobileMenu} className={`p-2 ${isHome ? "text-white" : "text-black"} hover:bg-gray-100 rounded-full`}>
+          <button onClick={toggleMobileMenu} className={`p-2 ${isHome && !isMobileMenuOpen ? "text-white hover:bg-white/10" : "text-black hover:bg-gray-100"} rounded-full`}>
             {isMobileMenuOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
           </button>
         </div>
@@ -349,24 +356,25 @@ export default function Header() {
               value={searchText}
             />
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
-            {/* Add search results dropdown for mobile */}
             {searchResults.length > 0 && (
               <div className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50">
                 <ul>
                   {searchResults.map((tour) => {
                     const thumb = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
                     return (
-                      <li
+                      <Link
                         key={tour.id}
-                        className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        href={`/tours/${tour.slug}`}
                         onClick={() => {
-                          router.push(`/tours/${tour.slug}`);
+                          console.log(`[mobile] Navigating to tour: /tours/${tour.slug}`);
                           setIsSearchOpen(false);
                         }}
                       >
-                        <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
-                        <span className="text-gray-900">{tour.title}</span>
-                      </li>
+                        <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer search-result-item">
+                          <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
+                          <span className="text-gray-900">{tour.title}</span>
+                        </li>
+                      </Link>
                     );
                   })}
                   <li
@@ -396,7 +404,6 @@ export default function Header() {
                 <FaTimes size={20} className="text-gray-800" />
               </button>
             </div>
-           
             <nav className="flex flex-col p-4 border-b">
               {navLinks.map((link) => (
                 <Link 
@@ -418,13 +425,13 @@ export default function Header() {
             </div>
             <div className="p-4">
               <div className="flex space-x-4 mb-4">
-                <a href="https://www.instagram.com/tours.columbus" target="_blank" className="p-2 rounded-full hover:bg-gray-100">
+                <a href="https://www.instagram.com/tours.columbus" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full hover:bg-gray-100">
                   <FaInstagram size={18} className="text-gray-600" />
                 </a>
-                <a href="https://wa.me/9422401225" target="_blank" className="p-2 rounded-full hover:bg-gray-100">
+                <a href="https://wa.me/9422401225" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full hover:bg-gray-100">
                   <FaWhatsapp size={18} className="text-gray-600" />
                 </a>
-                <a href="https://facebook.com" target="_blank" className="p-2 rounded-full hover:bg-gray-100">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full hover:bg-gray-100">
                   <FaFacebook size={18} className="text-gray-600" />
                 </a>
               </div>
@@ -436,6 +443,7 @@ export default function Header() {
                 <a 
                   href="https://maps.app.goo.gl/QwzV5paRzzCtWkU59" 
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center space-x-2 text-gray-600 hover:text-black"
                 >
                   <FaMapMarkerAlt size={16} />

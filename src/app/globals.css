@@ -31,3 +31,6 @@ body {
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
    /* adjust as needed for your hero section */
 }
+.snap-start {
+  scroll-snap-align: unset;
+}

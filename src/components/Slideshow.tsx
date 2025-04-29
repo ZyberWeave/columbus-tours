@@ -16,6 +16,14 @@ export default function Slideshow({ images }: SlideshowProps) {
     return () => clearInterval(timer);
   }, [images]);
 
+  const goToPrev = () => {
+    setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const goToNext = () => {
+    setCurrent((prev) => (prev + 1) % images.length);
+  };
+
   return (
     <div className="relative w-full h-96 mb-8">
       {images.map((img, index) => (
@@ -28,6 +36,8 @@ export default function Slideshow({ images }: SlideshowProps) {
           <Image src={img} alt={`Slide ${index + 1}`} fill className="object-cover rounded-lg" />
         </div>
       ))}
+      <button onClick={goToPrev}>Previous</button>
+      <button onClick={goToNext}>Next</button>
     </div>
   );
 }
