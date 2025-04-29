@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   FaFacebook,
   FaInstagram,
-  FaTwitter,
   FaYoutube,
   FaMapMarkerAlt,
   FaPhone,
@@ -58,7 +57,7 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex space-x-3 mt-4">
               <a
-                href="https://www.facebook.com"
+                href="https://www.facebook.com/share/1L2LCZECTb/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-white transition-colors duration-300"
@@ -73,14 +72,7 @@ const Footer: React.FC = () => {
               >
                 <FaInstagram size={20} />
               </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                <FaTwitter size={20} />
-              </a>
+             
               <a
                 href="https://www.youtube.com"
                 target="_blank"
@@ -112,14 +104,14 @@ const Footer: React.FC = () => {
                   Our Tours
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/blog"
                   className="text-gray-400 hover:text-white transition-colors duration-300"
                 >
                   Travel Blog
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/contact"

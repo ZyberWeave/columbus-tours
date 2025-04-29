@@ -336,7 +336,7 @@ export default function HomePage() {
           name="description"
           content="Experience unforgettable journeys with Columbus Tours. We offer international, domestic, religious, honeymoon, and cruise packages tailored to your dreams."
         />
-        <link rel="preload" href="/videos/hero-video.mp4" as="video" />
+        {/* <link rel="preload" href="/videos/hero-video.mp4" as="video" />
         {TESTIMONIALS.map((_, index) => (
           <link
             key={index}
@@ -344,7 +344,7 @@ export default function HomePage() {
             href={`/testimonials/video-${index + 1}.mp4`}
             as="video"
           />
-        ))}
+        ))} */}
       </Head>
 
       <style jsx global>{`
@@ -704,55 +704,43 @@ export default function HomePage() {
               >
                 <div className="embla__container">
                   {TESTIMONIALS.map((testimonial, index) => (
-                    <div
-                      key={testimonial.id}
-                      className={`embla__slide transition-transform duration-300 ${expandedIndex === index ? "scale-110 z-20" : ""}`}
-                      onMouseEnter={handleMouseEnter}
-                      onMouseLeave={handleMouseLeave}
-                    >
-                      <div className="relative w-full h-full rounded-lg overflow-hidden cursor-pointer">
-                        <video
-                          ref={(el) => {
-                            videoRefs.current[index] = el;
-                            return void 0;
-                          }}
-                          src={testimonial.videoUrl}
-                          poster={testimonial.thumbnail}
-                          className="w-full h-full object-cover"
-                          muted={isMuted}
-                          loop
-                          playsInline
-                          preload="metadata"
-                          onClick={() => handlePlayPause(index)}
-                          onError={(e) => console.error(`Error loading video ${index + 1}:`, e)}
-                        />
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 pointer-events-none">
-                          {playingIndex !== index && (
-                            <button
-                              className="bg-white/80 hover:bg-white rounded-full p-3 pointer-events-auto"
-                              aria-label={`Play video for ${testimonial.name}`}
-                              onClick={() => handlePlayPause(index)}
-                            >
-                              <FiPlay size={24} />
-                            </button>
-                          )}
-                          {playingIndex === index && (
-                            <button
-                              className="bg-white/80 hover:bg-white rounded-full p-3 pointer-events-auto"
-                              aria-label={`Pause video for ${testimonial.name}`}
-                              onClick={() => handlePlayPause(index)}
-                            >
-                              <FiPause size={24} />
-                            </button>
-                          )}
-                        </div>
-                        <div className="absolute bottom-2 left-2 text-white text-sm font-semibold">
-                          <h3 className="font-bold">{testimonial.name}</h3>
-                          <p>{testimonial.location}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+  <div
+  key={testimonial.id}
+  className={`embla__slide relative${
+    expandedIndex === index ? ' scale-110 z-20' : ''
+  }`}
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+>
+  <div className="relative w-full h-full">
+    <video
+      ref={el => { videoRefs.current[index] = el; }}
+      src={testimonial.videoUrl}
+      poster={testimonial.thumbnail}
+      className="w-full h-full object-cover rounded-2xl"
+      muted={isMuted}
+      playsInline
+      onPlay={() => setPlayingIndex(index)}
+      onPause={() => setPlayingIndex(null)}
+      style={{
+        opacity: 1,
+        transition: 'opacity 0.3s'
+      }}
+    />
+
+    {/* ▶️ always-visible play button (hides only while that video is playing) */}
+    {playingIndex !== index && (
+      <button
+        onClick={() => handlePlayPause(index)}
+        className="absolute inset-0 flex items-center justify-center text-white text-5xl bg-black/20 hover:bg-black/50 transition-colors"
+        aria-label="Play testimonial video"
+      >
+        <FiPlay />
+      </button>
+    )}
+  </div>
+</div>
+))}
                 </div>
               </div>
             </div>
@@ -867,7 +855,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="flex flex-wrap justify-center gap-6 mt-20 pt-10 border-t border-white/20"
+              className="flex flex-row flex-nowrap justify-center items-center gap-6 w-full overflow-x-auto mt-20 pt-10 border-t border-white/20"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
@@ -878,9 +866,9 @@ export default function HomePage() {
                 { number: "98%", label: "Satisfaction Rate" },
                 { number: "24/7", label: "Dedicated Support" },
               ].map((item, index) => (
-                <div key={index} className="text-center px-6">
-                  <div className="text-3xl md:text-4xl font-bold text-white mb-2">{item.number}</div>
-                  <div className="text-white/80 uppercase text-sm tracking-wider">{item.label}</div>
+                <div key={index} className="flex flex-col items-center min-w-[100px]">
+                  <span className="text-2xl font-bold text-[#FFFFFF]">{item.number}</span>
+                  <span className="text-sm text-gray-700">{item.label}</span>
                 </div>
               ))}
             </motion.div>

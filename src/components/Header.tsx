@@ -16,7 +16,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { allTours, type Tour } from "@/data/toursData";
 
 const navLinks = [
-  { name: "Home", href: "/" },
+  // { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
@@ -160,7 +160,7 @@ export default function Header() {
             <FaWhatsapp size={18} />
           </a>
           <a
-            href="https://facebook.com"
+            href="https://www.facebook.com/share/1L2LCZECTb/"
             target="_blank"
             rel="noopener noreferrer"
             className={`p-2 rounded-full ${isHome ? "text-white hover:bg-white/10" : "text-gray-600 hover:bg-gray-100"}`}
@@ -303,14 +303,14 @@ export default function Header() {
             >
               Services
             </Link>
-            <Link
-              href="/gallery"
+            {/* <Link
+              href="/privacy"
               className={`px-3 py-2 font-medium text-lg ${
                 isHome ? "text-white hover:text-gray-200" : "text-gray-800 hover:text-blue-600"
               }`}
             >
-              Gallery
-            </Link>
+              Privacy Policy
+            </Link> */}
           </nav>
         </div>
         <div className="flex justify-center space-x-8 mt-2">
