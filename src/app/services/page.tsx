@@ -14,7 +14,7 @@ import {
   FiCheckCircle,
 
 } from "react-icons/fi";
-import { FaHotel, FaPlane } from "react-icons/fa";
+import { FaHotel, FaPlane, FaUmbrellaBeach, FaMountain, FaCity } from "react-icons/fa";
 
 // Simplified service data with clearer benefits
 const services = [
@@ -123,38 +123,49 @@ const testimonials = [
 ];
 
 // Aligned booking steps with JSX
-// const bookingSteps = [
-//   {
-//     step: 1,
-//     title: "Pick Your Dream Destination",
-//     description:
-//       "Browse our website, find the place that excites you most, and reach out to us directly—your adventure starts with a click!",
-//     icon: <FiMapPin className="text-red-600" size={24} />,
-//   },
-//   {
-//     step: 2,
-//     title: "Get Personalized Options",
-//     description:
-//       "Receive custom trip ideas and expert consultations tailored just for you. We make planning easy and exciting!",
-//     icon: <FiCheckCircle className="text-red-600" size={24} />,
-//   },
-//   {
-//     step: 3,
-//     title: "Refine & Book",
-//     description:
-//       "Fine-tune your itinerary with our team, then lock in your booking. Your perfect trip is just a few tweaks away!",
-//     icon: <FiStar className="text-red-600" size={24} />,
-//   },
-//   {
-//     step: 4,
-//     title: "Travel & Enjoy!",
-//     description:
-//       "Set off on your adventure and let the fun begin—our team is here for you every step of the way!",
-//     icon: <FiHeadphones className="text-red-600" size={24} />,
-//   },
-// ];
+const bookingSteps = [
+  {
+    step: 1,
+    title: "Pick Your Dream Destination",
+    description:
+      "Browse our website, find the place that excites you most, and reach out to us directly—your adventure starts with a click!",
+    icon: <FiMapPin className="text-red-600" size={24} />,
+  },
+  {
+    step: 2,
+    title: "Get Personalized Options",
+    description:
+      "Receive custom trip ideas and expert consultations tailored just for you. We make planning easy and exciting!",
+    icon: <FiCheckCircle className="text-red-600" size={24} />,
+  },
+  {
+    step: 3,
+    title: "Refine & Book",
+    description:
+      "Fine-tune your itinerary with our team, then lock in your booking. Your perfect trip is just a few tweaks away!",
+    icon: <FiStar className="text-red-600" size={24} />,
+  },
+  {
+    step: 4,
+    title: "Travel & Enjoy!",
+    description:
+      "Set off on your adventure and let the fun begin—our team is here for you every step of the way!",
+    icon: <FiHeadphones className="text-red-600" size={24} />,
+  },
+];
 
-const ServiceCard = ({ service }) => {
+// Define a type for service
+type Service = {
+  id: number
+  title: string
+  description: string
+  benefits: string[]
+  icon: React.ReactNode
+  category: string
+};
+
+// Update ServiceCard props
+const ServiceCard = ({ service }: { service: Service }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -208,9 +219,56 @@ const ServiceCard = ({ service }) => {
   );
 };
 
+// Define types for destination and testimonial
+type Destination = {
+  image: string
+  name: string
+  icon: React.ReactNode
+  type: string
+  price: string
+};
 
+type Testimonial = {
+  id: number
+  name: string
+  location: string
+  text: string
+  rating: number
+  image: string
+};
 
-const TestimonialCard = ({ testimonial }) => {
+// Update DestinationCard props
+const DestinationCard = ({ destination }: { destination: Destination }) => {
+  return (
+    <motion.div
+      className="relative rounded-xl overflow-hidden shadow-md h-64"
+      whileHover={{ scale: 1.03 }}
+      transition={{ type: "spring", stiffness: 400 }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
+      <Image
+        src={destination.image}
+        alt={destination.name}
+        fill
+        className="object-cover w-full h-full"
+      />
+      <div className="absolute bottom-0 left-0 p-6 z-20 w-full">
+        <div className="flex items-center gap-2 mb-1">
+          {destination.icon}
+          <span className="text-white text-sm">{destination.type}</span>
+        </div>
+        <h3 className="text-xl font-bold text-white mb-1">{destination.name}</h3>
+        <p className="text-white/90 text-sm">{destination.price}</p>
+        <button className="mt-3 text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors">
+          Explore Package
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
+// Update TestimonialCard props
+const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
     <motion.div
       className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
@@ -230,12 +288,42 @@ const TestimonialCard = ({ testimonial }) => {
           <FiStar key={i} className="fill-current" size={16} />
         ))}
       </div>
-      <p className="text-gray-700 text-sm">&quot{testimonial.text}&quot</p>
+      <p className="text-gray-700 text-sm">"{testimonial.text}"</p>
     </motion.div>
   );
 };
 
+// Define a type for booking step
+type BookingStepType = {
+  step: number
+  title: string
+  description: string
+  icon: React.ReactNode
+};
 
+// Update BookingStep props
+const BookingStep = ({ step }: { step: BookingStepType }) => {
+  return (
+    <motion.div
+      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay: step.step * 0.1 }}
+    >
+      <div className="bg-red-100 p-3 rounded-full">{step.icon}</div>
+      <div>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="text-xs font-medium bg-red-600 text-white px-2 py-0.5 rounded-full">
+            STEP {step.step}
+          </span>
+          <h4 className="font-medium text-gray-900">{step.title}</h4>
+        </div>
+        <p className="text-gray-600 text-sm">{step.description}</p>
+      </div>
+    </motion.div>
+  );
+};
 
 export default function TravelServices() {
   const [activeFilter, setActiveFilter] = useState("all");
@@ -455,7 +543,7 @@ export default function TravelServices() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
               >
-                Don&apos;t just take our word for it - hear from our satisfied clients
+                Don't just take our word for it - hear from our satisfied clients
               </motion.p>
             </div>
 

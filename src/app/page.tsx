@@ -722,7 +722,6 @@ export default function HomePage() {
                           muted={isMuted}
                           loop
                           playsInline
-                          loading="lazy"
                           preload="metadata"
                           onClick={() => handlePlayPause(index)}
                           onError={(e) => console.error(`Error loading video ${index + 1}:`, e)}
