@@ -12,9 +12,8 @@ import {
   FiMapPin,
   FiHeart,
   FiCheckCircle,
-
 } from "react-icons/fi";
-import { FaHotel, FaPlane, FaUmbrellaBeach, FaMountain, FaCity } from "react-icons/fa";
+import { FaHotel, FaPlane } from "react-icons/fa";
 
 // Simplified service data with clearer benefits
 const services = [
@@ -24,7 +23,7 @@ const services = [
     description: "We design trips that match your unique travel style and interests perfectly.",
     benefits: [
       "Personalized daily schedules",
-      "Activities based on your preferences",
+      "Activities based on your preferences", 
       "Flexible pacing options",
     ],
     icon: <FiMapPin className="text-red-600" size={24} />,
@@ -33,7 +32,7 @@ const services = [
   {
     id: 2,
     title: "Luxury Stays",
-    description: "Access our curated collection of the world's finest accommodations.",
+    description: "Access our curated collection of the world&apos;s finest accommodations.",
     benefits: [
       "5-star hotels & private villas",
       "Exclusive member rates",
@@ -45,7 +44,7 @@ const services = [
   {
     id: 3,
     title: "Unique Experiences",
-    description: "Go beyond tourism with authentic local encounters you'll remember forever.",
+    description: "Go beyond tourism with authentic local encounters you&apos;ll remember forever.",
     benefits: [
       "Private cultural immersions",
       "Meet local artisans & experts",
@@ -91,8 +90,6 @@ const services = [
     category: "protection",
   },
 ];
-
-
 
 // Testimonials with real client photos
 const testimonials = [
@@ -237,36 +234,6 @@ type Testimonial = {
   image: string
 };
 
-// Update DestinationCard props
-const DestinationCard = ({ destination }: { destination: Destination }) => {
-  return (
-    <motion.div
-      className="relative rounded-xl overflow-hidden shadow-md h-64"
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 400 }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-10" />
-      <Image
-        src={destination.image}
-        alt={destination.name}
-        fill
-        className="object-cover w-full h-full"
-      />
-      <div className="absolute bottom-0 left-0 p-6 z-20 w-full">
-        <div className="flex items-center gap-2 mb-1">
-          {destination.icon}
-          <span className="text-white text-sm">{destination.type}</span>
-        </div>
-        <h3 className="text-xl font-bold text-white mb-1">{destination.name}</h3>
-        <p className="text-white/90 text-sm">{destination.price}</p>
-        <button className="mt-3 text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors">
-          Explore Package
-        </button>
-      </div>
-    </motion.div>
-  );
-};
-
 // Update TestimonialCard props
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   return (
@@ -288,7 +255,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
           <FiStar key={i} className="fill-current" size={16} />
         ))}
       </div>
-      <p className="text-gray-700 text-sm">"{testimonial.text}"</p>
+      <p className="text-gray-700 text-sm">&quot;{testimonial.text}&quot;</p>
     </motion.div>
   );
 };
@@ -299,30 +266,6 @@ type BookingStepType = {
   title: string
   description: string
   icon: React.ReactNode
-};
-
-// Update BookingStep props
-const BookingStep = ({ step }: { step: BookingStepType }) => {
-  return (
-    <motion.div
-      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: step.step * 0.1 }}
-    >
-      <div className="bg-red-100 p-3 rounded-full">{step.icon}</div>
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-medium bg-red-600 text-white px-2 py-0.5 rounded-full">
-            STEP {step.step}
-          </span>
-          <h4 className="font-medium text-gray-900">{step.title}</h4>
-        </div>
-        <p className="text-gray-600 text-sm">{step.description}</p>
-      </div>
-    </motion.div>
-  );
 };
 
 export default function TravelServices() {
@@ -453,76 +396,76 @@ export default function TravelServices() {
 
         {/* How It Works */}
         <section className="py-16 bg-white">
-  <div className="container mx-auto px-4">
-    <div className="text-center mb-12">
-      <motion.h2
-        className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        Simple <span className="text-red-600">Booking</span> Process
-      </motion.h2>
-      <motion.p
-        className="text-gray-600 max-w-2xl mx-auto"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.1 }}
-      >
-        From dream to departure in just a few easy steps
-      </motion.p>
-    </div>
-
-    <motion.div
-      className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.2 }}
-    >
-      {bookingSteps.map((step) => (
-        <motion.div
-          key={step.step}
-          className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ delay: step.step * 0.1 }}
-        >
-          <div className="mb-4">
-            <div className="relative inline-block">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                {step.icon}
-              </div>
-              <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                STEP {step.step}
-              </span>
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                Simple <span className="text-red-600">Booking</span> Process
+              </motion.h2>
+              <motion.p
+                className="text-gray-600 max-w-2xl mx-auto"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 }}
+              >
+                From dream to departure in just a few easy steps
+              </motion.p>
             </div>
-          </div>
-          <h4 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h4>
-          <p className="text-gray-600 text-sm">{step.description}</p>
-        </motion.div>
-      ))}
-    </motion.div>
 
-    <motion.div
-      className="mt-12 bg-red-50 rounded-xl p-8 text-center"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: 0.3 }}
-    >
-      <h3 className="text-xl font-bold text-gray-900 mb-3">Ready to start planning?</h3>
-      <p className="text-gray-600 max-w-2xl mx-auto mb-6">
-        Our travel specialists are standing by to help you create your perfect itinerary
-      </p>
-      <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
-        Get a Free Consultation
-      </button>
-    </motion.div>
-  </div>
-</section>
+            <motion.div
+              className="grid md:grid-cols-2 lg:grid-cols-4 gap-6"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              {bookingSteps.map((step) => (
+                <motion.div
+                  key={step.step}
+                  className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: step.step * 0.1 }}
+                >
+                  <div className="mb-4">
+                    <div className="relative inline-block">
+                      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                        {step.icon}
+                      </div>
+                      <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        STEP {step.step}
+                      </span>
+                    </div>
+                  </div>
+                  <h4 className="text-lg font-semibold text-gray-900 mb-2">{step.title}</h4>
+                  <p className="text-gray-600 text-sm">{step.description}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            <motion.div
+              className="mt-12 bg-red-50 rounded-xl p-8 text-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-3">Ready to start planning?</h3>
+              <p className="text-gray-600 max-w-2xl mx-auto mb-6">
+                Our travel specialists are standing by to help you create your perfect itinerary
+              </p>
+              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
+                Get a Free Consultation
+              </button>
+            </motion.div>
+          </div>
+        </section>
 
         {/* Testimonials */}
         <section className="py-16 bg-gray-50">
@@ -543,7 +486,7 @@ export default function TravelServices() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
               >
-                Don't just take our word for it - hear from our satisfied clients
+                Don&apos;t just take our word for it - hear from our satisfied clients
               </motion.p>
             </div>
 
