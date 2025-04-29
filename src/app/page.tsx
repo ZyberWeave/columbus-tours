@@ -712,7 +712,10 @@ export default function HomePage() {
                     >
                       <div className="relative w-full h-full rounded-lg overflow-hidden cursor-pointer">
                         <video
-                          ref={(el) => (videoRefs.current[index] = el)}
+                          ref={(el) => {
+                            videoRefs.current[index] = el;
+                            return void 0;
+                          }}
                           src={testimonial.videoUrl}
                           poster={testimonial.thumbnail}
                           className="w-full h-full object-cover"
