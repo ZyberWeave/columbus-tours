@@ -22,17 +22,17 @@ const navLinks = [
 ];
 
 // Category links for desktop and mobile (using query parameters)
-const categoryLinks = ["international", "domestic", "religious", "honeymoon", "cruise"].map(
-  (type) => (
-    <Link
-      key={type}
-      href={`/tours?category=${type}`}
-      className="cursor-pointer px-3 py-2 font-medium text-sm text-gray-600 hover:text-blue-600"
-    >
-      {type.charAt(0).toUpperCase() + type.slice(1)}
-    </Link>
-  )
-);
+// const categoryLinks = ["international", "domestic", "religious", "honeymoon", "cruise"].map(
+//   (type) => (
+//     <Link
+//       key={type}
+//       href={`/tours?category=${type}`}
+//       className="cursor-pointer px-3 py-2 font-medium text-sm text-gray-600 hover:text-blue-600"
+//     >
+//       {type.charAt(0).toUpperCase() + type.slice(1)}
+//     </Link>
+//   )
+// );
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -417,10 +417,17 @@ export default function Header() {
               ))}
             </nav>
             <div className="flex flex-wrap p-4 border-b">
-              {React.Children.map(categoryLinks, (link) => 
-                React.cloneElement(link as React.ReactElement, {
-                  onClick: toggleMobileMenu
-                })
+              {["international", "domestic", "religious", "honeymoon", "cruise"].map(
+                (type) => (
+                  <Link
+                    key={type}
+                    href={`/tours?category=${type}`}
+                    onClick={toggleMobileMenu}
+                    className="cursor-pointer px-3 py-2 font-medium text-sm text-gray-600 hover:text-blue-600"
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </Link>
+                )
               )}
             </div>
             <div className="p-4">
