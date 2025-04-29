@@ -90,9 +90,7 @@ function TourCard({ tour, priority = false }: TourCardProps) {
             </div>
             <div className="flex items-center text-gray-700 w-full">
               <FaMapMarkerAlt className="mr-2 text-[#D32F2F]" />
-              <span className="text-sm font-medium">
-                {tour.destination || "Multiple destinations"}
-              </span>
+              
             </div>
           </div>
 
@@ -119,10 +117,7 @@ function TourCard({ tour, priority = false }: TourCardProps) {
                     {tour.duration} {tour.duration === 1 ? "night" : "nights"}
                   </span>
                 </div>
-                <div className="flex items-center text-white/90 w-full">
-                  <FaMapMarkerAlt className="mr-2" />
-                  <span>{tour.destination || "Multiple destinations"}</span>
-                </div>
+                
               </div>
             </div>
 
