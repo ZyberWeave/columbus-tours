@@ -14,7 +14,7 @@ import {
   FiCheckCircle,
 
 } from "react-icons/fi";
-import { FaHotel, FaPlane, FaUmbrellaBeach, FaMountain, FaCity } from "react-icons/fa";
+import { FaHotel, FaPlane } from "react-icons/fa";
 
 // Simplified service data with clearer benefits
 const services = [
@@ -123,36 +123,36 @@ const testimonials = [
 ];
 
 // Aligned booking steps with JSX
-const bookingSteps = [
-  {
-    step: 1,
-    title: "Pick Your Dream Destination",
-    description:
-      "Browse our website, find the place that excites you most, and reach out to us directly—your adventure starts with a click!",
-    icon: <FiMapPin className="text-red-600" size={24} />,
-  },
-  {
-    step: 2,
-    title: "Get Personalized Options",
-    description:
-      "Receive custom trip ideas and expert consultations tailored just for you. We make planning easy and exciting!",
-    icon: <FiCheckCircle className="text-red-600" size={24} />,
-  },
-  {
-    step: 3,
-    title: "Refine & Book",
-    description:
-      "Fine-tune your itinerary with our team, then lock in your booking. Your perfect trip is just a few tweaks away!",
-    icon: <FiStar className="text-red-600" size={24} />,
-  },
-  {
-    step: 4,
-    title: "Travel & Enjoy!",
-    description:
-      "Set off on your adventure and let the fun begin—our team is here for you every step of the way!",
-    icon: <FiHeadphones className="text-red-600" size={24} />,
-  },
-];
+// const bookingSteps = [
+//   {
+//     step: 1,
+//     title: "Pick Your Dream Destination",
+//     description:
+//       "Browse our website, find the place that excites you most, and reach out to us directly—your adventure starts with a click!",
+//     icon: <FiMapPin className="text-red-600" size={24} />,
+//   },
+//   {
+//     step: 2,
+//     title: "Get Personalized Options",
+//     description:
+//       "Receive custom trip ideas and expert consultations tailored just for you. We make planning easy and exciting!",
+//     icon: <FiCheckCircle className="text-red-600" size={24} />,
+//   },
+//   {
+//     step: 3,
+//     title: "Refine & Book",
+//     description:
+//       "Fine-tune your itinerary with our team, then lock in your booking. Your perfect trip is just a few tweaks away!",
+//     icon: <FiStar className="text-red-600" size={24} />,
+//   },
+//   {
+//     step: 4,
+//     title: "Travel & Enjoy!",
+//     description:
+//       "Set off on your adventure and let the fun begin—our team is here for you every step of the way!",
+//     icon: <FiHeadphones className="text-red-600" size={24} />,
+//   },
+// ];
 
 const ServiceCard = ({ service }) => {
   const [expanded, setExpanded] = useState(false);
@@ -230,7 +230,7 @@ const TestimonialCard = ({ testimonial }) => {
           <FiStar key={i} className="fill-current" size={16} />
         ))}
       </div>
-      <p className="text-gray-700 text-sm">"{testimonial.text}"</p>
+      <p className="text-gray-700 text-sm">&quot{testimonial.text}&quot</p>
     </motion.div>
   );
 };
@@ -476,7 +476,7 @@ export default function TravelServices() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
               >
-                Don't just take our word for it - hear from our satisfied clients
+                Don&apos;t just take our word for it - hear from our satisfied clients
               </motion.p>
             </div>
 

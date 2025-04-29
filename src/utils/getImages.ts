@@ -7,7 +7,7 @@ export function getTourImages(category: string, folder: string): string[] {
   try {
     return fs.readdirSync(slideshowPath)
       .filter(file => /\.(jpg|jpeg|png|webp)$/i.test(file));
-  } catch (error) {
+  } catch {
     console.warn(`No images found for tour: ${category}/${folder}`);
     return [];
   }

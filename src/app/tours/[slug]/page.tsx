@@ -1,7 +1,8 @@
 // app/tours/[slug]/page.tsx
-import { allTours, Tour } from "@/data/toursData";
+import { allTours } from "@/data/toursData";
 import TourDetailPageClient from "@/components/TourDetailPageClient"; // our client component
 import { getTourImages } from '@/utils/getImages';
+import { notFound } from 'next/navigation';
 
 interface PageProps {
   params: {

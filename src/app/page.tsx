@@ -171,9 +171,18 @@ const AutoSlider: React.FC<AutoSliderProps> = ({
 // ------------------------
 // Embla Autoplay Hook (Corrected)
 // ------------------------
+interface EmblaApi {
+  canScrollPrev: () => boolean;
+  canScrollNext: () => boolean;
+  scrollPrev: () => void;
+  scrollNext: () => void;
+  scrollTo: (index: number) => void;
+  slideNodes: () => HTMLElement[];
+}
+
 const useEmblaAutoplay = (options = { speed: 1, reverse: false }) => {
   const autoplay = useRef<NodeJS.Timeout | null>(null);
-  const emblaApiRef = useRef<any>(null);
+  const emblaApiRef = useRef<EmblaApi | null>(null);
 
   const stopAutoplay = useCallback(() => {
     if (autoplay.current) {
@@ -810,7 +819,7 @@ export default function HomePage() {
                   href: "/experiences",
                   cta: "Explore Tours",
                 },
-              ].map(({ Icon, title, desc, stats, href, cta }, index) => (
+              ].map(({ Icon, title, desc, stats }, index) => (
                 <motion.div
                   key={title}
                   className="group bg-white/5 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-white/10 transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 hover:bg-white/10"

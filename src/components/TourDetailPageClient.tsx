@@ -33,7 +33,7 @@ interface TourCardProps {
 }
 
 function TourCard({ tour, priority = false }: TourCardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  
 
   return (
     <motion.div
