@@ -216,15 +216,6 @@ const ServiceCard = ({ service }: { service: Service }) => {
   );
 };
 
-// Define types for destination and testimonial
-type Destination = {
-  image: string
-  name: string
-  icon: React.ReactNode
-  type: string
-  price: string
-};
-
 type Testimonial = {
   id: number
   name: string
@@ -260,8 +251,7 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   );
 };
 
-// Define a type for booking step
-type BookingStepType = {
+type Step = {
   step: number
   title: string
   description: string
@@ -424,7 +414,7 @@ export default function TravelServices() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              {bookingSteps.map((step) => (
+              {bookingSteps.map((step: Step) => (
                 <motion.div
                   key={step.step}
                   className="bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-300 flex flex-col items-center text-center"
