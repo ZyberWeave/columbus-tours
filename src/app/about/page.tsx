@@ -258,7 +258,7 @@ export default function AboutPage() {
           transition={{ staggerChildren: 0.1 }}
           viewport={{ once: true }}
         >
-          {TEAM.map(({ img, name, role, desc }) => (
+          {TEAM.map(({ img, name, role }) => (
             <motion.article
               key={name}
               className="overflow-hidden rounded-xl bg-white shadow-lg transition-all hover:-translate-y-1 hover:shadow-xl"
@@ -296,7 +296,7 @@ export default function AboutPage() {
                     role
                   )}
                 </p>
-                <p className="text-gray-600">{desc}</p>
+                
               </div>
             </motion.article>
           ))}
