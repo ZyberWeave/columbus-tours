@@ -280,45 +280,87 @@ export default function HomePage() {
   }, [isHovered, playingIndex, startAutoplay]);
 
   // Handle play/pause and center video
-  const handlePlayPause = useCallback(
-    (index: number) => {
-      videoRefs.current.forEach((video, i) => {
-        if (i !== index && video) video.pause();
-      });
-      const video = videoRefs.current[index];
-      if (!video) return;
-
-      if (playingIndex === index) {
-        video.pause();
-        setPlayingIndex(null);
-        setExpandedIndex(null); // Collapse when paused
-        resumeAutoplay();
-      } else {
-        if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-        video.play().then(() => {
-          setPlayingIndex(index);
-          setExpandedIndex(index); // Expand when playing
-          stopAutoplay();
-          if (emblaApi) {
-            const selectedIndex = emblaApi.selectedScrollSnap();
-            if (selectedIndex !== index) {
-              emblaApi.scrollTo(index, true);
-            }
-          }
-        }).catch((error) => {
-          console.error(`Video play failed for index ${index}:`, error);
-        });
+ // 2) Update your handlePlayPause to set .src only when the user clicks:
+ const handlePlayPause = useCallback(
+  (index: number) => {
+    // 1️⃣ Pause & reset all other videos
+    videoRefs.current.forEach((video, i) => {
+      if (i !== index && video) {
+        video.pause()
+        video.currentTime = 0
+        video.removeAttribute("src")
+        video.load()       // ← force poster to re-appear
       }
-    },
-    [playingIndex, resumeAutoplay, emblaApi, stopAutoplay]
-  );
+    })
 
+    const video = videoRefs.current[index]
+    if (!video) return
+
+    // 2️⃣ First click: lazy-load the src
+    if (!video.src) {
+      video.src = video.dataset.src || ""
+    }
+
+    if (video.paused) {
+      video
+        .play()
+        .then(() => {
+          setPlayingIndex(index)
+          setExpandedIndex(index)
+          stopAutoplay()
+          if (emblaApi) emblaApi.scrollTo(index)
+        })
+        .catch(console.error)
+    } else {
+      // 3️⃣ On pause: rewind & unload to show poster
+      video.pause()
+      video.currentTime = 0
+      video.removeAttribute("src")
+      video.load()
+      setPlayingIndex(null)
+      setExpandedIndex(null)
+      resumeAutoplay()
+    }
+  },
+  [emblaApi, stopAutoplay, resumeAutoplay]
+)
+
+
+  
   // Update mute state for all videos
   useEffect(() => {
     videoRefs.current.forEach((video) => {
       if (video) video.muted = isMuted;
     });
   }, [isMuted]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const vid = entry.target as HTMLVideoElement
+          // If it’s scrolled *completely* out of view
+          if (!entry.isIntersecting && !vid.paused) {
+            vid.pause()
+            vid.currentTime = 0
+            vid.removeAttribute("src")
+            vid.load()
+            // clear your “playing” state
+            setPlayingIndex(null)
+            setExpandedIndex(null)
+            resumeAutoplay()
+          }
+        })
+      },
+      { threshold: 0 }
+    )
+  
+    videoRefs.current.forEach((v) => v && observer.observe(v))
+    return () => {
+      videoRefs.current.forEach((v) => v && observer.unobserve(v))
+    }
+  }, [resumeAutoplay])
+  
 
   // Hero video loading
   useEffect(() => {
@@ -471,7 +513,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 w-[93vw] mx-auto"
+              className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5, staggerChildren: 0.1 }}
@@ -541,10 +583,10 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 w-[93vw] mx-auto"
+              className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.6, staggerChildren: 0.1 }}
+              transition={{ duration: 0.5 }}
               viewport={{ once: true }}
             >
               {FEATURED_TRIPS.map((tour, index) => (
@@ -674,78 +716,77 @@ export default function HomePage() {
         </section>
 
         {/* TESTIMONIALS SECTION (Using Embla Carousel) */}
-        <section id="testimonial" className="w-full bg-white py-20 px-4">
-          <div className="max-w-[93vw] mx-auto flex flex-col items-center">
-            <div className="inline-flex items-center mb-4">
-              <div className="h-1 w-8 bg-[#D32F2F] mr-3"></div>
-              <span className="text-[#D32F2F] font-semibold uppercase tracking-wider text-sm">
-                Testimonials
-              </span>
-              <div className="h-1 w-8 bg-[#D32F2F] ml-3"></div>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#333333] mb-8 text-center">
-              What Our Travelers Say
-            </h2>
-            <div className="relative w-full">
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={() => setIsMuted((prev) => !prev)}
-                  className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
-                  aria-label={isMuted ? "Unmute testimonial videos" : "Mute testimonial videos"}
-                >
-                  {isMuted ? <FiVolumeX size={24} /> : <FiVolume2 size={24} />}
-                </button>
-              </div>
-              <div
-                className="embla"
-                ref={emblaRef}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-              >
-                <div className="embla__container">
-                  {TESTIMONIALS.map((testimonial, index) => (
-  <div
-  key={testimonial.id}
-  className={`embla__slide relative${
-    expandedIndex === index ? ' scale-110 z-20' : ''
-  }`}
-  onMouseEnter={handleMouseEnter}
-  onMouseLeave={handleMouseLeave}
->
-  <div className="relative w-full h-full">
-    <video
-      ref={el => { videoRefs.current[index] = el; }}
-      src={testimonial.videoUrl}
-      poster={testimonial.thumbnail}
-      className="w-full h-full object-cover rounded-2xl"
-      muted={isMuted}
-      playsInline
-      onPlay={() => setPlayingIndex(index)}
-      onPause={() => setPlayingIndex(null)}
-      style={{
-        opacity: 1,
-        transition: 'opacity 0.3s'
-      }}
-    />
-
-    {/* ▶️ always-visible play button (hides only while that video is playing) */}
-    {playingIndex !== index && (
-      <button
-        onClick={() => handlePlayPause(index)}
-        className="absolute inset-0 flex items-center justify-center text-white text-5xl bg-black/20 hover:bg-black/50 transition-colors"
-        aria-label="Play testimonial video"
+        {/* TESTIMONIALS SECTION (Using Embla Carousel) */}
+<section id="testimonial" className="w-full bg-white py-20 px-4">
+  <div className="max-w-[93vw] mx-auto flex flex-col items-center">
+    <div className="inline-flex items-center mb-4">
+      <div className="h-1 w-8 bg-[#D32F2F] mr-3"></div>
+      <span className="text-[#D32F2F] font-semibold uppercase tracking-wider text-sm">
+        Testimonials
+      </span>
+      <div className="h-1 w-8 bg-[#D32F2F] ml-3"></div>
+    </div>
+    <h2 className="text-3xl md:text-4xl font-extrabold text-[#333333] mb-8 text-center">
+      What Our Travelers Say
+    </h2>
+    <div className="relative w-full">
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setIsMuted((prev) => !prev)}
+          className="p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+          aria-label={isMuted ? "Unmute testimonial videos" : "Mute testimonial videos"}
+        >
+          {isMuted ? <FiVolumeX size={24} /> : <FiVolume2 size={24} />}
+        </button>
+      </div>
+      <div
+        className="embla"
+        ref={emblaRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
-        <FiPlay />
-      </button>
-    )}
-  </div>
-</div>
-))}
-                </div>
+        <div className="embla__container">
+          {TESTIMONIALS.map((testimonial, index) => (
+            <div
+              key={testimonial.id}
+              className={`embla__slide relative${
+                expandedIndex === index ? ' scale-110 z-20' : ''
+              }`}
+            >
+              <div className="relative w-full h-full rounded-2xl overflow-hidden">
+            
+<video
+  ref={el => { videoRefs.current[index] = el; }}
+  poster={testimonial.thumbnail}
+  preload="none"
+  muted={isMuted}
+  playsInline
+  loop
+  data-src={testimonial.videoUrl}      // ← defer loading
+  onClick={() => handlePlayPause(index)}
+  className="w-full h-full object-cover"
+/>
+
+
+                
+                {/* Play button overlay */}
+                {playingIndex !== index && (
+                  <button
+                    onClick={() => handlePlayPause(index)}
+                    className="absolute inset-0 flex items-center justify-center text-white text-5xl bg-black/20 hover:bg-black/50 transition-colors"
+                    aria-label="Play testimonial video"
+                  >
+                    <FiPlay />
+                  </button>
+                )}
               </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
         {/* WHY CHOOSE US SECTION */}
         <section className="w-full bg-gradient-to-br from-[#D32F2F] to-[#B71C1C] py-24 px-4 relative overflow-hidden">
@@ -862,9 +903,9 @@ export default function HomePage() {
               viewport={{ once: true }}
             >
               {[
-                { number: "50K+", label: "Happy Travelers" },
-                { number: "98%", label: "Satisfaction Rate" },
-                { number: "24/7", label: "Dedicated Support" },
+                { number: "50K+", label: "Happy Travelers", labelColor: "text-[#FFFFFF]" },
+                { number: "98%", label: "Satisfaction Rate", labelColor: "text-[#FFFFFF]" },
+                { number: "24/7", label: "Dedicated Support", labelColor: "text-[#FFFFFF]" },
               ].map((item, index) => (
                 <div key={index} className="flex flex-col items-center min-w-[100px]">
                   <span className="text-2xl font-bold text-[#FFFFFF]">{item.number}</span>
@@ -907,12 +948,12 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, staggerChildren: 0.1 }}
-              viewport={{ once: true }}
-            >
+  className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  transition={{ duration: 0.5 }}
+  viewport={{ once: true }}
+>
               <motion.div whileHover={{ y: -5 }} transition={{ type: 'spring', stiffness: 300 }}>
                 <a
                   href="https://wa.me/919422401225"

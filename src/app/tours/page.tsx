@@ -1,11 +1,13 @@
 "use client";
+import React, { Suspense, useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
-import { useState, useEffect, useMemo,  Suspense, useRef } from "react";
+
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { allTours, type Tour } from "@/data/toursData";
 import DualSlider from "@/components/DualSlider";
+import { FiSearch } from 'react-icons/fi';
 import { FaStar, FaCalendarAlt, FaHeart } from 'react-icons/fa';
 import {
   FaGlobe,
@@ -30,19 +32,39 @@ const CATEGORIES = [
 // Replace SLIDES with your actual tour group images and captions
 const SLIDES = [
   {
-    src: "/images/tourgroups/group1.jpg",
-    title: "Our Tour Groups",
-    subtitle: "Memorable journeys with happy travelers",
+    src: "/images/tourgroups/dubai.jpg",
+    title: "Dubai Adventures",
+    subtitle: "Experience the luxury and culture of Dubai.",
   },
   {
-    src: "/images/tourgroups/group2.jpg",
-    title: "Our Tour Groups",
-    subtitle: "Adventure, fun, and lifelong friendships",
+    src: "/images/tourgroups/pattaya.jpg",
+    title: "Pattaya Escapades",
+    subtitle: "Enjoy the vibrant nightlife and beaches of Pattaya.",
   },
   {
-    src: "/images/tourgroups/group3.jpg",
-    title: "Our Tour Groups",
-    subtitle: "Discovering the world together",
+    src: "/images/tourgroups/srilanka.jpg",
+    title: "Sri Lanka Tours",
+    subtitle: "Discover the rich history and landscapes of Sri Lanka.",
+  },
+  {
+    src: "/images/tourgroups/china.jpg",
+    title: "China Expeditions",
+    subtitle: "Explore the ancient wonders of China.",
+  },
+  {
+    src: "/images/tourgroups/thailand.jpg",
+    title: "Thailand Getaways",
+    subtitle: "Immerse in the culture and beauty of Thailand.",
+  },
+  {
+    src: "/images/tourgroups/bhutan.jpg",
+    title: "Bhutan Journeys",
+    subtitle: "Experience the serene beauty of Bhutan.",
+  },
+  {
+    src: "/images/tourgroups/baku.jpg",
+    title: "Baku Adventures",
+    subtitle: "Discover the modern and historical blend of Baku.",
   },
 ];
 
@@ -63,13 +85,13 @@ function Loading() {
 }
 
 function ToursPageContent() {
-  const router = useRouter();
+  const router = useRouter(); // Ensure this is declared
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category")?.toLowerCase() || "all";
   const initialSearch = searchParams.get("search") || "";
 
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [searchQuery, setSearchQuery] = useState(initialSearch); // Ensure this is declared
   const [durationRange, setDurationRange] = useState<[number, number]>([1, 15]);
   const [maxDuration, setMaxDuration] = useState(15);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,12 +111,9 @@ function ToursPageContent() {
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchQuery(value);
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      router.replace(`/tours?search=${encodeURIComponent(value)}&category=${selectedCategory.toLowerCase()}`, { scroll: false });
-    }, 300);
+    const v = e.target.value;
+    setSearchQuery(v);
+    router.replace(`/tours?search=${encodeURIComponent(v)}&category=${selectedCategory}`, { scroll: false });
   };
 
   useEffect(() => {
@@ -242,6 +261,44 @@ function ToursPageContent() {
         </div>
       </section>
 
+      {/* ── Mobile: categories + instant search ── */}
+      <div className="md:hidden bg-white px-4 pt-4 pb-2 space-y-2">
+        {/* Categories bar (wrap on mobile instead of overflow) */}
+        <div className="flex flex-wrap gap-2 justify-center">
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat.name}
+              onClick={() => handleCategoryChange(cat.name)}
+              className={`flex items-center gap-1 px-3 py-2 rounded-md ${
+                selectedCategory === cat.name.toLowerCase()
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-gray-100'
+              }`}
+            >
+              {cat.icon}
+              <span className="text-sm">{cat.name}</span>
+            </button>
+          ))}
+        </div>
+        {/* Instant-search input */}
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={e => {
+              setSearchQuery(e.target.value);
+              router.replace(
+                `/tours?search=${encodeURIComponent(e.target.value)}&category=${selectedCategory}`,
+                { scroll: false }
+              );
+            }}
+            placeholder="Search tours…"
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+          />
+        </div>
+      </div>
+
       <div className="container mx-auto px-4">
         {/* Mobile Filter Button & Sort Select */}
         <div className="md:hidden flex justify-between items-center mb-4">
@@ -249,7 +306,7 @@ function ToursPageContent() {
             onClick={() => setIsFilterOpen(!isFilterOpen)}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm"
           >
-            <span>🔍</span>
+            <FiSearch className="text-xl" />
             Filters
           </button>
           <div className="relative">
@@ -368,7 +425,7 @@ function ToursPageContent() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredTours.map((tour) => (
                   <TourCard key={tour.id} tour={tour} />
                 ))}
@@ -385,6 +442,7 @@ interface TourCardProps {
   tour: Tour;
   priority?: boolean;
 }
+ 
  function TourCard({ tour, priority = false }: TourCardProps) {
   
   
