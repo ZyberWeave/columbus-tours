@@ -5,7 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import Head from "next/head";
 import { FaCompass, FaStar, FaMapMarkerAlt, FaCalendarAlt, FaMedal, FaGlobeAmericas } from "react-icons/fa";
-import { FiPause, FiVolume2, FiVolumeX, FiPlay } from "react-icons/fi";
+import {  FiVolume2, FiVolumeX, FiPlay } from "react-icons/fi";
 import useEmblaCarousel from 'embla-carousel-react';
 
 // ------------------------
