@@ -235,28 +235,7 @@ const TestimonialCard = ({ testimonial }) => {
   );
 };
 
-const BookingStep = ({ step }) => {
-  return (
-    <motion.div
-      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 flex items-start gap-4"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ delay: step.step * 0.1 }}
-    >
-      <div className="bg-red-100 p-3 rounded-full">{step.icon}</div>
-      <div>
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-xs font-medium bg-red-600 text-white px-2 py-0.5 rounded-full">
-            STEP {step.step}
-          </span>
-          <h4 className="font-medium text-gray-900">{step.title}</h4>
-        </div>
-        <p className="text-gray-600 text-sm">{step.description}</p>
-      </div>
-    </motion.div>
-  );
-};
+
 
 export default function TravelServices() {
   const [activeFilter, setActiveFilter] = useState("all");
