@@ -930,7 +930,7 @@ export default function HomePage() {
             </motion.div>
 
             <motion.div
-  className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
+  className="grid justify-center gap-3 w-full max-w-5xl mx-auto px-4 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
   initial={{ opacity: 0 }}
   whileInView={{ opacity: 1 }}
   transition={{ duration: 0.5 }}

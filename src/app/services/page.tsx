@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
+import { motion, AnimatePresence} from "framer-motion";
+
 import Head from "next/head";
 import {
-  FiSearch,
+  
   FiStar,
   FiShield,
   FiHeadphones,
@@ -91,33 +91,7 @@ const services = [
   },
 ];
 
-// Testimonials with real client photos
-const testimonials = [
-  {
-    id: 1,
-    name: "Sarah & James",
-    location: "Sydney, Australia",
-    text: "Our honeymoon was absolutely perfect thanks to Columbus Tours. Every detail was taken care of, from private beach dinners to surprise upgrades at our resort.",
-    rating: 5,
-    image: "/couple-honeymoon.jpg",
-  },
-  {
-    id: 2,
-    name: "The Chen Family",
-    location: "Toronto, Canada",
-    text: "Traveling with three kids can be stressful, but Columbus made it effortless. Their kid-friendly guides and activities kept everyone happy throughout our European tour.",
-    rating: 5,
-    image: "/family-travel.jpg",
-  },
-  {
-    id: 3,
-    name: "Michael R.",
-    location: "London, UK",
-    text: "As a frequent business traveler, I appreciate the efficiency and attention to detail. My corporate trips are now completely hassle-free.",
-    rating: 4,
-    image: "/business-traveler.jpg",
-  },
-];
+
 
 // Aligned booking steps with JSX
 const bookingSteps = [
@@ -216,40 +190,10 @@ const ServiceCard = ({ service }: { service: Service }) => {
   );
 };
 
-type Testimonial = {
-  id: number
-  name: string
-  location: string
-  text: string
-  rating: number
-  image: string
-};
+
 
 // Update TestimonialCard props
-const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
-  return (
-    <motion.div
-      className="bg-white p-6 rounded-lg shadow-sm border border-gray-200"
-      whileHover={{ y: -5 }}
-    >
-      <div className="flex items-center gap-4 mb-4">
-        <div className="relative h-12 w-12 rounded-full overflow-hidden">
-          <Image src={testimonial.image} alt={testimonial.name} fill className="object-cover" />
-        </div>
-        <div>
-          <h4 className="font-medium">{testimonial.name}</h4>
-          <p className="text-gray-500 text-sm">{testimonial.location}</p>
-        </div>
-      </div>
-      <div className="flex text-amber-400 mb-3">
-        {[...Array(testimonial.rating)].map((_, i) => (
-          <FiStar key={i} className="fill-current" size={16} />
-        ))}
-      </div>
-      <p className="text-gray-700 text-sm">&quot;{testimonial.text}&quot;</p>
-    </motion.div>
-  );
-};
+
 
 type Step = {
   step: number
@@ -259,8 +203,8 @@ type Step = {
 };
 
 export default function TravelServices() {
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter ] = useState("all");
+  const [searchQuery] = useState("");
 
   const filteredServices = services.filter((service) => {
     const matchesSearch =
@@ -271,11 +215,8 @@ export default function TravelServices() {
   });
 
   const mainRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: mainRef,
-    offset: ["start start", "end start"],
-  });
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  
+  
 
   return (
     <>
@@ -289,38 +230,21 @@ export default function TravelServices() {
 
       <div className="min-h-screen bg-gray-50" ref={mainRef}>
         {/* Hero Section */}
-        <section className="relative h-[80vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-          <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
-            <div className="absolute inset-0 bg-black/40" />
-            <Image
-              src="/travel-hero.jpg"
-              alt="Luxury travel experience"
-              fill
-              className="object-cover w-full h-full"
-              priority
-            />
-          </motion.div>
-
-          <div className="container mx-auto px-4 relative z-10 text-center">
+         {/* Updated Hero Section */}
+         <section className="py-16 bg-gradient-to-r from-white to-gray-100">
+          <div className="container mx-auto px-4 text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Your Journey, <span className="text-red-300">Perfected</span>
+              <h1 className="text-4xl md:text-5xl font-bold text-red-600 mb-6">
+                Welcome to Columbus Tours
               </h1>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
-                We handle every detail so you can focus on making memories. Where will your next adventure take you?
+              <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto mb-8">
+                Plan your dream vacation with ease! Search for your perfect destination or explore our tailored travel services, including luxury stays, unique experiences, and 24/7 support. Let us handle the details so you can focus on making memories.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
-                  Explore Our Services
-                </button>
-                <button className="bg-white hover:bg-gray-100 text-gray-900 px-8 py-3 rounded-md shadow-md transition-colors">
-                  View Popular Trips
-                </button>
-              </div>
+              
             </motion.div>
           </div>
         </section>
@@ -367,18 +291,7 @@ export default function TravelServices() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
-                <FiSearch className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 mb-2">No services found</h3>
-                <p className="text-gray-600 mb-4">Try adjusting your search or filters</p>
-                <button
-                  className="px-5 py-2 bg-red-600 text-white rounded-md font-medium"
-                  onClick={() => {
-                    setSearchQuery("");
-                    setActiveFilter("all");
-                  }}
-                >
-                  Reset Search
-                </button>
+                
               </motion.div>
             )}
           </div>
@@ -450,49 +363,29 @@ export default function TravelServices() {
               <p className="text-gray-600 max-w-2xl mx-auto mb-6">
                 Our travel specialists are standing by to help you create your perfect itinerary
               </p>
-              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors">
-                Get a Free Consultation
-              </button>
+              <a 
+                href="https://wa.me/919422401225"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-md shadow-md transition-colors"
+              >
+                <div className="flex items-center gap-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                  </svg>
+                  Get a Free Consultation
+                </div>
+              </a>
             </motion.div>
           </div>
         </section>
 
-        {/* Testimonials */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <motion.h2
-                className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-              >
-                Traveler <span className="text-red-600">Stories</span>
-              </motion.h2>
-              <motion.p
-                className="text-gray-600 max-w-2xl mx-auto"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-              >
-                Don&apos;t just take our word for it - hear from our satisfied clients
-              </motion.p>
-            </div>
-
-            <motion.div
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              {testimonials.map((testimonial) => (
-                <TestimonialCard key={testimonial.id} testimonial={testimonial} />
-              ))}
-            </motion.div>
-          </div>
-        </section>
+        
 
         {/* Contact Us Section */}
         <section className="w-full bg-gradient-to-br from-[#0A122A] to-[#1B2738] py-24 px-4 relative overflow-hidden mt-20 mb-20">
