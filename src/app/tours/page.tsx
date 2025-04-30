@@ -388,6 +388,7 @@ function ToursPageContent() {
           </aside>
 
           {/* Main Content: Tour Listings */}
+          
           <div className="flex-1">
             {/* Desktop Sort Controls */}
             <div className="hidden md:flex justify-between items-center mb-6">
@@ -425,7 +426,7 @@ function ToursPageContent() {
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {filteredTours.map((tour) => (
                   <TourCard key={tour.id} tour={tour} />
                 ))}

@@ -17,7 +17,7 @@ import { allTours, type Tour } from "@/data/toursData";
 
 const navLinks = [
   // { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
+  { name: "Tours", href: "/tours" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -288,12 +288,12 @@ export default function Header() {
 
           <nav className="flex items-center space-x-8">
             <Link
-              href="/tours"
+              href="/about"
               className={`px-3 py-2 font-medium text-lg ${
                 isHome ? "text-white hover:text-gray-200" : "text-gray-800 hover:text-blue-600"
               }`}
             >
-              Tours
+              About
             </Link>
             <Link
               href="/services"
@@ -343,56 +343,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Search Dropdown */}
-      {isSearchOpen && (
-        <div className="lg:hidden fixed inset-x-0 top-[70px] px-4 py-3 bg-white shadow-md z-50">
-          <div className="relative" ref={searchRef}>
-            <input
-              type="text"
-              placeholder="Search destinations..."
-              className="w-full py-2 pl-10 pr-4 rounded-full border border-gray-200 focus:outline-none focus:ring-1 focus:ring-blue-500 text-sm"
-              onChange={(e) => updateSearch(e.target.value)}
-              onKeyDown={handleKeyDown}
-              value={searchText}
-            />
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={14} />
-            {searchResults.length > 0 && (
-              <div className="absolute top-full mt-2 w-full bg-white shadow-lg rounded-lg z-50">
-                <ul>
-                  {searchResults.map((tour) => {
-                    const thumb = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
-                    return (
-                      <Link
-                        key={tour.id}
-                        href={`/tours/${tour.slug}`}
-                        onClick={() => {
-                          console.log(`[mobile] Navigating to tour: /tours/${tour.slug}`);
-                          setIsSearchOpen(false);
-                        }}
-                      >
-                        <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer search-result-item">
-                          <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
-                          <span className="text-gray-900">{tour.title}</span>
-                        </li>
-                      </Link>
-                    );
-                  })}
-                  <li
-                    className="px-4 py-2 text-blue-600 hover:underline cursor-pointer text-center border-t"
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      router.push(`/tours?search=${encodeURIComponent(searchText)}`);
-                    }}
-                  >
-                    Show All
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
         <>
@@ -405,6 +355,13 @@ export default function Header() {
               </button>
             </div>
             <nav className="flex flex-col p-4 border-b">
+              <Link 
+                href="/tours" 
+                className="px-3 py-2 font-medium text-black hover:text-black"
+                onClick={toggleMobileMenu}
+              >
+                Tours
+              </Link>
               {navLinks.map((link) => (
                 <Link 
                   key={link.name} 

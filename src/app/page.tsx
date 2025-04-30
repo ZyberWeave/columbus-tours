@@ -891,7 +891,7 @@ export default function HomePage() {
               ].map((item, index) => (
                 <div key={index} className="flex flex-col items-center min-w-[100px]">
                   <span className="text-2xl font-bold text-[#FFFFFF]">{item.number}</span>
-                  <span className="text-sm text-gray-700">{item.label}</span>
+                  <span className="text-s font-bold text-[#FFFFFF]">{item.label}</span>
                 </div>
               ))}
             </motion.div>
