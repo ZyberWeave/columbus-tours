@@ -436,6 +436,13 @@ useEffect(() => {
               >
                 About
               </Link>
+              <Link 
+                href="/services" 
+                className="px-3 py-2 font-medium text-black hover:text-black"
+                onClick={toggleMobileMenu}
+              >
+                Services
+              </Link>
               {navLinks.map((link) => (
                 <Link 
                   key={link.name} 
