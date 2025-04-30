@@ -494,11 +494,11 @@ export default function HomePage() {
             <motion.div
               key={category}
               className="relative group w-full aspect-square rounded-3xl overflow-hidden shadow-xl transition-all duration-300"
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay }}
-              whileHover={{ y: -8 }}
+              whileHover={{ y: -8, scale: 1.05 }}
             >
               {/* Image Slider */}
               <div className="relative w-full h-full overflow-hidden">
