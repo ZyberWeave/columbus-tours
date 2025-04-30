@@ -79,7 +79,7 @@ export default function Header() {
   );
 
   // Debounced search update handler
-  const updateSearch = useMemo(() => debounce((val: string) => handleSearch(val), 300), [debounce]);
+  
 
   // Handle Enter key press in search input
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
