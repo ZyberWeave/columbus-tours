@@ -443,117 +443,99 @@ export default function HomePage() {
             Your browser does not support the video tag.
           </video>
 
-          <motion.div
-            className="relative z-10 flex flex-col justify-center items-center h-full text-white text-center px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: isVideoLoaded ? 1 : 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Image
-              src="/logo.png"
-              alt="Columbus Tours Logo"
-              width={300}
-              height={100}
-              className="w-full max-w-xs mb-8 drop-shadow-xl"
-              priority
-            />
-            <motion.p
-              className="text-2xl md:text-3xl font-light mb-12 drop-shadow-lg"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              Discover amazing experiences with us.
-            </motion.p>
-            <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Link href="/tours">
-                <button
-                  className="px-8 py-4 text-lg font-bold text-white bg-[#D32F2F] border-4 border-[#D32F2F] rounded-full hover:bg-[#B71C1C] hover:border-[#B71C1C] hover:scale-105 transition-all duration-300"
-                  aria-label="Explore Tours"
-                >
-                  Explore Tours
-                </button>
-              </Link>
-            </motion.div>
-          </motion.div>
+          
+          
         </section>
 
         {/* TOUR CATEGORIES SECTION */}
-        <section className="w-full bg-[#F7F7F7] py-20 px-4">
-          <div className="w-full flex flex-col items-center">
-            <div className="inline-flex items-center mb-4">
-              <div className="h-1 w-8 bg-[#D32F2F] mr-3"></div>
-              <span className="text-[#D32F2F] font-semibold uppercase tracking-wider text-sm">
-                Tours Categories
-              </span>
-              <div className="h-1 w-8 bg-[#D32F2F] ml-3"></div>
-            </div>
-            <motion.div
-              className="text-center mb-16"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-extrabold text-[#333333] mb-4">
-                Discover Your Next Adventure
-              </h2>
-              <p className="text-xl md:text-2xl text-[#333333] mb-8 max-w-2xl mx-auto">
-                Explore a wide range of tour packages tailored just for you.
-              </p>
-              <Link href="/tours">
-                <button className="px-8 md:px-10 py-3 md:py-4 bg-[#D32F2F] text-white text-lg md:text-xl rounded-full hover:bg-[#1565C0] transition transform hover:scale-105 duration-300">
-                  View All Tours
-                </button>
-              </Link>
-            </motion.div>
+    {/* TOUR CATEGORIES SECTION */}
+<section className="w-full bg-[#F7F7F7] py-20 px-4">
+  <div className="w-full flex flex-col items-center">
+    {/* Heading */}
+    <div className="inline-flex items-center mb-4">
+      <div className="h-1 w-8 bg-[#D32F2F] mr-3" />
+      <span className="text-[#D32F2F] font-semibold uppercase tracking-wider text-sm">
+        Tours Categories
+      </span>
+      <div className="h-1 w-8 bg-[#D32F2F] ml-3" />
+    </div>
 
+    {/* Subheading & CTA */}
+    <motion.div
+      className="text-center mb-16"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5 }}
+    >
+      <h2 className="text-4xl md:text-5xl font-extrabold text-[#333333] mb-4">
+        Discover Your Next Adventure
+      </h2>
+      <p className="text-xl md:text-2xl text-[#333333] mb-8 max-w-2xl mx-auto">
+        Explore a wide range of tour packages tailored just for you.
+      </p>
+      <Link href="/tours">
+        <button className="px-8 md:px-10 py-3 md:py-4 bg-[#D32F2F] text-white text-lg md:text-xl rounded-full hover:bg-[#1565C0] transition transform hover:scale-105 duration-300">
+          View All Tours
+        </button>
+      </Link>
+    </motion.div>
+
+    {/* Categories Grid */}
+    <div className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+      {(() => {
+        const entries = Object.entries(IMAGES);
+        const total = entries.length;
+        return entries.map(([category, images], idx) => {
+          // Right-to-left stagger: last-index first
+          const delay = (total - 1 - idx) * 0.1;
+
+          return (
             <motion.div
-              className="grid justify-center gap-3 w-[93vw] mx-auto grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.5, staggerChildren: 0.1 }}
+              key={category}
+              className="relative group w-full aspect-square rounded-3xl overflow-hidden shadow-xl transition-all duration-300"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.5, delay }}
+              whileHover={{ y: -8 }}
             >
-              {Object.entries(IMAGES).map(([category, images]) => (
-                <motion.div
-                  key={category}
-                  className="relative group w-full aspect-square rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition duration-300"
-                  whileHover={{ y: -10 }}
-                >
-                  <AutoSlider
-                    images={images}
-                    interval={4000}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 uppercase">
-                      {category}
-                    </h3>
-                    <p className="text-center text-white text-sm md:text-base mb-4 px-2">
-                      {{
-                        international: "Explore tours across continents and immerse yourself in new cultures.",
-                        domestic: "Discover the beauty of local destinations and hidden gems.",
-                        religious: "Experience spiritually enriching journeys.",
-                        honeymoon: "Indulge in romantic escapes and unforgettable experiences.",
-                        cruise: "Sail away on luxurious cruises to exotic destinations.",
-                      }[category]}
-                    </p>
-                    <Link href={`/tours?category=${category}`}>
-                      <button className="px-6 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition duration-300">
-                        View {category.charAt(0).toUpperCase() + category.slice(1)} Tours
-                      </button>
-                    </Link>
-                  </div>
-                </motion.div>
-              ))}
+              {/* Image Slider */}
+              <div className="relative w-full h-full overflow-hidden">
+                <AutoSlider
+                  images={images}
+                  interval={4000}
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
+
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-black/60 flex flex-col justify-center items-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2 uppercase">
+                  {category}
+                </h3>
+                <p className="text-center text-white text-sm md:text-base mb-4 px-2">
+                  {{
+                    international: "Explore tours across continents and immerse yourself in new cultures.",
+                    domestic:       "Discover the beauty of local destinations and hidden gems.",
+                    religious:      "Experience spiritually enriching journeys.",
+                    honeymoon:      "Indulge in romantic escapes and unforgettable experiences.",
+                    cruise:         "Sail away on luxurious cruises to exotic destinations.",
+                  }[category]}
+                </p>
+                <Link href={`/tours?category=${category}`}>
+                  <button className="px-6 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition duration-300">
+                    View {category.charAt(0).toUpperCase() + category.slice(1)} Tours
+                  </button>
+                </Link>
+              </div>
             </motion.div>
-          </div>
-        </section>
+          );
+        });
+      })()}
+    </div>
+  </div>
+</section>
 
         {/* FEATURED TOURS SECTION */}
         <section className="w-full bg-gradient-to-b from-gray-50 to-white py-24 px-4">

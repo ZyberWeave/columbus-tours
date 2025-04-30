@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useState, useEffect, useMemo, useRef } from "react";
+import React, { Suspense, useState, useEffect, useMemo } from "react";
 import { motion } from "framer-motion";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -107,8 +107,8 @@ function ToursPageContent() {
     return () => clearInterval(timer);
   }, []);
 
-  // --- Move debounce outside the component ---
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  
+  
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value;
@@ -327,7 +327,7 @@ function ToursPageContent() {
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className=" mt-10 flex flex-col md:flex-row gap-6">
           {/* Filter Sidebar */}
           <aside className={`${isFilterOpen ? "block" : "hidden"} md:block md:w-1/4 bg-[#F7F7F7] rounded-lg shadow-md p-6`}>
             <div className="flex justify-between items-center mb-4">

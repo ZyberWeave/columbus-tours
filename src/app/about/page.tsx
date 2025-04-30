@@ -41,7 +41,7 @@ const TEAM: TeamCard[] = [
     name: 'Mr. Yogesh More',
     role: 'Executive General Manager',
   },{
-    img: '/images/team/Abhimanyu.jpg',
+    img: '/images/team/abhimanyu.jpg',
     name: 'Abhimanyu Jadhav',
     role: 'International Tours Specialist',
     
@@ -51,7 +51,7 @@ const TEAM: TeamCard[] = [
     name: 'Mr. Nilesh Shelkar',
     role: 'Senior Manager, Banking Services',
   },{
-    img: '/images/team/Rohan.jpg',
+    img: '/images/team/rohan.jpg',
     name: 'Rohan Sarode',
     role: 'Head of IT Strategy & Integration (via ZyberWeave)',
     
@@ -122,10 +122,10 @@ export default function AboutPage() {
                 Explore Tours
               </Link>
               <a
-                href="#contact"
+                href="/contact"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-white px-8 py-4 font-semibold transition-all hover:scale-105 hover:bg-white/10 hover:shadow-lg"
               >
-                Connect With Us
+                Contact Us
               </a>
             </nav>
           </motion.div>
