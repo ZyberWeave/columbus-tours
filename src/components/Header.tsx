@@ -347,11 +347,11 @@ export default function Header() {
             </div>
             <nav className="flex flex-col p-4 border-b">
               <Link 
-                href="/tours" 
+                href="/about" 
                 className="px-3 py-2 font-medium text-black hover:text-black"
                 onClick={toggleMobileMenu}
               >
-                Tours
+                About
               </Link>
               {navLinks.map((link) => (
                 <Link 
