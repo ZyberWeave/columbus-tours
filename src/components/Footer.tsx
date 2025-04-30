@@ -57,7 +57,7 @@ const Footer: React.FC = () => {
           </div>
 
           {/* Quick Links Section */}
-          <div className="space-y-4 mx-auto">
+          <div className="space-y-4">
             <h3 className="text-xl font-bold">Quick Links</h3>
             <ul className="space-y-3 text-sm">
               <li>

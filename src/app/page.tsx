@@ -256,7 +256,7 @@ export default function HomePage() {
       emblaApiRef.current = emblaApi;
       startAutoplay();
     }
-  }, [emblaApi, startAutoplay]);
+  }, [emblaApi, startAutoplay, emblaApiRef]);
 
   // Handle hover
   const handleMouseEnter = useCallback(() => {
@@ -372,22 +372,28 @@ export default function HomePage() {
 
   return (
     <>
+      
       <Head>
-        <title>Columbus Tours | Discover Your Perfect Vacation</title>
-        <meta
-          name="description"
-          content="Experience unforgettable journeys with Columbus Tours. We offer international, domestic, religious, honeymoon, and cruise packages tailored to your dreams."
-        />
-        {/* <link rel="preload" href="/videos/hero-video.mp4" as="video" />
-        {TESTIMONIALS.map((_, index) => (
-          <link
-            key={index}
-            rel="preload"
-            href={`/testimonials/video-${index + 1}.mp4`}
-            as="video"
-          />
-        ))} */}
-      </Head>
+  <title>Columbus Tours | Discover Your Perfect Vacation</title>
+  <meta name="description" content="Book international and domestic tours with Columbus Tours. Discover curated experiences across Dubai, Thailand, Bali, and more." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charSet="UTF-8" />
+
+  {/* Open Graph (Facebook + Meta apps) */}
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.columbustours.in/" />
+  <meta property="og:title" content="Columbus Tours | Discover Your Perfect Vacation" />
+  <meta property="og:description" content="Experience handpicked tours from Columbus Tours. Unforgettable journeys to world-class destinations." />
+  <meta property="og:image" content="https://www.columbustours.in/og-preview.jpg" />
+
+  {/* Favicon */}
+  <link rel="icon" href="/favicon.ico" />
+
+  {/* Canonical URL */}
+  <link rel="canonical" href="https://www.columbustours.in/" />
+</Head>
+
+      
 
       <style jsx global>{`
   .embla {
@@ -538,7 +544,7 @@ export default function HomePage() {
 </section>
 
         {/* FEATURED TOURS SECTION */}
-        <section className="w-full bg-gradient-to-b from-gray-50 to-white py-24 px-4">
+        <section className="w-full bg-gradient-to-b from-gray-50 to-white py-10 px-4">
           <div className="max-w-8xl mx-auto">
             <motion.div
               className="text-center mb-16"
