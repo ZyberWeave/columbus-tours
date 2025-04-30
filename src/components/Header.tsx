@@ -425,48 +425,7 @@ useEffect(() => {
 
             {/* Add Search Input for Mobile */}
             {/* Always visible search bar in mobile menu */}
-<div className="p-4 border-b" ref={searchRef}>
-  <input
-    type="text"
-    placeholder="Search destinations..."
-    className="w-full py-2 px-4 rounded-full border border-gray-300 text-sm text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    onChange={(e) => handleSearch(e.target.value)}
-    onKeyDown={handleKeyDown}
-    value={searchText}
-  />
-  {searchResults.length > 0 && (
-    <div className="mt-2 bg-white shadow-lg rounded-lg z-50">
-      <ul>
-        {searchResults.map((tour) => {
-          const thumb = `/images/tours/${tour.category.toLowerCase()}/${tour.folder}/thumbnail.jpg`;
-          return (
-            <Link
-              key={tour.id}
-              href={`/tours/${tour.slug}`}
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-              }}
-            >
-              <li className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100 cursor-pointer search-result-item">
-                <Image src={thumb} alt={tour.title} width={40} height={40} className="rounded" />
-                <span className="text-gray-900">{tour.title}</span>
-              </li>
-            </Link>
-          );
-        })}
-        <li
-          className="px-4 py-2 text-blue-600 hover:underline cursor-pointer text-center border-t"
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            router.push(`/tours?search=${encodeURIComponent(searchText)}`);
-          }}
-        >
-          Show All
-        </li>
-      </ul>
-    </div>
-  )}
-</div>
+
 
 
             <nav className="flex flex-col p-4 border-b">
