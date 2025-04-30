@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import React, { useState, useEffect,  useCallback, useRef } from "react";
 import {
   FaWhatsapp,
   FaInstagram,
@@ -67,16 +67,7 @@ export default function Header() {
   };
 
   // Debounce helper to prevent too many updates while typing
-  const debounce = useCallback(
-    <T extends unknown[], R>(func: (...args: T) => R, wait: number): ((...args: T) => void) => {
-      let timeout: NodeJS.Timeout;
-      return (...args: T) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func(...args), wait);
-      };
-    },
-    []
-  );
+  
 
   // Debounced search update handler
   
