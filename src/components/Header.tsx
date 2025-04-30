@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React, { useState, useEffect,  useCallback, useRef } from "react";
+import React, { useState, useEffect,   useRef } from "react";
 import {
   FaWhatsapp,
   FaInstagram,
