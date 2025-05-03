@@ -113,19 +113,19 @@ const Footer: React.FC = () => {
               <li className="flex items-center">
                 <FaPhone className="mr-3 flex-shrink-0" size={14} />
                 <a
-                  href="tel:8956273122"
+                  href="tel:9604541294"
                   className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
                 >
-                  +91 89562 73122
+                  +91 96045 41294
                 </a>
               </li>
               <li className="flex items-center">
                 <FaEnvelope className="mr-3 flex-shrink-0" size={14} />
                 <a
-                  href="mailto:columbustours@gmail.com"
+                  href="mailto:tourscolumbus@gmail.com"
                   className="text-gray-400 hover:text-white transition-colors duration-300 hover:underline"
                 >
-                  columbustours@gmail.com
+                  tourscolumbus@gmail.com
                 </a>
               </li>
             </ul>
